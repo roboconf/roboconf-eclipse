@@ -4,4 +4,4 @@
 Website: [http://roboconf.net](http://roboconf.net)  
 Licensed under the terms of the **Apache License v2**.
 
-This project includes set of Eclipse tools for Roboconf.
+This project includes a set of Eclipse tools for Roboconf.
