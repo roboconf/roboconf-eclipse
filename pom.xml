@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-   Copyright 2014 Linagora, Université Joseph Fourier
+   Copyright 2014 Linagora, Université Joseph Fourier, Floralis
+   
+   The present code is developed in the scope of the joint LINAGORA -
+   Université Joseph Fourier - Floralis research program and is designated
+   as a "Result" pursuant to the terms and conditions of the LINAGORA
+   - Université Joseph Fourier - Floralis research program. Each copyright
+   holder of Results enumerated here above fully & independently holds complete
+   ownership of the complete Intellectual Property rights applicable to the whole
+   of said Results, and may freely exploit it in any manner which does not infringe
+   the moral rights of the other copyright holders.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +22,8 @@
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
-   limitations under the License.
+   limitations under the License.age governing permissions and limitations
+  ~ under the License.
   -->
   
 <project
@@ -21,18 +31,35 @@
 		xmlns="http://maven.apache.org/POM/4.0.0" 
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		
-	<modelVersion>4.0.0</modelVersion> 
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.roboconf</groupId>
+		<artifactId>roboconf-platform-parent</artifactId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
+	
+	<!-- 
+		The version for the Eclipse parent is deduced from the platform version.
+		0.2-SNAPSHOT => 0.2.0-SNAPSHOT
+		1.0 => 1.0.0
+		
+		This is because Eclipse versions must have 3 digits.
+		
+		For a given platform version, several releases of the Eclipse plug-ins may be found.
+		Thus, 1.0.0 is the first release of the Eclipse plug-ins for the Roboconf platform 1.0.
+		And 1.0.1 is the first MAINTENANCE release for the Roboconf Eclipse tooling.
+	 -->
 	
 	<groupId>net.roboconf.eclipse</groupId>
 	<artifactId>parent</artifactId>
-	<name>Roboconf :: Eclipse :: Parent</name>
-	<version>1.0.0-SNAPSHOT</version>
+	<name>Roboconf :: Eclipse Parent</name>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<modules>
 		<module>target-definition</module>
-		<module>plugins</module>
-		<module>features</module>
+		<module>plugins/net.roboconf.eclipse.plugin</module>
+		<module>features/net.roboconf.eclipse.feature</module>
 	</modules>
 	
 	<properties>
@@ -42,14 +69,15 @@
 		
 		<tycho-version>0.19.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<roboconf.platform.version>0.2-SNAPSHOT</roboconf.platform.version>
 	</properties>
 	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>net.roboconf</groupId>
-				<artifactId>core</artifactId>
-				<version>1.0-SNAPSHOT</version>
+				<artifactId>roboconf-core</artifactId>
+				<version>${roboconf.platform.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -98,7 +126,7 @@
 						<artifact>
 							<groupId>net.roboconf.eclipse</groupId>
 							<artifactId>target</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
+							<version>${project.version}</version>
 							<classifier>mix</classifier>
 						</artifact>
 					</target>
