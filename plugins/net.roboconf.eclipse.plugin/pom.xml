@@ -49,6 +49,11 @@
 			<groupId>net.roboconf</groupId>
 			<artifactId>roboconf-core</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.roboconf</groupId>
+			<artifactId>roboconf-tooling-core</artifactId>
+		</dependency>
 	</dependencies>
 	
 </project>

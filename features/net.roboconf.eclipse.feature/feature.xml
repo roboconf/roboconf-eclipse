@@ -17,6 +17,13 @@
    </license>
 
    <plugin
+         id="net.roboconf.eclipse.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="net.roboconf.core"
          download-size="0"
          install-size="0"
@@ -24,7 +31,7 @@
          unpack="false"/>
 
    <plugin
-         id="net.roboconf.eclipse.plugin"
+         id="net.roboconf.tooling-core"
          download-size="0"
          install-size="0"
          version="0.0.0"

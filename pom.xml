@@ -79,6 +79,12 @@
 				<artifactId>roboconf-core</artifactId>
 				<version>${roboconf.platform.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>net.roboconf</groupId>
+				<artifactId>roboconf-tooling-core</artifactId>
+				<version>${roboconf.platform.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -170,29 +176,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-<!--
-	<pluginRepositories>
-		<pluginRepository>
-			<id>tycho</id>
-			<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<repositories>
-		<repository>
-			<id>indigo</id>
-			<url>http://download.eclipse.org/releases/indigo/</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-	-->
 
 	<licenses>
 		<license>

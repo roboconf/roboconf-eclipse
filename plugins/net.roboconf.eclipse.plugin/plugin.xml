@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.RoboconfDslEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="graph"
+            icon="icons/sample.gif"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfDslEditor"
+            name="Roboconf Editor">
+      </editor>
+   </extension>
+
+</plugin>
