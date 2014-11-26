@@ -8,4 +8,5 @@ Require-Bundle: net.roboconf.core,
  org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.jface.text,
- org.eclipse.ui.editors
+ org.eclipse.ui.editors,
+ net.roboconf.tooling-core

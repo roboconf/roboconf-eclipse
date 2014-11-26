@@ -31,6 +31,7 @@ import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
@@ -38,18 +39,19 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfConfiguration extends SourceViewerConfiguration {
+public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 
+	protected final ColorManager colorManager;
+
+	private RoboconfGraphScanner scanner;
 	private DoubleClickStrategy doubleClickStrategy;
-	private RoboconfScanner scanner;
-	private final ColorManager colorManager;
 
 
 	/**
 	 * Constructor.
 	 * @param colorManager
 	 */
-	public RoboconfConfiguration( ColorManager colorManager ) {
+	public RoboconfGraphConfiguration( ColorManager colorManager ) {
 		this.colorManager = colorManager;
 	}
 
@@ -72,10 +74,10 @@ public class RoboconfConfiguration extends SourceViewerConfiguration {
 	}
 
 
-	protected RoboconfScanner getXMLScanner() {
+	protected RuleBasedScanner getScanner() {
 
 		if( this.scanner == null ) {
-			this.scanner = new RoboconfScanner( this.colorManager );
+			this.scanner = new RoboconfGraphScanner( this.colorManager );
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( this.colorManager.getColor( ColorConstants.DEFAULT ))));
 		}
 
@@ -87,7 +89,7 @@ public class RoboconfConfiguration extends SourceViewerConfiguration {
 	public IPresentationReconciler getPresentationReconciler( ISourceViewer sourceViewer ) {
 
 		PresentationReconciler reconciler = new PresentationReconciler();
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( getXMLScanner());
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( getScanner());
 		reconciler.setDamager( dr, IDocument.DEFAULT_CONTENT_TYPE );
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 

@@ -25,47 +25,25 @@
 
 package net.roboconf.eclipse.plugin.editors;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.editors.text.TextEditor;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class ColorManager {
+public class RoboconfGraphEditor extends TextEditor {
 
-	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );
+	private final ColorManager colorManager;
 
-
-	/**
-	 * Disposes the graphical resources.
-	 */
-	public void dispose() {
-
-		for( Color color : this.fColorTable.values()) {
-			if( ! color.isDisposed())
-				color.dispose();
-		}
-
-		this.fColorTable.clear();
+	public RoboconfGraphEditor() {
+		super();
+		this.colorManager = new ColorManager();
+		setSourceViewerConfiguration( new RoboconfGraphConfiguration(this.colorManager));
+		setDocumentProvider( new DocumentProvider());
 	}
 
-
-	/**
-	 * @param rgb
-	 * @return
-	 */
-	public Color getColor( RGB rgb ) {
-
-		Color color = this.fColorTable.get( rgb );
-		if( color == null ) {
-			color = new Color( Display.getCurrent(), rgb );
-			this.fColorTable.put( rgb, color );
-		}
-
-		return color;
+	@Override
+	public void dispose() {
+		this.colorManager.dispose();
+		super.dispose();
 	}
 }

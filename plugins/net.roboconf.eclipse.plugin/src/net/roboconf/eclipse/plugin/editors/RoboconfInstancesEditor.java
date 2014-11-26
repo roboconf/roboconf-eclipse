@@ -30,15 +30,15 @@ import org.eclipse.ui.editors.text.TextEditor;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfDslEditor extends TextEditor {
+public class RoboconfInstancesEditor extends TextEditor {
 
 	private final ColorManager colorManager;
 
-	public RoboconfDslEditor() {
+	public RoboconfInstancesEditor() {
 		super();
 		this.colorManager = new ColorManager();
-		setSourceViewerConfiguration(new RoboconfConfiguration(this.colorManager));
-		setDocumentProvider(new DocumentProvider());
+		setSourceViewerConfiguration( new RoboconfInstancesConfiguration( this.colorManager ));
+		setDocumentProvider( new DocumentProvider());
 	}
 
 	@Override

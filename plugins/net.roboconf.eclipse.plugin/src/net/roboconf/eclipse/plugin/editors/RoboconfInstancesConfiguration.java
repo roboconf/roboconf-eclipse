@@ -25,47 +25,35 @@
 
 package net.roboconf.eclipse.plugin.editors;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.rules.Token;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class ColorManager {
+public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
 
-	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );
+	private RoboconfInstancesScanner scanner;
 
 
 	/**
-	 * Disposes the graphical resources.
+	 * Constructor.
+	 * @param colorManager
 	 */
-	public void dispose() {
-
-		for( Color color : this.fColorTable.values()) {
-			if( ! color.isDisposed())
-				color.dispose();
-		}
-
-		this.fColorTable.clear();
+	public RoboconfInstancesConfiguration( ColorManager colorManager ) {
+		super( colorManager );
 	}
 
 
-	/**
-	 * @param rgb
-	 * @return
-	 */
-	public Color getColor( RGB rgb ) {
+	@Override
+	protected RuleBasedScanner getScanner() {
 
-		Color color = this.fColorTable.get( rgb );
-		if( color == null ) {
-			color = new Color( Display.getCurrent(), rgb );
-			this.fColorTable.put( rgb, color );
+		if( this.scanner == null ) {
+			this.scanner = new RoboconfInstancesScanner( this.colorManager );
+			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( this.colorManager.getColor( ColorConstants.DEFAULT ))));
 		}
 
-		return color;
+		return this.scanner;
 	}
 }
