@@ -34,6 +34,9 @@ public class RoboconfGraphEditor extends TextEditor {
 
 	private final ColorManager colorManager;
 
+	/**
+	 * Constructor.
+	 */
 	public RoboconfGraphEditor() {
 		super();
 		this.colorManager = new ColorManager();

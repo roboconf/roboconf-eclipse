@@ -35,6 +35,7 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -66,7 +67,7 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 
 
 	@Override
-	public ITextDoubleClickStrategy getDoubleClickStrategy( ISourceViewer sourceViewer, String contentType) {
+	public ITextDoubleClickStrategy getDoubleClickStrategy( ISourceViewer sourceViewer, String contentType ) {
 		if( this.doubleClickStrategy == null )
 			this.doubleClickStrategy = new DoubleClickStrategy();
 
@@ -78,7 +79,8 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 
 		if( this.scanner == null ) {
 			this.scanner = new RoboconfGraphScanner( this.colorManager );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( this.colorManager.getColor( ColorConstants.DEFAULT ))));
+			Color color = this.colorManager.getColor( ColorConstants.DEFAULT );
+			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
 
 		return this.scanner;
@@ -93,8 +95,8 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager( dr, IDocument.DEFAULT_CONTENT_TYPE );
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 
-		NonRuleBasedDamagerRepairer ndr =
-			new NonRuleBasedDamagerRepairer( new TextAttribute( this.colorManager.getColor( ColorConstants.COMMENT )));
+		Color color = this.colorManager.getColor( ColorConstants.COMMENT );
+		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
 
 		reconciler.setDamager( ndr, PartitionScanner.ROBOCONF_COMMENT );
 		reconciler.setRepairer( ndr, PartitionScanner.ROBOCONF_COMMENT );

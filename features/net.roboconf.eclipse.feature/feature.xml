@@ -4,16 +4,16 @@
       label="Roboconf Eclipse Feature"
       version="0.2.0.qualifier">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://roboconf.net">
+      These plug-ins provide tooling for Roboconf.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright>
+      Copyright (c) 2014 - Linagora, Université Joseph Fourier, Floralis
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      Roboconf Eclipse Tooling is licensed under the terms of the Apache License v2.
    </license>
 
    <plugin

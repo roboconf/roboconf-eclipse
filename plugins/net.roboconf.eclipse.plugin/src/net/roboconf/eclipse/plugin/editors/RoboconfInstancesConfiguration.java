@@ -28,6 +28,7 @@ package net.roboconf.eclipse.plugin.editors;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -51,7 +52,8 @@ public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
 
 		if( this.scanner == null ) {
 			this.scanner = new RoboconfInstancesScanner( this.colorManager );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( this.colorManager.getColor( ColorConstants.DEFAULT ))));
+			Color color = this.colorManager.getColor( ColorConstants.DEFAULT );
+			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
 
 		return this.scanner;

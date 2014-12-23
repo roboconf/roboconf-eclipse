@@ -41,20 +41,8 @@
 
 	<groupId>net.roboconf.eclipse</groupId>
 	<artifactId>target</artifactId>
-	<name>Rpboconf :: Eclipse Target</name>
+	<name>Roboconf :: Eclipse Target Platform</name>
 	<packaging>pom</packaging>
-	
-	<dependencies>
-		<dependency>
-			<groupId>net.roboconf</groupId>
-			<artifactId>roboconf-core</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.roboconf</groupId>
-			<artifactId>roboconf-tooling-core</artifactId>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>

@@ -3,10 +3,6 @@
 *.war
 *.ear
 
-.project
-.classpath
-.settings
-
 bin
 screenshots
 target

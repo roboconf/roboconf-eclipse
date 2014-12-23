@@ -25,7 +25,7 @@
 
 package net.roboconf.eclipse.plugin.editors;
 
-import net.roboconf.core.model.parsing.ParsingConstants;
+import net.roboconf.core.dsl.ParsingConstants;
 
 import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IPredicateRule;

@@ -28,8 +28,7 @@ package net.roboconf.eclipse.plugin.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.roboconf.core.Constants;
-import net.roboconf.core.model.parsing.ParsingConstants;
+import net.roboconf.core.dsl.ParsingConstants;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
@@ -46,6 +45,10 @@ import org.eclipse.swt.SWT;
  */
 public class RoboconfGraphScanner extends RuleBasedScanner {
 
+	/**
+	 * Constructor.
+	 * @param manager
+	 */
 	public RoboconfGraphScanner( ColorManager manager ) {
 
 		IToken hl = new Token( new TextAttribute( manager.getColor( ColorConstants.HL_KEYWORD ), null, SWT.BOLD ));
@@ -55,15 +58,13 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 		keywordsRule.addWord( ParsingConstants.KEYWORD_FACET, hl );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_IMPORT, hl );
 
-		keywordsRule.addWord( Constants.PROPERTY_COMPONENT_ALIAS, properties );
-		keywordsRule.addWord( Constants.PROPERTY_COMPONENT_FACETS, properties );
-		keywordsRule.addWord( Constants.PROPERTY_COMPONENT_IMPORTS, properties );
-		keywordsRule.addWord( Constants.PROPERTY_COMPONENT_OPTIONAL_IMPORT, properties );
-		keywordsRule.addWord( Constants.PROPERTY_FACET_EXTENDS, properties );
-		keywordsRule.addWord( Constants.PROPERTY_GRAPH_CHILDREN, properties );
-		keywordsRule.addWord( Constants.PROPERTY_GRAPH_EXPORTS, properties );
-		keywordsRule.addWord( Constants.PROPERTY_GRAPH_ICON_LOCATION, properties );
-		keywordsRule.addWord( Constants.PROPERTY_GRAPH_INSTALLER, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_FACETS, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_IMPORTS, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_INSTALLER, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_OPTIONAL_IMPORT, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_EXTENDS, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_CHILDREN, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_EXPORTS, properties );
 
 		List<IRule> rules = new ArrayList<IRule> ();
 		rules.add( new WhitespaceRule( new WhitespaceDetector()));

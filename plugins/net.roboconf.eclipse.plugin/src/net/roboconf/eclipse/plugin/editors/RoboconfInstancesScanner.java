@@ -28,8 +28,7 @@ package net.roboconf.eclipse.plugin.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.roboconf.core.Constants;
-import net.roboconf.core.model.parsing.ParsingConstants;
+import net.roboconf.core.dsl.ParsingConstants;
 import net.roboconf.eclipse.plugin.editors.RoboconfGraphScanner.WordDetector;
 
 import org.eclipse.jface.text.TextAttribute;
@@ -47,6 +46,10 @@ import org.eclipse.swt.SWT;
  */
 public class RoboconfInstancesScanner extends RuleBasedScanner {
 
+	/**
+	 * Constructor.
+	 * @param manager
+	 */
 	public RoboconfInstancesScanner( ColorManager manager ) {
 
 		IToken hl = new Token( new TextAttribute( manager.getColor( ColorConstants.HL_KEYWORD ), null, SWT.BOLD ));
@@ -55,11 +58,11 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 		WordRule keywordsRule = new WordRule( new WordDetector(), Token.UNDEFINED, true );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_IMPORT, hl );
 
-		keywordsRule.addWord( Constants.PROPERTY_INSTANCE_CHANNEL, properties );
-		keywordsRule.addWord( Constants.PROPERTY_INSTANCE_COUNT, properties );
-		keywordsRule.addWord( Constants.PROPERTY_INSTANCE_DATA, properties );
-		keywordsRule.addWord( Constants.PROPERTY_INSTANCE_NAME, properties );
-		keywordsRule.addWord( Constants.PROPERTY_INSTANCE_STATE, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_CHANNELS, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_COUNT, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_DATA, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_NAME, properties );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_STATE, properties );
 
 		List<IRule> rules = new ArrayList<IRule> ();
 		rules.add( new WhitespaceRule( new WhitespaceDetector()));
@@ -100,12 +103,13 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 					break;
 			}
 
-			// Make sure it not "instance oftruc"
+			// Make sure it is not "instance oftruc"
 			IToken result = null;
 			if( this.comparedLength == ParsingConstants.KEYWORD_INSTANCE_OF.length()) {
-				c = (char) scanner.read();
+				int read = scanner.read();
 				this.comparedLength ++;
-				if( Character.isWhitespace( c ) || c == ICharacterScanner.EOF )
+				if( Character.isWhitespace(( char) read )
+						|| read == ICharacterScanner.EOF )
 					result = this.token;
 			}
 

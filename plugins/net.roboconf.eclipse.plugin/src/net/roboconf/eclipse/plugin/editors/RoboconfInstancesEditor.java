@@ -34,6 +34,10 @@ public class RoboconfInstancesEditor extends TextEditor {
 
 	private final ColorManager colorManager;
 
+
+	/**
+	 * Constructor.
+	 */
 	public RoboconfInstancesEditor() {
 		super();
 		this.colorManager = new ColorManager();

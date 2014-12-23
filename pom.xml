@@ -60,6 +60,7 @@
 		<module>target-definition</module>
 		<module>plugins/net.roboconf.eclipse.plugin</module>
 		<module>features/net.roboconf.eclipse.feature</module>
+		<module>repository</module>
 	</modules>
 	
 	<properties>
@@ -72,21 +73,19 @@
 		<roboconf.platform.version>0.2-SNAPSHOT</roboconf.platform.version>
 	</properties>
 	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>net.roboconf</groupId>
-				<artifactId>roboconf-core</artifactId>
-				<version>${roboconf.platform.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>net.roboconf</groupId>
-				<artifactId>roboconf-tooling-core</artifactId>
-				<version>${roboconf.platform.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>net.roboconf</groupId>
+			<artifactId>roboconf-core</artifactId>
+			<version>${roboconf.platform.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.roboconf</groupId>
+			<artifactId>roboconf-tooling-core</artifactId>
+			<version>${roboconf.platform.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -177,9 +176,10 @@
 		</plugins>
 	</build>
 
-	<licenses>
-		<license>
-			<name>Apache License v2.0</name>
-		</license>
-	</licenses>
+	<scm>
+		<connection>scm:git:git@github.com:roboconf/roboconf-eclipse.git</connection>
+		<developerConnection>scm:git:git@github.com:roboconf/roboconf-eclipse.git</developerConnection>
+		<url>git@github.com:roboconf/roboconf-eclipse.git</url>
+	</scm>
+	
 </project>
