@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Roboconf Eclipse Plug-in
+Bundle-SymbolicName: net.roboconf.eclipse.plugin;singleton:=true
+Bundle-Version: 0.2.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: net.roboconf.core,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors,
+ net.roboconf.tooling-core

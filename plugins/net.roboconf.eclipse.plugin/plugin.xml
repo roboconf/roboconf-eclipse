@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="graph"
+            icon="icons/roboconf--16x16.jpg"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
+            name="Roboconf Graph Editor">
+      </editor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.RoboconfInstancesEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="instances"
+            icon="icons/roboconf--16x16.jpg"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfInstancesEditor"
+            name="Roboconf Graph Editor">
+      </editor>
+   </extension>
+
+</plugin>

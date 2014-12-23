@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.roboconf.eclipse.feature"
+      label="Roboconf Eclipse Feature"
+      version="0.2.0.qualifier">
+
+   <description url="http://roboconf.net">
+      These plug-ins provide tooling for Roboconf.
+   </description>
+
+   <copyright>
+      Copyright (c) 2014 - Linagora, Université Joseph Fourier, Floralis
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      Roboconf Eclipse Tooling is licensed under the terms of the Apache License v2.
+   </license>
+
+   <plugin
+         id="net.roboconf.eclipse.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.tooling-core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
