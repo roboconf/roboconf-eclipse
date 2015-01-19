@@ -25,6 +25,9 @@
 
 package net.roboconf.eclipse.plugin.editors;
 
+import net.roboconf.eclipse.plugin.Activator;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
@@ -59,7 +62,7 @@ public class DoubleClickStrategy implements ITextDoubleClickStrategy {
 			}
 
 		} catch( BadLocationException e ) {
-			// TODO: log
+			Activator.log( e, IStatus.WARNING );
 		}
 	}
 

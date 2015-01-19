@@ -25,7 +25,10 @@
 
 package net.roboconf.eclipse.plugin.editors;
 
+import net.roboconf.eclipse.plugin.Activator;
+
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -49,7 +52,7 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
 
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public NonRuleBasedDamagerRepairer( TextAttribute defaultTextAttribute ) {
 		Assert.isNotNull( defaultTextAttribute );
@@ -123,8 +126,8 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
 				end = Math.min( partition.getOffset() + partition.getLength(), end );
 				return new Region( start, end - start );
 
-			} catch( BadLocationException x ) {
-				// TODO: log...
+			} catch( BadLocationException e ) {
+				Activator.log( e, IStatus.WARNING );
 			}
 		}
 
@@ -140,10 +143,8 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
 	 * org.eclipse.jface.text.ITypedRegion)
 	 */
 	@Override
-	public void createPresentation( TextPresentation presentation,
-			ITypedRegion region ) {
-		addRange( presentation, region.getOffset(), region.getLength(),
-				this.fDefaultTextAttribute );
+	public void createPresentation( TextPresentation presentation, ITypedRegion region ) {
+		addRange( presentation, region.getOffset(), region.getLength(), this.fDefaultTextAttribute );
 	}
 
 

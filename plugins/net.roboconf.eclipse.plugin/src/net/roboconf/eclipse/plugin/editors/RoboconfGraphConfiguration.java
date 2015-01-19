@@ -79,7 +79,7 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 
 		if( this.scanner == null ) {
 			this.scanner = new RoboconfGraphScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorConstants.DEFAULT );
+			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
 
@@ -95,7 +95,7 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 		reconciler.setDamager( dr, IDocument.DEFAULT_CONTENT_TYPE );
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 
-		Color color = this.colorManager.getColor( ColorConstants.COMMENT );
+		Color color = this.colorManager.getColor( ColorManager.COMMENT );
 		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
 
 		reconciler.setDamager( ndr, PartitionScanner.ROBOCONF_COMMENT );

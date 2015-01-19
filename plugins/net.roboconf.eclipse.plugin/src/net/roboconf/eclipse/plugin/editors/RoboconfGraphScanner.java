@@ -51,8 +51,8 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 	 */
 	public RoboconfGraphScanner( ColorManager manager ) {
 
-		IToken hl = new Token( new TextAttribute( manager.getColor( ColorConstants.HL_KEYWORD ), null, SWT.BOLD ));
-		IToken properties = new Token( new TextAttribute( manager.getColor( ColorConstants.PROPERTY_NAME )));
+		IToken hl = new Token( new TextAttribute( manager.getColor( ColorManager.HL_KEYWORD ), null, SWT.BOLD ));
+		IToken properties = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME )));
 
 		WordRule keywordsRule = new WordRule( new WordDetector(), Token.UNDEFINED, true );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_FACET, hl );

@@ -52,7 +52,7 @@ public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
 
 		if( this.scanner == null ) {
 			this.scanner = new RoboconfInstancesScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorConstants.DEFAULT );
+			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
 

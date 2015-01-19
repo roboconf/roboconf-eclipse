@@ -159,7 +159,7 @@ public class NewProjectWizardPage extends WizardPage {
 		});
 
 		Button mavenButton = new Button( container, SWT.CHECK );
-		mavenButton.setText( "Make this project a Maven project." );
+		mavenButton.setText( "Make this project a Maven project" );
 		mavenButton.setSelection( this.creationBean.isMavenProject());
 		GridDataFactory.swtDefaults().span( 2, 1 ).applyTo( mavenButton );
 
