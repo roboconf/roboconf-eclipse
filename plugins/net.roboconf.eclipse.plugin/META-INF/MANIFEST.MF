@@ -9,4 +9,8 @@ Require-Bundle: net.roboconf.core,
  org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
- net.roboconf.tooling-core
+ net.roboconf.tooling-core,
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources
+Bundle-Activator: net.roboconf.eclipse.plugin.Activator
+Bundle-ActivationPolicy: lazy

@@ -24,5 +24,21 @@
             name="Roboconf Graph Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="net.roboconf.eclipse.plugin.wizards"
+            name="Roboconf">
+      </category>
+      <wizard
+            category="net.roboconf.eclipse.plugin.wizards"
+            class="net.roboconf.eclipse.plugin.wizards.NewProjectWizard"
+            hasPages="true"
+            icon="icons/roboconf--16x16.jpg"
+            id="net.roboconf.eclipse.plugin.wizard"
+            name="Roboconf Project"
+            project="true">
+      </wizard>
+   </extension>
 
 </plugin>
