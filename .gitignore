@@ -6,6 +6,8 @@
 .project
 .classpath
 .settings
+/.idea/
+*.iml
 
 bin
 screenshots
