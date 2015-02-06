@@ -6,6 +6,7 @@
 .project
 .classpath
 .settings
+*.iml
 
 bin
 screenshots
