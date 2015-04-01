@@ -126,17 +126,6 @@ public class NewProjectWizardPage extends WizardPage {
 			}
 		});
 
-		createLabel( container, "Namespace:", "The project's namespace" );
-		text = createText( container );
-		text.addModifyListener( new ModifyListener() {
-			@Override
-			public void modifyText( ModifyEvent e ) {
-				String s = ((Text) e.widget).getText();
-				NewProjectWizardPage.this.creationBean.projectNamespace( s );
-				validate();
-			}
-		});
-
 		createLabel( container, "Description:", "The project's description" );
 		text = createText( container );
 		text.addModifyListener( new ModifyListener() {
@@ -239,16 +228,23 @@ public class NewProjectWizardPage extends WizardPage {
 				valid = updateStatus( "The project's name cannot be empty." );
 			else if( Utils.isEmptyOrWhitespaces( this.creationBean.getProjectName()))
 				valid = updateStatus( "The project's alias cannot be empty." );
-			else if( Utils.isEmptyOrWhitespaces( this.creationBean.getProjectNamespace()))
-				valid = updateStatus( "The project's namespace cannot be empty." );
-			else if( this.creationBean.getProjectNamespace().endsWith( "." ))
-				valid = updateStatus( "The project's namespace cannot end with a dot." );
-			else if( this.creationBean.getProjectNamespace().startsWith( "." ))
-				valid = updateStatus( "The project's namespace cannot start with a dot." );
 			else if( Utils.isEmptyOrWhitespaces( this.creationBean.getProjectVersion()))
 				valid = updateStatus( "The project's version cannot be empty." );
+
 			else if( this.creationBean.isMavenProject() && Utils.isEmptyOrWhitespaces( this.creationBean.getPluginVersion()))
 				valid = updateStatus( "The Maven plug-in's version cannot be empty." );
+
+			else if( this.creationBean.isMavenProject()
+					&& Utils.isEmptyOrWhitespaces( this.creationBean.getGroupId()))
+				valid = updateStatus( "The project's group ID cannot be empty." );
+
+			else if( this.creationBean.isMavenProject()
+					&& this.creationBean.getGroupId().endsWith( "." ))
+				valid = updateStatus( "The project's group ID cannot end with a dot." );
+
+			else if( this.creationBean.isMavenProject()
+					&& this.creationBean.getGroupId().startsWith( "." ))
+				valid = updateStatus( "The project's group ID cannot start with a dot." );
 
 			else for( IResource resource : ResourcesPlugin.getWorkspace().getRoot().members()) {
 				if( resource.getName().equalsIgnoreCase( this.creationBean.getProjectName())) {
@@ -315,8 +311,21 @@ public class NewProjectWizardPage extends WizardPage {
 
 		controls.clear();
 		if( this.creationBean.isMavenProject()) {
-			controls.add( createLabel( container, "Plug-in version:", "The version of the Roboconf Maven plug-in" ));
+
+			controls.add( createLabel( container, "Group ID:", "The project's group ID" ));
 			Text text = createText( container );
+			controls.add( text );
+			text.addModifyListener( new ModifyListener() {
+				@Override
+				public void modifyText( ModifyEvent e ) {
+					String s = ((Text) e.widget).getText();
+					NewProjectWizardPage.this.creationBean.groupId( s );
+					validate();
+				}
+			});
+
+			controls.add( createLabel( container, "Plug-in version:", "The version of the Roboconf Maven plug-in" ));
+			text = createText( container );
 			controls.add( text );
 			if( ! Utils.isEmptyOrWhitespaces( this.creationBean.getPluginVersion()))
 				text.setText( this.creationBean.getPluginVersion());
