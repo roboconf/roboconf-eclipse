@@ -68,8 +68,9 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 		rules.add( new WhitespaceRule( new WhitespaceDetector()));
 		rules.add( keywordsRule );
 		rules.add( new InstanceOfRule( hl ));
+		rules.add( new PropertyRule( properties ));
 
-		setRules( rules.toArray( new IRule[ 0 ]));
+		setRules( rules.toArray( new IRule[ rules.size()]));
 	}
 
 
@@ -77,7 +78,7 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 	 * @author Vincent Zurczak - Linagora
 	 */
 	private static class InstanceOfRule implements IRule {
-		private int comparedLength = 0;
+		private int comparedLength;
 		private final IToken token;
 
 
@@ -87,17 +88,21 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 
 		@Override
 		public IToken evaluate( ICharacterScanner scanner ) {
+			this.comparedLength = 0;
 
 			// Find the key word
-			char c = '#';
-			while( c != ICharacterScanner.EOF
-					&& c != '\n'
-					&& c != '\r'
+			int readChar = 0;
+			char asChar = '#';
+			while( readChar != ICharacterScanner.EOF
+					&& asChar != '\n'
+					&& asChar != '\r'
 					&& this.comparedLength < ParsingConstants.KEYWORD_INSTANCE_OF.length()) {
 
-				c = (char) scanner.read();
+				readChar = scanner.read();
+				asChar = (char) readChar;
+
 				char expectedChar = ParsingConstants.KEYWORD_INSTANCE_OF.charAt( this.comparedLength );
-				if( expectedChar == Character.toLowerCase( c ))
+				if( expectedChar == Character.toLowerCase( asChar ))
 					this.comparedLength ++;
 				else
 					break;
@@ -120,7 +125,47 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 					scanner.unread();
 			}
 
-			this.comparedLength = 0;
+			return result;
+		}
+	}
+
+
+	/**
+	 * @author Vincent Zurczak - Linagora
+	 */
+	private static class PropertyRule implements IRule {
+		private final IToken token;
+		private int read = 0;;
+
+
+		public PropertyRule( IToken token ) {
+			this.token = token;
+		}
+
+		@Override
+		public IToken evaluate( ICharacterScanner scanner ) {
+			this.read = 0;
+
+			// Read characters
+			int readChar = 0;
+			char asChar = '#';
+			while( readChar != ICharacterScanner.EOF
+					&& asChar != '\n'
+					&& asChar != '\r'
+					&& asChar != ':' ) {
+
+				readChar = scanner.read();
+				asChar = (char) readChar;
+				this.read ++;
+			}
+
+			// If the last character is a colon, then we have a property
+			IToken result = Token.UNDEFINED;
+			if( asChar == ':' )
+				result = this.token;
+			else for( int i = this.read; i != 0; i-- )
+				scanner.unread();
+
 			return result;
 		}
 	}

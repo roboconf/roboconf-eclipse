@@ -78,7 +78,7 @@ public class NewProjectWizardPage extends WizardPage {
 
 		this.creationBean.projectVersion( "1.0-SNAPSHOT" );
 		this.creationBean.mavenProject( true );
-		this.creationBean.pluginVersion( "0.2" );
+		this.creationBean.pluginVersion( "0.4" );
 
 		setTitle( "New Roboconf Project" );
 		setDescription( "Create a new Roboconf project." );
