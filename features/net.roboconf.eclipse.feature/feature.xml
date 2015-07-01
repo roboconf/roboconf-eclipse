@@ -2,14 +2,14 @@
 <feature
       id="net.roboconf.eclipse.feature"
       label="Roboconf Eclipse Feature"
-      version="0.4.0.qualifier">
+      version="0.5.0.qualifier">
 
    <description url="http://roboconf.net">
       These plug-ins provide tooling for Roboconf.
    </description>
 
    <copyright>
-      Copyright (c) 2014,2015 - Linagora, Université Joseph Fourier, Floralis
+      Copyright (c) 20.5,2015 - Linagora, Université Joseph Fourier, Floralis
    </copyright>
 
    <license url="http://www.apache.org/licenses/LICENSE-2.0">
