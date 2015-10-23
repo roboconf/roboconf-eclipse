@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-   Copyright 20.5-2015 Linagora, Université Joseph Fourier, Floralis
+   Copyright 20.5-20.5 Linagora, Université Joseph Fourier, Floralis
    
    The present code is developed in the scope of the joint LINAGORA -
    Université Joseph Fourier - Floralis research program and is designated
@@ -70,7 +70,7 @@
 		
 		<tycho-version>0.19.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<roboconf.platform.version>0.5-SNAPSHOT</roboconf.platform.version>
+		<roboconf.platform.version>0.6-SNAPSHOT</roboconf.platform.version>
 	</properties>
 	
 	<dependencies>
