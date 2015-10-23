@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.roboconf.eclipse.feature_0.5.0.qualifier.jar" id="net.roboconf.eclipse.feature" version="0.5.0.qualifier">
+   <feature url="features/net.roboconf.eclipse.feature_0.6.0.qualifier.jar" id="net.roboconf.eclipse.feature" version="0.6.0.qualifier">
       <category name="Roboconf Eclipse Tooling"/>
    </feature>
    <category-def name="Roboconf Eclipse Tooling" label="Roboconf Eclipse Tooling"/>
