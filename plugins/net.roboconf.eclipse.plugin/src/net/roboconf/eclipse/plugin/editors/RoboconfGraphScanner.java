@@ -53,6 +53,7 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 
 		IToken hl = new Token( new TextAttribute( manager.getColor( ColorManager.HL_KEYWORD ), null, SWT.BOLD ));
 		IToken properties = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME )));
+		IToken propertyQualifier = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME ), null, SWT.ITALIC ));
 
 		WordRule keywordsRule = new WordRule( new WordDetector(), Token.UNDEFINED, true );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_FACET, hl );
@@ -61,10 +62,13 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_FACETS, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_IMPORTS, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_INSTALLER, properties );
-		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_OPTIONAL_IMPORT, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_EXTENDS, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_CHILDREN, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_GRAPH_EXPORTS, properties );
+
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_OPTIONAL_IMPORT, propertyQualifier );
+		keywordsRule.addWord( ParsingConstants.PROPERTY_COMPONENT_EXTERNAL_IMPORT, propertyQualifier );
+		keywordsRule.addWord( "random[port]", propertyQualifier );
 
 		List<IRule> rules = new ArrayList<IRule> ();
 		rules.add( new WhitespaceRule( new WhitespaceDetector()));
@@ -81,12 +85,12 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 
 		@Override
 		public boolean isWordStart( char c ) {
-			return Character.isLetter( c );
+			return Character.isLetter( c ) || c == '(';
 		}
 
 		@Override
 		public boolean isWordPart( char c ) {
-			return ! Character.isWhitespace( c ) && c != ':' && c != '{';
+			return ! Character.isWhitespace( c ) && c != ':' && c != '{' && c != ',' && c != ';';
 		}
 	}
 }
