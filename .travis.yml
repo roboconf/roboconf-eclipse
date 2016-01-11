@@ -3,8 +3,8 @@ language: java
 # Test several JDK
 jdk:
   - oraclejdk7
-  - openjdk6
   - openjdk7
+  - oraclejdk8
 
 # The plug-in depends on libraries that come from the platform.
 # So, we must be able to find snapshots of the platform.
