@@ -23,17 +23,33 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.graphs;
 
-import org.eclipse.jface.text.rules.IWhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
+
+import org.eclipse.ui.editors.text.TextEditor;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class WhitespaceDetector implements IWhitespaceDetector {
+public class RoboconfGraphEditor extends TextEditor {
+
+	private final ColorManager colorManager;
+
+	/**
+	 * Constructor.
+	 */
+	public RoboconfGraphEditor() {
+		super();
+		this.colorManager = new ColorManager();
+		setSourceViewerConfiguration( new RoboconfGraphConfiguration(this.colorManager));
+		setDocumentProvider( new RoboconfDocumentProvider());
+	}
 
 	@Override
-	public boolean isWhitespace( char c ) {
-		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+	public void dispose() {
+		this.colorManager.dispose();
+		super.dispose();
 	}
 }

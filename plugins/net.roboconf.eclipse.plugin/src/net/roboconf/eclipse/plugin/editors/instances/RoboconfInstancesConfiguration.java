@@ -23,51 +23,42 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.instances;
 
-import net.roboconf.eclipse.plugin.Activator;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.graphs.RoboconfGraphConfiguration;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
-import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.rules.Token;
+import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class DoubleClickStrategy implements ITextDoubleClickStrategy {
+public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
 
-	@Override
-	public void doubleClicked( ITextViewer part ) {
+	private RoboconfInstancesScanner scanner;
 
-		try {
-			int caret = part.getSelectedRange().x;
-			if( caret >= 0 ) {
-				IDocument doc = part.getDocument();
-				int startPos = caret, endPos = caret;
 
-				// Find the word
-				while( endPos < doc.getLength() && isValidWordCharacter( doc.getChar( endPos )))
-					endPos ++;
-
-				while( startPos > 0 && isValidWordCharacter( doc.getChar( startPos )))
-					startPos --;
-
-				// When the caret is at the document beginning
-				if( startPos > 0 )
-					startPos ++;
-
-				part.setSelectedRange( startPos, endPos - startPos );
-			}
-
-		} catch( BadLocationException e ) {
-			Activator.log( e, IStatus.WARNING );
-		}
+	/**
+	 * Constructor.
+	 * @param colorManager
+	 */
+	public RoboconfInstancesConfiguration( ColorManager colorManager ) {
+		super( colorManager );
 	}
 
 
-	private boolean isValidWordCharacter( char c ) {
-		return Character.isJavaIdentifierPart( c ) || c == '-';
+	@Override
+	protected RuleBasedScanner getScanner() {
+
+		if( this.scanner == null ) {
+			this.scanner = new RoboconfInstancesScanner( this.colorManager );
+			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
+			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
+		}
+
+		return this.scanner;
 	}
 }

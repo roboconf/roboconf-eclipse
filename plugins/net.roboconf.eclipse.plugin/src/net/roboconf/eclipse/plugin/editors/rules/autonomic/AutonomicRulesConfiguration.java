@@ -23,10 +23,13 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.rules.autonomic;
+
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.NonRuleBasedDamagerRepairer;
+import net.roboconf.eclipse.plugin.editors.graphs.RoboconfGraphConfiguration;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
@@ -34,51 +37,30 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
+public class AutonomicRulesConfiguration extends RoboconfGraphConfiguration {
 
-	protected final ColorManager colorManager;
-
-	private RoboconfGraphScanner scanner;
-	private DoubleClickStrategy doubleClickStrategy;
+	private AutonomicRulesScanner scanner;
 
 
 	/**
 	 * Constructor.
 	 * @param colorManager
 	 */
-	public RoboconfGraphConfiguration( ColorManager colorManager ) {
-		this.colorManager = colorManager;
+	public AutonomicRulesConfiguration( ColorManager colorManager ) {
+		super( colorManager );
 	}
 
 
 	@Override
-	public String[] getConfiguredContentTypes( ISourceViewer sourceViewer ) {
-		return new String[] {
-			IDocument.DEFAULT_CONTENT_TYPE,
-			PartitionScanner.ROBOCONF_COMMENT
-		};
-	}
-
-
-	@Override
-	public ITextDoubleClickStrategy getDoubleClickStrategy( ISourceViewer sourceViewer, String contentType ) {
-		if( this.doubleClickStrategy == null )
-			this.doubleClickStrategy = new DoubleClickStrategy();
-
-		return this.doubleClickStrategy;
-	}
-
-
 	protected RuleBasedScanner getScanner() {
 
 		if( this.scanner == null ) {
-			this.scanner = new RoboconfGraphScanner( this.colorManager );
+			this.scanner = new AutonomicRulesScanner( this.colorManager );
 			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
@@ -96,12 +78,19 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 
 		Color color = this.colorManager.getColor( ColorManager.COMMENT );
-		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
 
-		reconciler.setDamager( ndr, PartitionScanner.ROBOCONF_COMMENT );
-		reconciler.setRepairer( ndr, PartitionScanner.ROBOCONF_COMMENT );
+		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SHARP );
+		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SHARP );
+
+		ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SS );
+		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SS );
+
+		ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.MULTILINE_COMMENT );
+		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.MULTILINE_COMMENT );
 
 		return reconciler;
 	}
-
 }

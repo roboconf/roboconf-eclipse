@@ -23,17 +23,19 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.graphs;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
@@ -75,22 +77,5 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 		rules.add( keywordsRule );
 
 		setRules( rules.toArray( new IRule[ 0 ]));
-	}
-
-
-	/**
-	 * @author Vincent Zurczak - Linagora
-	 */
-	public static class WordDetector implements IWordDetector {
-
-		@Override
-		public boolean isWordStart( char c ) {
-			return Character.isLetter( c ) || c == '(';
-		}
-
-		@Override
-		public boolean isWordPart( char c ) {
-			return ! Character.isWhitespace( c ) && c != ':' && c != '{' && c != ',' && c != ';';
-		}
 	}
 }

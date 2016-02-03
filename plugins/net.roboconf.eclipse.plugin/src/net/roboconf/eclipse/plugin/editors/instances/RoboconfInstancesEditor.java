@@ -23,7 +23,10 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.instances;
+
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
@@ -42,7 +45,7 @@ public class RoboconfInstancesEditor extends TextEditor {
 		super();
 		this.colorManager = new ColorManager();
 		setSourceViewerConfiguration( new RoboconfInstancesConfiguration( this.colorManager ));
-		setDocumentProvider( new DocumentProvider());
+		setDocumentProvider( new RoboconfDocumentProvider());
 	}
 
 	@Override

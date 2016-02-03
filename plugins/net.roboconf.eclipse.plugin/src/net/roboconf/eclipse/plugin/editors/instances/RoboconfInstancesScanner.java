@@ -23,13 +23,15 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.instances;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.eclipse.plugin.editors.RoboconfGraphScanner.WordDetector;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.ICharacterScanner;

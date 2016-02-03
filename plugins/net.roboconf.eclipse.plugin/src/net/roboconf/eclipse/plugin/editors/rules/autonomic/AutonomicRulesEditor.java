@@ -23,25 +23,28 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.rules.autonomic;
+
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfGraphEditor extends TextEditor {
+public class AutonomicRulesEditor extends TextEditor {
 
 	private final ColorManager colorManager;
+
 
 	/**
 	 * Constructor.
 	 */
-	public RoboconfGraphEditor() {
+	public AutonomicRulesEditor() {
 		super();
 		this.colorManager = new ColorManager();
-		setSourceViewerConfiguration( new RoboconfGraphConfiguration(this.colorManager));
-		setDocumentProvider( new DocumentProvider());
+		setSourceViewerConfiguration( new AutonomicRulesConfiguration( this.colorManager ));
+		setDocumentProvider( new AutonomicRulesDocumentProvider());
 	}
 
 	@Override

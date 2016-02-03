@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,39 +23,22 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.commons;
 
-import org.eclipse.jface.text.TextAttribute;
-import org.eclipse.jface.text.rules.RuleBasedScanner;
-import org.eclipse.jface.text.rules.Token;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.jface.text.rules.IWordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
-
-	private RoboconfInstancesScanner scanner;
-
-
-	/**
-	 * Constructor.
-	 * @param colorManager
-	 */
-	public RoboconfInstancesConfiguration( ColorManager colorManager ) {
-		super( colorManager );
-	}
-
+public class WordDetector implements IWordDetector {
 
 	@Override
-	protected RuleBasedScanner getScanner() {
+	public boolean isWordStart( char c ) {
+		return Character.isLetter( c ) || c == '(';
+	}
 
-		if( this.scanner == null ) {
-			this.scanner = new RoboconfInstancesScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
-		}
-
-		return this.scanner;
+	@Override
+	public boolean isWordPart( char c ) {
+		return ! Character.isWhitespace( c ) && c != ':' && c != '{' && c != ',' && c != ';';
 	}
 }

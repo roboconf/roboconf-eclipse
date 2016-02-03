@@ -23,32 +23,54 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.commons;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentPartitioner;
-import org.eclipse.jface.text.rules.FastPartitioner;
-import org.eclipse.ui.editors.text.FileDocumentProvider;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class DocumentProvider extends FileDocumentProvider {
+public class ColorManager {
 
-	@Override
-	protected IDocument createDocument( Object element ) throws CoreException {
+	public static final RGB COMMENT = new RGB( 0, 128, 0 );
+	public static final RGB HL_KEYWORD = new RGB( 128, 0, 0 );
+	public static final RGB PROPERTY_NAME = new RGB( 128, 0, 0 );
+	public static final RGB DEFAULT = new RGB( 0, 0, 0 );
 
-		IDocument document = super.createDocument( element );
-		if( document != null ) {
-			IDocumentPartitioner partitioner = new FastPartitioner(
-					new PartitionScanner(),
-					new String[] { PartitionScanner.ROBOCONF_COMMENT });
+	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );
 
-			partitioner.connect( document );
-			document.setDocumentPartitioner( partitioner );
+
+	/**
+	 * Disposes the graphical resources.
+	 */
+	public void dispose() {
+
+		for( Color color : this.fColorTable.values()) {
+			if( ! color.isDisposed())
+				color.dispose();
 		}
 
-		return document;
+		this.fColorTable.clear();
+	}
+
+
+	/**
+	 * @param rgb
+	 * @return
+	 */
+	public Color getColor( RGB rgb ) {
+
+		Color color = this.fColorTable.get( rgb );
+		if( color == null ) {
+			color = new Color( Display.getCurrent(), rgb );
+			this.fColorTable.put( rgb, color );
+		}
+
+		return color;
 	}
 }

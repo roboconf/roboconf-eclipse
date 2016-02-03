@@ -23,7 +23,7 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors;
+package net.roboconf.eclipse.plugin.editors.commons;
 
 import net.roboconf.eclipse.plugin.Activator;
 

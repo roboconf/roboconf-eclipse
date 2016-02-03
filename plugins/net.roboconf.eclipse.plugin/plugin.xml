@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            extensions="graph"
-            icon="icons/roboconf--16x16.jpg"
-            id="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
-            name="Roboconf Graph Editor">
-      </editor>
-   </extension>
    
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="net.roboconf.eclipse.plugin.editors.RoboconfInstancesEditor"
+            class="net.roboconf.eclipse.plugin.editors.instances.RoboconfInstancesEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             extensions="instances"
-            icon="icons/roboconf--16x16.jpg"
+            icon="icons/roboconf_16x16.jpg"
             id="net.roboconf.eclipse.plugin.editors.RoboconfInstancesEditor"
+            name="Roboconf Instances Editor">
+      </editor>
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.graphs.RoboconfGraphEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="graph"
+            icon="icons/roboconf_16x16.jpg"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
             name="Roboconf Graph Editor">
+      </editor>
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.rules.autonomic.AutonomicRulesEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="drl"
+            icon="icons/rule_16x16.gif"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfRulesEditor"
+            name="Roboconf Rules Editor">
       </editor>
    </extension>
    <extension
@@ -34,7 +39,7 @@
             category="net.roboconf.eclipse.plugin.wizards"
             class="net.roboconf.eclipse.plugin.wizards.NewProjectWizard"
             hasPages="true"
-            icon="icons/roboconf--16x16.jpg"
+            icon="icons/roboconf_16x16.jpg"
             id="net.roboconf.eclipse.plugin.wizard"
             name="Roboconf Project"
             project="true">
