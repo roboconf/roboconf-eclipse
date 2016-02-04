@@ -26,7 +26,7 @@
 package net.roboconf.eclipse.plugin.editors.instances;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.graphs.RoboconfGraphConfiguration;
+import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
@@ -36,7 +36,7 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfInstancesConfiguration extends RoboconfGraphConfiguration {
+public class RoboconfInstancesConfiguration extends RoboconfBaseConfiguration {
 
 	private RoboconfInstancesScanner scanner;
 

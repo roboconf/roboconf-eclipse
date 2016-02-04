@@ -23,12 +23,9 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.graphs;
+package net.roboconf.eclipse.plugin.editors.commons;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.DoubleClickStrategy;
-import net.roboconf.eclipse.plugin.editors.commons.NonRuleBasedDamagerRepairer;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfPartitionScanner;
+import net.roboconf.eclipse.plugin.editors.commands.RoboconfCommandsScanner;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
@@ -45,11 +42,11 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
+public class RoboconfBaseConfiguration extends SourceViewerConfiguration {
 
 	protected final ColorManager colorManager;
 
-	private RoboconfGraphScanner scanner;
+	private RoboconfCommandsScanner scanner;
 	private DoubleClickStrategy doubleClickStrategy;
 
 
@@ -57,7 +54,7 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 	 * Constructor.
 	 * @param colorManager
 	 */
-	public RoboconfGraphConfiguration( ColorManager colorManager ) {
+	public RoboconfBaseConfiguration( ColorManager colorManager ) {
 		this.colorManager = colorManager;
 	}
 
@@ -83,7 +80,7 @@ public class RoboconfGraphConfiguration extends SourceViewerConfiguration {
 	protected RuleBasedScanner getScanner() {
 
 		if( this.scanner == null ) {
-			this.scanner = new RoboconfGraphScanner( this.colorManager );
+			this.scanner = new RoboconfCommandsScanner( this.colorManager );
 			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}

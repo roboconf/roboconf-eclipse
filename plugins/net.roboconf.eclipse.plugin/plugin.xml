@@ -28,6 +28,14 @@
             id="net.roboconf.eclipse.plugin.editors.RoboconfRulesEditor"
             name="Roboconf Rules Editor">
       </editor>
+      <editor
+            class="net.roboconf.eclipse.plugin.editors.commands.RoboconfCommandsEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="commands"
+            icon="icons/commands_16x16.gif"
+            id="net.roboconf.eclipse.plugin.editors.RoboconfCommandsEditor"
+            name="Roboconf Commands Editor">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

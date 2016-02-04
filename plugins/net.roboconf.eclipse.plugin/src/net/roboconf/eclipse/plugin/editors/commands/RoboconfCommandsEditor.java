@@ -23,10 +23,9 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.graphs;
+package net.roboconf.eclipse.plugin.editors.commands;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
 
 import org.eclipse.ui.editors.text.TextEditor;
@@ -34,17 +33,17 @@ import org.eclipse.ui.editors.text.TextEditor;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfGraphEditor extends TextEditor {
+public class RoboconfCommandsEditor extends TextEditor {
 
 	private final ColorManager colorManager;
 
 	/**
 	 * Constructor.
 	 */
-	public RoboconfGraphEditor() {
+	public RoboconfCommandsEditor() {
 		super();
 		this.colorManager = new ColorManager();
-		setSourceViewerConfiguration( new RoboconfBaseConfiguration( this.colorManager ));
+		setSourceViewerConfiguration( new RoboconfCommandsConfiguration( this.colorManager ));
 		setDocumentProvider( new RoboconfDocumentProvider());
 	}
 
