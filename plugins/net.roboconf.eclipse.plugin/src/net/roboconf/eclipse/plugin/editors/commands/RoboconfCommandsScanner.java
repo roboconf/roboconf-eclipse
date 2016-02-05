@@ -207,7 +207,7 @@ public class RoboconfCommandsScanner extends RuleBasedScanner {
 
 
 	/**
-	 * Creates a flexible pattern from keywords
+	 * Creates a flexible pattern from keywords.
 	 * @param keywords a non-null list of keywords
 	 * @return a non-null string
 	 */
