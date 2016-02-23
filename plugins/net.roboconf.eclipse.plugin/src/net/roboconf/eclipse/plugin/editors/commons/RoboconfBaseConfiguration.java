@@ -25,8 +25,6 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
-import net.roboconf.eclipse.plugin.editors.commands.RoboconfCommandsScanner;
-
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
@@ -42,11 +40,11 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfBaseConfiguration extends SourceViewerConfiguration {
+public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguration {
 
 	protected final ColorManager colorManager;
 
-	private RoboconfCommandsScanner scanner;
+	private RuleBasedScanner scanner;
 	private DoubleClickStrategy doubleClickStrategy;
 
 
@@ -77,18 +75,6 @@ public class RoboconfBaseConfiguration extends SourceViewerConfiguration {
 	}
 
 
-	protected RuleBasedScanner getScanner() {
-
-		if( this.scanner == null ) {
-			this.scanner = new RoboconfCommandsScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
-		}
-
-		return this.scanner;
-	}
-
-
 	@Override
 	public IPresentationReconciler getPresentationReconciler( ISourceViewer sourceViewer ) {
 
@@ -105,4 +91,23 @@ public class RoboconfBaseConfiguration extends SourceViewerConfiguration {
 
 		return reconciler;
 	}
+
+
+	protected final RuleBasedScanner getScanner() {
+
+		if( this.scanner == null ) {
+			this.scanner = buildScanner( this.colorManager );
+			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
+			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
+		}
+
+		return this.scanner;
+	}
+
+
+	/**
+	 * @param colorManager the color manager
+	 * @return the scanner
+	 */
+	protected abstract RuleBasedScanner buildScanner( ColorManager colorManager );
 }

@@ -28,18 +28,12 @@ package net.roboconf.eclipse.plugin.editors.instances;
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
-import org.eclipse.jface.text.rules.Token;
-import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class RoboconfInstancesConfiguration extends RoboconfBaseConfiguration {
-
-	private RoboconfInstancesScanner scanner;
-
 
 	/**
 	 * Constructor.
@@ -49,16 +43,8 @@ public class RoboconfInstancesConfiguration extends RoboconfBaseConfiguration {
 		super( colorManager );
 	}
 
-
 	@Override
-	protected RuleBasedScanner getScanner() {
-
-		if( this.scanner == null ) {
-			this.scanner = new RoboconfInstancesScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
-		}
-
-		return this.scanner;
+	protected RuleBasedScanner buildScanner( ColorManager colorManager ) {
+		return new RoboconfInstancesScanner( this.colorManager );
 	}
 }

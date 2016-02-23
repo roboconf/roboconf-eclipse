@@ -26,7 +26,6 @@
 package net.roboconf.eclipse.plugin.editors.graphs;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
 
 import org.eclipse.ui.editors.text.TextEditor;
@@ -44,7 +43,7 @@ public class RoboconfGraphEditor extends TextEditor {
 	public RoboconfGraphEditor() {
 		super();
 		this.colorManager = new ColorManager();
-		setSourceViewerConfiguration( new RoboconfBaseConfiguration( this.colorManager ));
+		setSourceViewerConfiguration( new RoboconfGraphConfiguration( this.colorManager ));
 		setDocumentProvider( new RoboconfDocumentProvider());
 	}
 

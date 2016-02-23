@@ -23,7 +23,7 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commands;
+package net.roboconf.eclipse.plugin.editors.graphs;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
@@ -33,18 +33,18 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfCommandsConfiguration extends RoboconfBaseConfiguration {
+public class RoboconfGraphConfiguration extends RoboconfBaseConfiguration {
 
 	/**
 	 * Constructor.
 	 * @param colorManager
 	 */
-	public RoboconfCommandsConfiguration( ColorManager colorManager ) {
+	public RoboconfGraphConfiguration( ColorManager colorManager ) {
 		super( colorManager );
 	}
 
 	@Override
 	protected RuleBasedScanner buildScanner( ColorManager colorManager ) {
-		return new RoboconfCommandsScanner( this.colorManager );
+		return new RoboconfGraphScanner( this.colorManager );
 	}
 }

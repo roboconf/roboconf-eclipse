@@ -35,7 +35,6 @@ import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
-import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.graphics.Color;
 
@@ -43,9 +42,6 @@ import org.eclipse.swt.graphics.Color;
  * @author Vincent Zurczak - Linagora
  */
 public class AutonomicRulesConfiguration extends RoboconfBaseConfiguration {
-
-	private AutonomicRulesScanner scanner;
-
 
 	/**
 	 * Constructor.
@@ -57,15 +53,8 @@ public class AutonomicRulesConfiguration extends RoboconfBaseConfiguration {
 
 
 	@Override
-	protected RuleBasedScanner getScanner() {
-
-		if( this.scanner == null ) {
-			this.scanner = new AutonomicRulesScanner( this.colorManager );
-			Color color = this.colorManager.getColor( ColorManager.DEFAULT );
-			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
-		}
-
-		return this.scanner;
+	protected RuleBasedScanner buildScanner( ColorManager colorManager ) {
+		return new AutonomicRulesScanner( this.colorManager );
 	}
 
 
