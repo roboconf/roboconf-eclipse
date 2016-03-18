@@ -17,4 +17,3 @@ before_script:
 # Use --settings to force the usage of our "settings.xml" file.
 script:
   - mvn clean install -q --settings settings.xml
-  
