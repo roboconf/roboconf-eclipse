@@ -2,7 +2,7 @@
 <feature
       id="net.roboconf.eclipse.feature"
       label="Roboconf Eclipse Feature"
-      version="0.6.0.qualifier">
+      version="0.7.0.qualifier">
 
    <description url="http://roboconf.net">
       These plug-ins provide tooling for Roboconf.
