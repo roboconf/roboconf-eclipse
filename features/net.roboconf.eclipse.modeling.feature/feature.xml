@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.roboconf.eclipse.modeling.feature"
+      label="Roboconf Eclipse Modeling Feature"
+      version="0.7.0.qualifier">
+
+   <description url="http://roboconf.net">
+      These plug-ins provide modeling tools for Roboconf.
+   </description>
+
+   <copyright>
+      Copyright (c) 2016 - Linagora, Université Joseph Fourier, Floralis
+   </copyright>
+
+   <license url="http://www.apache.org/licenses/LICENSE-2.0">
+      Roboconf Eclipse Tooling is licensed under the terms of the Apache License v2.
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf.edit"/>
+      <import plugin="org.occiware.clouddesigner.occi"/>
+      <import plugin="org.occiware.clouddesigner.occi.edit"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.sirius"/>
+      <import plugin="org.occiware.clouddesigner.occi.design" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.occiware.clouddesigner.occi.emfgen.ui" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="net.roboconf.core"/>
+   </requires>
+
+   <plugin
+         id="net.roboconf.eclipse.occi.graph.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.eclipse.occi.graph.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.eclipse.modeler"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

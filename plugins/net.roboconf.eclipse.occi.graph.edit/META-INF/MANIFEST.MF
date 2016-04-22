@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EMF / OCCI Editing for Roboconf Graph(s)
+Bundle-SymbolicName: net.roboconf.eclipse.occi.graph.edit;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: roboconfgraph.provider.RoboconfGraphEditPlugin$Implementation
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: roboconfgraph.provider
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.edit;visibility:=reexport,
+ org.occiware.clouddesigner.occi;visibility:=reexport,
+ org.occiware.clouddesigner.occi.edit;visibility:=reexport,
+ net.roboconf.eclipse.occi.graph.model
+Bundle-ActivationPolicy: lazy

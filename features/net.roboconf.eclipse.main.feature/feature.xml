@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="net.roboconf.eclipse.feature"
+      id="net.roboconf.eclipse.main.feature"
       label="Roboconf Eclipse Feature"
       version="0.7.0.qualifier">
 
@@ -9,7 +9,7 @@
    </description>
 
    <copyright>
-      Copyright (c) 20.5,20.5 - Linagora, Université Joseph Fourier, Floralis
+      Copyright (c) 2014,2016 - Linagora, Université Joseph Fourier, Floralis
    </copyright>
 
    <license url="http://www.apache.org/licenses/LICENSE-2.0">

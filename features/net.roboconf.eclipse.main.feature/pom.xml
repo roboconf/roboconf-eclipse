@@ -40,8 +40,8 @@
 	</parent>
 
 	<groupId>net.roboconf.eclipse</groupId>
-	<artifactId>net.roboconf.eclipse.feature</artifactId>
-	<name>Roboconf :: Eclipse Feature</name>
+	<artifactId>net.roboconf.eclipse.main.feature</artifactId>
+	<name>Roboconf :: Eclipse Main Feature</name>
 	<packaging>eclipse-feature</packaging>
 	
 </project>

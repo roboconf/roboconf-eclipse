@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+  <extension point="org.eclipse.sirius.componentization">
+    <component class="net.roboconf.eclipse.modeler.RoboconfModelerPlugin"
+               id="net.roboconf.eclipse.sirius.graph"
+	       name="graph">
+    </component>
+  </extension>
+  
+  
+  <extension point="org.eclipse.ui.newWizards">
+  	<!-- FIXME: to replace by the usual Eclipse category -->
+      <category
+        id = "net.roboconf.eclipse"
+	    name="Roboconf">
+      </category>
+     <wizard
+           category="net.roboconf.eclipse"
+           class="net.roboconf.eclipse.modeler.wizards.NewWizard"
+           icon="icons/roboconf_16x16.jpg"
+           name="Roboconf Graph(s) Representation"
+           id="net.roboconf.eclipse.graphs">
+      </wizard>
+   </extension>
+  <extension
+        point="org.eclipse.sirius.externalJavaAction">
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.SetInstallerNameAction"
+           id="net.roboconf.eclipse.sirius.graph.set-installer-name">
+     </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.SelectImageAction"
+           id="net.roboconf.eclipse.sirius.graph.select-image">
+     </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.UnsetImageAction"
+           id="net.roboconf.eclipse.sirius.graph.unset-image">
+     </javaActions>
+  </extension>
+</plugin>

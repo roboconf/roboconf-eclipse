@@ -25,74 +25,23 @@
    limitations under the License.age governing permissions and limitations
   ~ under the License.
   -->
-  
+ 
 <project
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" 
 		xmlns="http://maven.apache.org/POM/4.0.0" 
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion> 
 	<parent>
 		<groupId>net.roboconf.eclipse</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.7.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
 	<groupId>net.roboconf.eclipse</groupId>
-	<artifactId>target</artifactId>
-	<name>Roboconf :: Eclipse Target Platform</name>
-	<packaging>pom</packaging>
-
-	<build>
-		<plugins>
-		
-			<!-- Attach the target file -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-
-				<executions>
-					<execution>
-						<id>attach-artifacts</id>
-						<phase>package</phase>
-						<goals>
-							<goal>attach-artifact</goal>
-						</goals>
-
-						<configuration>
-							<artifacts>
-								<artifact>
-									<file>mix.target</file>
-									<type>target</type>
-									<classifier>mix</classifier>
-								</artifact>
-							</artifacts>
-						</configuration>
-
-					</execution>
-				</executions>
-			</plugin>
-			
-			<!-- Prepare a complete and suitable target for PDE -->
-			<plugin>
-				<groupId>lt.velykis.maven</groupId>
-				<artifactId>pde-target-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<executions>
-					<execution>
-						<id>pde-target</id>
-						<goals>
-							<goal>add-pom-dependencies</goal>
-						</goals>
-						<configuration>
-							<baseDefinition>${project.basedir}/mix.target</baseDefinition>
-							<outputFile>${project.build.directory}/mix-pde.target</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	<artifactId>net.roboconf.eclipse.modeling.feature</artifactId>
+	<name>Roboconf :: Eclipse Modeling Feature</name>
+	<packaging>eclipse-feature</packaging>
+	
 </project>
