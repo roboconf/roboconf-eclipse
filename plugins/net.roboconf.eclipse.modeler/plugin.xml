@@ -11,15 +11,11 @@
   
   <extension point="org.eclipse.ui.newWizards">
   	<!-- FIXME: to replace by the usual Eclipse category -->
-      <category
-        id = "net.roboconf.eclipse"
-	    name="Roboconf">
-      </category>
      <wizard
-           category="net.roboconf.eclipse"
+           category="net.roboconf.eclipse.plugin.wizards"
            class="net.roboconf.eclipse.modeler.wizards.NewWizard"
            icon="icons/roboconf_16x16.jpg"
-           name="Roboconf Graph(s) Representation"
+           name="Diagram for Roboconf Graph(s)"
            id="net.roboconf.eclipse.graphs">
       </wizard>
    </extension>
