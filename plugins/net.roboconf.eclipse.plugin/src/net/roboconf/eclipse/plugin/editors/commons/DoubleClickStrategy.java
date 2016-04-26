@@ -25,13 +25,13 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
-import net.roboconf.eclipse.plugin.Activator;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextViewer;
+
+import net.roboconf.eclipse.plugin.Activator;
 
 /**
  * @author Vincent Zurczak - Linagora

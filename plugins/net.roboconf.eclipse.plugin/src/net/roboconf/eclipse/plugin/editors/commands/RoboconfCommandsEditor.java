@@ -25,10 +25,10 @@
 
 package net.roboconf.eclipse.plugin.editors.commands;
 
+import org.eclipse.ui.editors.text.TextEditor;
+
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
-
-import org.eclipse.ui.editors.text.TextEditor;
 
 /**
  * @author Vincent Zurczak - Linagora

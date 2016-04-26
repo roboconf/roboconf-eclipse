@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -41,6 +42,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sirius.viewpoint.DSemanticDecorator;
 
 import net.roboconf.core.utils.Utils;
@@ -68,6 +71,28 @@ public final class EclipseUtils {
 
 		if( eo instanceof DSemanticDecorator )
 			eo  = ((DSemanticDecorator) eo).getTarget();
+
+		return eo;
+	}
+
+
+	/**
+	 * Finds an EObject from the selection.
+	 * @param selection
+	 * @return
+	 */
+	public static EObject findEObjectFromSelection( ISelection selection ) {
+
+		Object o = null;
+		if( selection instanceof IStructuredSelection ) {
+			o = ((IStructuredSelection) selection).getFirstElement();
+		}
+
+		EObject eo = null;
+		if( o instanceof IAdaptable ) {
+			eo = ((IAdaptable) o).getAdapter( EObject.class );
+			eo = EclipseUtils.resolve( eo );
+		}
 
 		return eo;
 	}

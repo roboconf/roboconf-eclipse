@@ -25,10 +25,10 @@
 
 package net.roboconf.eclipse.plugin.editors.graphs;
 
+import org.eclipse.jface.text.rules.RuleBasedScanner;
+
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
-
-import org.eclipse.jface.text.rules.RuleBasedScanner;
 
 /**
  * @author Vincent Zurczak - Linagora

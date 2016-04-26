@@ -40,21 +40,8 @@
 	</parent>
 
 	<groupId>net.roboconf.eclipse</groupId>
-	<artifactId>net.roboconf.eclipse.occi.graph.edit</artifactId>
-	<name>Roboconf :: EMF / OCCI Editing for Graph(s)</name>
+	<artifactId>net.roboconf.eclipse.sirius.graph</artifactId>
+	<name>Roboconf :: Eclipse Plug-in</name>
 	<packaging>eclipse-plugin</packaging>
-	
-	<!-- Disable Checkstyle verifications for generated bundles -->
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	
 </project>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/tree/description/1.0.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" xmlns:validation="http://www.eclipse.org/sirius/description/validation/1.1.0" name="graph" version="10.1.3.201511131800">
-  <ownedViewpoints name="graph" label="Roboconf Graph(s)" modelFileExtension="graph-ui" icon="/net.roboconf.eclipse.sirius.graph/icons/roboconf_16x16.jpg">
+  <ownedViewpoints name="graph" label="Roboconf Graph(s)" modelFileExtension="graph-ui" icon="/net.roboconf.eclipse.modeler/icons/16x16/roboconf_16x16.jpg">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="RoboconfGraphs" label="Graph(s) Diagram" domainClass="Configuration" enablePopupBars="true">
       <metamodel href="platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#/"/>
       <metamodel href="../../net.roboconf.occi.graph.model/model/roboconf-graph.ecore#/"/>
@@ -14,21 +14,21 @@
       </validationSet>
       <defaultLayer name="Default">
         <nodeMappings name="component" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconfgraph.RoboconfComponent">
-          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.sirius.graph/icons/default-component.svg">
+          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-component.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelFormat>bold</labelFormat>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
         <nodeMappings name="facet" preconditionExpression="aql:not self.oclIsKindOf(roboconfgraph::RoboconfComponent)" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconfgraph.RoboconfFacet">
-          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.sirius.graph/icons/default-facet.svg">
+          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-facet.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelFormat>bold</labelFormat>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
         <toolSections name="nodes" label="Roboconf Types">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Facet" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='facet']" iconPath="/net.roboconf.eclipse.sirius.graph/icons/facet_16x16.png">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Facet" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='facet']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/facet_16x16.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -37,7 +37,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Component" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='component']" iconPath="/net.roboconf.eclipse.sirius.graph/icons/component_16x16.png">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Component" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='component']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/component_16x16.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -58,15 +58,15 @@
           </ownedTools>
         </toolSections>
         <toolSections name="Actions">
-          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Unset Image" id="net.roboconf.eclipse.sirius.graph.unset-image"/>
-          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Set Installer Name" precondition="aql:self.oclIsKindOf(roboconfgraph::RoboconfComponent) or self.members->select( i | i.oclIsKindOf(roboconfgraph::RoboconfComponent))" id="net.roboconf.eclipse.sirius.graph.set-installer-name">
+          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Unset Image" id="net.roboconf.eclipse.modeler.unset-image"/>
+          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Set Installer Name" precondition="aql:self.oclIsKindOf(roboconfgraph::RoboconfComponent) or self.members->select( i | i.oclIsKindOf(roboconfgraph::RoboconfComponent))" id="net.roboconf.eclipse.modeler.set-installer-name">
             <parameters name="eobject" value="aql:self"/>
           </ownedTools>
           <ownedTools xsi:type="tool:DoubleClickDescription" name="select image" forceRefresh="true" elementsToSelect="aql:Sequence{self}" mappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@defaultLayer/@nodeMappings[name='facet']">
             <element name="element"/>
             <elementView name="elementView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ExternalJavaAction" name="select image on the disk" forceRefresh="true" id="net.roboconf.eclipse.sirius.graph.select-image"/>
+              <firstModelOperations xsi:type="tool_1:ExternalJavaAction" name="select image on the disk" forceRefresh="true" id="net.roboconf.eclipse.modeler.select-image"/>
             </initialOperation>
           </ownedTools>
         </toolSections>
@@ -83,7 +83,7 @@
           </style>
         </edgeMappings>
         <toolSections name="inheritance palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="inheritance" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Inheritance']/@edgeMappings[name='inheritance']" iconPath="/net.roboconf.eclipse.sirius.graph/icons/inheritance_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="inheritance" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Inheritance']/@edgeMappings[name='inheritance']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/inheritance_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -104,7 +104,7 @@
           </style>
         </edgeMappings>
         <toolSections name="children palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="children" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Children']/@edgeMappings[name='children']" iconPath="/net.roboconf.eclipse.sirius.graph/icons/children_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="children" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Children']/@edgeMappings[name='children']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/children_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -125,7 +125,7 @@
           </style>
         </edgeMappings>
         <toolSections name="runtime palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="runtime" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Runtime']/@edgeMappings[name='runtime']" iconPath="/net.roboconf.eclipse.sirius.graph/icons/runtime_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="runtime" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='RoboconfGraphs']/@additionalLayers[name='Runtime']/@edgeMappings[name='runtime']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/runtime_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -170,6 +170,6 @@
         </create>
       </subItemMappings>
     </ownedRepresentations>
-    <ownedJavaExtensions qualifiedClassName="net.roboconf.eclipse.sirius.graph.services.ImageSelectionService"/>
+    <ownedJavaExtensions qualifiedClassName="net.roboconf.eclipse.modeler.services.ImageSelectionService"/>
   </ownedViewpoints>
 </description:Group>

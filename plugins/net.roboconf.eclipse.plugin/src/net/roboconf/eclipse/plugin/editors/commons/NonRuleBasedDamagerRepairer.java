@@ -25,8 +25,6 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
-import net.roboconf.eclipse.plugin.Activator;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.BadLocationException;
@@ -40,6 +38,8 @@ import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.presentation.IPresentationDamager;
 import org.eclipse.jface.text.presentation.IPresentationRepairer;
 import org.eclipse.swt.custom.StyleRange;
+
+import net.roboconf.eclipse.plugin.Activator;
 
 /**
  * FIXME: work on this class.

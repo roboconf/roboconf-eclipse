@@ -31,7 +31,7 @@
    </requires>
 
    <plugin
-         id="net.roboconf.eclipse.occi.graph.edit"
+         id="net.roboconf.eclipse.occi.graph.model.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"

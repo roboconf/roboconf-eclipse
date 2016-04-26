@@ -63,7 +63,7 @@
 		<!-- Plug-ins -->
 		<module>plugins/net.roboconf.eclipse.plugin</module>
 		<module>plugins/net.roboconf.eclipse.occi.graph.model</module>
-		<module>plugins/net.roboconf.eclipse.occi.graph.edit</module>
+		<module>plugins/net.roboconf.eclipse.occi.graph.model.edit</module>
 		<module>plugins/net.roboconf.eclipse.modeler</module>
 		
 		<!-- Features -->

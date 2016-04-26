@@ -25,10 +25,6 @@
 
 package net.roboconf.eclipse.plugin.editors.rules.autonomic;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.NonRuleBasedDamagerRepairer;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
-
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -37,6 +33,10 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.graphics.Color;
+
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.NonRuleBasedDamagerRepairer;
+import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 
 /**
  * @author Vincent Zurczak - Linagora

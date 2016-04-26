@@ -25,9 +25,9 @@
 
 package net.roboconf.eclipse.plugin.editors.rules.autonomic;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-
 import org.eclipse.ui.editors.text.TextEditor;
+
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 
 /**
  * @author Vincent Zurczak - Linagora

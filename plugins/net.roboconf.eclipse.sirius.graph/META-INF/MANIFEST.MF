@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Sirius Modeler for Roboconf
-Bundle-SymbolicName: net.roboconf.eclipse.modeler;singleton:=true
+Bundle-Name: Sirius Modeller for Roboconf Graph(s)
+Bundle-SymbolicName: net.roboconf.eclipse.sirius.graph;singleton:=true
 Bundle-Version: 0.7.0.qualifier
-Bundle-Activator: net.roboconf.eclipse.modeler.RoboconfModelerPlugin
+Bundle-Activator: net.roboconf.eclipse.sirius.graph.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -11,8 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.occiware.clouddesigner.occi.design;bundle-version="0.1.0",
  org.occiware.clouddesigner.occi.emfgen.ui;bundle-version="0.1.0",
  net.roboconf.core,
- net.roboconf.eclipse.occi.graph.model.edit,
- net.roboconf.eclipse.occi.graph.model,
- net.roboconf.eclipse.plugin
+ net.roboconf.eclipse.occi.graph.edit,
+ net.roboconf.eclipse.occi.graph.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

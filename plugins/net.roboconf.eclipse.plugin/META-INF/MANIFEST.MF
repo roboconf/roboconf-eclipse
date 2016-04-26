@@ -14,3 +14,4 @@ Require-Bundle: net.roboconf.core,
  org.eclipse.core.resources
 Bundle-Activator: net.roboconf.eclipse.plugin.Activator
 Bundle-ActivationPolicy: lazy
+Export-Package: net.roboconf.eclipse.plugin.wizards;x-friends:="net.roboconf.eclipse.modeler"

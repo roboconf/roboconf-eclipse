@@ -3,7 +3,7 @@
 <plugin>
   <extension point="org.eclipse.sirius.componentization">
     <component class="net.roboconf.eclipse.modeler.RoboconfModelerPlugin"
-               id="net.roboconf.eclipse.sirius.graph"
+               id="net.roboconf.eclipse.modeler"
 	       name="graph">
     </component>
   </extension>
@@ -14,7 +14,7 @@
      <wizard
            category="net.roboconf.eclipse.plugin.wizards"
            class="net.roboconf.eclipse.modeler.wizards.NewWizard"
-           icon="icons/roboconf_16x16.jpg"
+           icon="icons/16x16/roboconf_16x16.jpg"
            name="Diagram for Roboconf Graph(s)"
            id="net.roboconf.eclipse.graphs">
       </wizard>
@@ -23,15 +23,131 @@
         point="org.eclipse.sirius.externalJavaAction">
      <javaActions
            actionClass="net.roboconf.eclipse.modeler.actions.SetInstallerNameAction"
-           id="net.roboconf.eclipse.sirius.graph.set-installer-name">
+           id="net.roboconf.eclipse.modeler.set-installer-name">
      </javaActions>
      <javaActions
            actionClass="net.roboconf.eclipse.modeler.actions.SelectImageAction"
-           id="net.roboconf.eclipse.sirius.graph.select-image">
+           id="net.roboconf.eclipse.modeler.select-image">
      </javaActions>
      <javaActions
            actionClass="net.roboconf.eclipse.modeler.actions.UnsetImageAction"
-           id="net.roboconf.eclipse.sirius.graph.unset-image">
+           id="net.roboconf.eclipse.modeler.unset-image">
      </javaActions>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <category
+           id="net.roboconf.eclipse.modeler"
+           name="Roboconf">
+     </category>
+     <view
+           category="net.roboconf.eclipse.modeler"
+           class="net.roboconf.eclipse.modeler.views.VariablesView"
+           icon="icons/16x16/roboconf_16x16.jpg"
+           id="net.roboconf.eclipse.modeler.views.variablesView"
+           name="Roboconf Variables">
+     </view>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+     <command
+           defaultHandler="net.roboconf.eclipse.modeler.commands.CreateOrEditExportedVariableCommand"
+           description="Create or edit an exported variable"
+           id="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
+           name="Create or edit an exported variable">
+     </command>
+     <command
+           defaultHandler="net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand"
+           description="Manage imported variables"
+           id="net.roboconf.eclipse.modeler.manageImportedVariables"
+           name="Manage Imported Variables">
+     </command>
+     <command
+           defaultHandler="net.roboconf.eclipse.modeler.commands.DeleteVariableCommand"
+           description="Delete the selected variable"
+           id="net.roboconf.eclipse.modeler.deleteExportedVariable"
+           name="Delete an exported variable">
+     </command>
+     <command
+           defaultHandler="net.roboconf.eclipse.modeler.commands.GenerateFilesCommand"
+           id="net.roboconf.eclipse.modeler.generateFiles"
+           name="Generate Files">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           locationURI="toolbar:net.roboconf.eclipse.modeler.views.variablesView?after=additions">
+        <command
+              commandId="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
+              hoverIcon="icons/16x16/new_16x16.gif"
+              icon="icons/16x16/new_16x16.gif"
+              label="New Exported Variable"
+              style="push"
+              tooltip="Create a new exported variable">
+        </command>
+        <command
+              commandId="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
+              icon="icons/16x16/editor_16x16.gif"
+              label="Edit the Exported Variable"
+              style="push"
+              tooltip="Edit an exported variable">
+        </command>
+        <command
+              commandId="net.roboconf.eclipse.modeler.deleteExportedVariable"
+              icon="icons/16x16/delete_16x16.gif"
+              label="Delete the Exported Variable"
+              style="push"
+              tooltip="Delete an exported variable">
+        </command>
+         <command
+              commandId="net.roboconf.eclipse.modeler.manageImportedVariables"
+              icon="icons/16x16/manage_16x16.gif"
+              label="Manage Imported Variables"
+              style="push"
+              tooltip="Manage imported variables">
+        </command>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+    	 <menu
+            icon="icons/16x16/roboconf_16x16.jpg"
+            id="net.roboconf.eclipse.actions"
+            label="Roboconf">
+        </menu>
+     </menuContribution>
+     <menuContribution
+           allPopups="false"
+           locationURI="popup:net.roboconf.eclipse.actions?after=additions">
+        <command
+              commandId="net.roboconf.eclipse.modeler.generateFiles"
+              label="Generate Files"
+              style="push">
+              
+              <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IFile">
+                        </instanceof>
+                        <test
+                              property="org.eclipse.core.resources.extension"
+                              value="graph-ui">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+        </command>
+     </menuContribution>
   </extension>
 </plugin>

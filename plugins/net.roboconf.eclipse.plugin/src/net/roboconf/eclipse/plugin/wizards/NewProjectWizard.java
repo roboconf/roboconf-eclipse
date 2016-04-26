@@ -29,9 +29,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.roboconf.eclipse.plugin.Activator;
-import net.roboconf.tooling.core.ProjectUtils;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -53,6 +50,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 
+import net.roboconf.eclipse.plugin.Activator;
+import net.roboconf.tooling.core.ProjectUtils;
+
 /**
  * @author Vincent Zurczak - Linagora
  */
@@ -61,7 +61,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 	private static final String PROJECTS_VIEW = "org.eclipse.ui.navigator.ProjectExplorer";
 	private static final String PACKAGES_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 
-	private NewProjectWizardPage page;
+	protected NewProjectWizardPage projectPage;
 
 
 	/**
@@ -94,8 +94,8 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		this.page = new NewProjectWizardPage();
-		addPage( this.page );
+		this.projectPage = new NewProjectWizardPage();
+		addPage( this.projectPage );
 	}
 
 
@@ -114,16 +114,16 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 
 				try {
 					monitor.beginTask( "Creating the project...", 5 );
-					File target = NewProjectWizard.this.page.getTargetDirectory();
-					String name = NewProjectWizard.this.page.getCreationBean().getArtifactId();
+					File target = NewProjectWizard.this.projectPage.getTargetDirectory();
+					String name = NewProjectWizard.this.projectPage.getCreationBean().getArtifactId();
 					if( target == null )
 						target = new File( ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString(), name );
 
-					ProjectUtils.createProjectSkeleton( target, NewProjectWizard.this.page.getCreationBean());
+					ProjectUtils.createProjectSkeleton( target, NewProjectWizard.this.projectPage.getCreationBean());
 					monitor.worked( 4 );
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( name );
 
-					target = NewProjectWizard.this.page.getTargetDirectory();
+					target = NewProjectWizard.this.projectPage.getTargetDirectory();
 					if( target != null ) {
 						IProjectDescription projectDescription = ResourcesPlugin.getWorkspace().newProjectDescription( name );
 						projectDescription.setLocationURI( target.toURI());
@@ -151,10 +151,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			getContainer().run( true, false, op );
 
 			// Open the graph file
-			String projectName = this.page.getCreationBean().getArtifactId();
+			String projectName = this.projectPage.getCreationBean().getArtifactId();
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
-			String loc = this.page.getCreationBean().isMavenProject() ? "src/main/model/graph/main.graph" : "graph/main.graph";
+			String loc = this.projectPage.getCreationBean().isMavenProject() ? "src/main/model/graph/main.graph" : "graph/main.graph";
 			final IFile graphFile = project.getFile( loc );
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			try {
