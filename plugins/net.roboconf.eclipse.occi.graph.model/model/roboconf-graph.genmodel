@@ -6,7 +6,8 @@
     complianceLevel="7.0" copyrightFields="false" editPluginID="net.roboconf.eclipse.occi.graph.model.edit"
     editorPluginID="net.roboconf.occi.graph.edit" usedGenPackages="platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.genmodel#//occi">
   <foreignModel>roboconf-graph.ecore</foreignModel>
-  <genPackages prefix="Roboconfgraph" disposableProviderFactory="true" ecorePackage="roboconf-graph.ecore#/">
+  <genPackages prefix="Roboconfgraph" basePackage="net.roboconf.eclipse.occi.graph"
+      disposableProviderFactory="true" ecorePackage="roboconf-graph.ecore#/">
     <genClasses ecoreClass="roboconf-graph.ecore#//RoboconfComponent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf-graph.ecore#//RoboconfComponent/installerName"/>
     </genClasses>

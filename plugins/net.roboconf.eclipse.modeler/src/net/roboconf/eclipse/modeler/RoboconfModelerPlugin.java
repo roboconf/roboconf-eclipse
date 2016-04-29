@@ -30,8 +30,10 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.sirius.business.api.componentization.ViewpointRegistry;
 import org.eclipse.sirius.viewpoint.description.Viewpoint;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -46,7 +48,7 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 
     // The shared instance
     private static RoboconfModelerPlugin plugin;
-    private static Set<Viewpoint> viewpoints;
+    private Set<Viewpoint> viewpoints;
 
 
     /**
@@ -61,8 +63,9 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
       super.start(context);
 	  plugin = this;
-	  viewpoints = new HashSet<> ();
-	  viewpoints.addAll( ViewpointRegistry.getInstance().registerFromPlugin(
+
+	  this.viewpoints = new HashSet<> ();
+	  this.viewpoints.addAll( ViewpointRegistry.getInstance().registerFromPlugin(
 			  PLUGIN_ID + "/description/graph.odesign" ));
     }
 
@@ -71,13 +74,13 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 
     	plugin = null;
-    	if (viewpoints != null) {
-    		for (final Viewpoint viewpoint: viewpoints) {
+    	if (this.viewpoints != null) {
+    		for (final Viewpoint viewpoint: this.viewpoints) {
     			ViewpointRegistry.getInstance().disposeFromPlugin(viewpoint);
     		}
 
-    		viewpoints.clear();
-    		viewpoints = null;
+    		this.viewpoints.clear();
+    		this.viewpoints = null;
     	}
 
     	super.stop(context);
@@ -116,5 +119,20 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
     public static void log( String message, int severity ) {
     	IStatus status = new Status( severity, PLUGIN_ID, message );
     	getDefault().getLog().log( status );
+    }
+
+
+    public static Image findImage( String filePath ) {
+
+    	ImageDescriptor desc = imageDescriptorFromPlugin( PLUGIN_ID, filePath );
+    	Image img = null;
+		try {
+			img = desc.createImage();
+
+		} catch( Exception e ) {
+			log( "Image " + filePath + " could not be found.", IStatus.ERROR );
+		}
+
+    	return img;
     }
 }

@@ -25,11 +25,9 @@
 
 package net.roboconf.eclipse.modeler.dialogs;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -37,15 +35,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
-
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class GenerationDialog extends TitleAreaDialog {
-
-	private Image image;
-
 
 	/**
 	 * Constructor.
@@ -96,26 +89,5 @@ public class GenerationDialog extends TitleAreaDialog {
 
 
 		return bigContainer;
-	}
-
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.Dialog#close()
-	 */
-	@Override
-	public boolean close() {
-
-		boolean result = super.close();
-		try {
-			if( this.image != null
-					&& ! this.image.isDisposed())
-				this.image.dispose();
-
-		} catch( Exception e ) {
-			RoboconfModelerPlugin.log( e, IStatus.ERROR );
-		}
-
-		return result;
 	}
 }

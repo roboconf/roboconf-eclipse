@@ -40,7 +40,7 @@ import org.eclipse.ui.PlatformUI;
 import org.occiware.clouddesigner.occi.Configuration;
 
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import roboconfgraph.RoboconfComponent;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
 
 /**
  * @author Vincent Zurczak - Linagora

@@ -5,9 +5,9 @@ Bundle-SymbolicName: net.roboconf.eclipse.occi.graph.model;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: roboconfgraph,
- roboconfgraph.impl,
- roboconfgraph.util
+Export-Package: net.roboconf.eclipse.occi.graph.roboconfgraph,
+ net.roboconf.eclipse.occi.graph.roboconfgraph.impl,
+ net.roboconf.eclipse.occi.graph.roboconfgraph.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.occiware.clouddesigner.occi;visibility:=reexport

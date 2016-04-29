@@ -32,7 +32,7 @@
       <!-- @generated roboconf-graph -->
       <factory
             uri="http://roboconf.net/graph"
-            class="roboconfgraph.provider.RoboconfgraphItemProviderAdapterFactory"
+            class="net.roboconf.eclipse.occi.graph.roboconfgraph.provider.RoboconfgraphItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider

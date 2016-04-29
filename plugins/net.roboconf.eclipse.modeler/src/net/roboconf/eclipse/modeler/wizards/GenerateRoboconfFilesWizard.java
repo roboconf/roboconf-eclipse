@@ -25,13 +25,10 @@
 
 package net.roboconf.eclipse.modeler.wizards;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -39,7 +36,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.plugin.wizards.NewProjectWizard;
 
 /**
@@ -105,8 +101,6 @@ public class GenerateRoboconfFilesWizard extends NewProjectWizard {
 	 */
 	private static class ChoiceWizardPage extends WizardPage {
 
-		// FIXME: find better images or delete them from the code.
-		private Image projectImg, fileImg;
 		private boolean generateProject = true;
 
 
@@ -118,23 +112,6 @@ public class GenerateRoboconfFilesWizard extends NewProjectWizard {
 
 			setTitle( "Generate Roboconf Files" );
 			setDescription( "Select the generation options." );
-
-			ImageDescriptor desc;
-			try {
-				desc = RoboconfModelerPlugin.imageDescriptorFromPlugin( RoboconfModelerPlugin.PLUGIN_ID, "icons/misc/project_90x78.png" );
-				this.projectImg = desc.createImage();
-
-			} catch( Exception e ) {
-				RoboconfModelerPlugin.log( e, IStatus.ERROR );
-			}
-
-			try {
-				desc = RoboconfModelerPlugin.imageDescriptorFromPlugin( RoboconfModelerPlugin.PLUGIN_ID, "icons/misc/file_90x78.png" );
-				this.fileImg = desc.createImage();
-
-			} catch( Exception e ) {
-				RoboconfModelerPlugin.log( e, IStatus.ERROR );
-			}
 		}
 
 
@@ -146,6 +123,7 @@ public class GenerateRoboconfFilesWizard extends NewProjectWizard {
 		public void createControl( Composite parent ) {
 
 			// Basic fields
+			getShell().setText( "Generate Roboconf Files" );
 			final Composite container = new Composite( parent, SWT.NONE );
 			GridLayoutFactory.swtDefaults().numColumns( 2 ).extendedMargins( 15, 15, 20, 0 ).spacing( 15, 15 ).applyTo( container );
 			container.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ));
@@ -189,22 +167,6 @@ public class GenerateRoboconfFilesWizard extends NewProjectWizard {
 			fileButton.addListener( SWT.Selection, listener );
 
 			setControl( container );
-		}
-
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.DialogPage#dispose()
-		 */
-		@Override
-		public void dispose() {
-
-			if( this.projectImg != null && ! this.projectImg.isDisposed())
-				this.projectImg.dispose();
-
-			if( this.fileImg != null && ! this.fileImg.isDisposed())
-				this.fileImg.dispose();
-
-			super.dispose();
 		}
 	}
 

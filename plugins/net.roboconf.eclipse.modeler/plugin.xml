@@ -33,6 +33,10 @@
            actionClass="net.roboconf.eclipse.modeler.actions.UnsetImageAction"
            id="net.roboconf.eclipse.modeler.unset-image">
      </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.ShowVariablesAction"
+           id="net.roboconf.eclipse.modeler.showVariables">
+     </javaActions>
   </extension>
   <extension
         point="org.eclipse.ui.views">
@@ -51,10 +55,16 @@
   <extension
         point="org.eclipse.ui.commands">
      <command
-           defaultHandler="net.roboconf.eclipse.modeler.commands.CreateOrEditExportedVariableCommand"
-           description="Create or edit an exported variable"
-           id="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
-           name="Create or edit an exported variable">
+           defaultHandler="net.roboconf.eclipse.modeler.commands.CreateNewExportedVariableCommand"
+           description="Create a new exported variable"
+           id="net.roboconf.eclipse.modeler.createNewExportedVariableCommand"
+           name="Create a new exported variable">
+     </command>
+     <command
+           defaultHandler="net.roboconf.eclipse.modeler.commands.EditExportedVariableCommand"
+           description="Edit an exported variable"
+           id="net.roboconf.eclipse.modeler.editExportedVariableCommand"
+           name="Edit an exported variable">
      </command>
      <command
            defaultHandler="net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand"
@@ -63,7 +73,7 @@
            name="Manage Imported Variables">
      </command>
      <command
-           defaultHandler="net.roboconf.eclipse.modeler.commands.DeleteVariableCommand"
+           defaultHandler="net.roboconf.eclipse.modeler.commands.DeleteExportedVariableCommand"
            description="Delete the selected variable"
            id="net.roboconf.eclipse.modeler.deleteExportedVariable"
            name="Delete an exported variable">
@@ -79,7 +89,7 @@
      <menuContribution
            locationURI="toolbar:net.roboconf.eclipse.modeler.views.variablesView?after=additions">
         <command
-              commandId="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
+              commandId="net.roboconf.eclipse.modeler.createNewExportedVariableCommand"
               hoverIcon="icons/16x16/new_16x16.gif"
               icon="icons/16x16/new_16x16.gif"
               label="New Exported Variable"
@@ -87,11 +97,11 @@
               tooltip="Create a new exported variable">
         </command>
         <command
-              commandId="net.roboconf.eclipse.modeler.createOrEditExportedVariableCommand"
+              commandId="net.roboconf.eclipse.modeler.editExportedVariableCommand"
               icon="icons/16x16/editor_16x16.gif"
               label="Edit the Exported Variable"
               style="push"
-              tooltip="Edit an exported variable">
+              tooltip="Edit the exported variable">
         </command>
         <command
               commandId="net.roboconf.eclipse.modeler.deleteExportedVariable"

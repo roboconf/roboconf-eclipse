@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora

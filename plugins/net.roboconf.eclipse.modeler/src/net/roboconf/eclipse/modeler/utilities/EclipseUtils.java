@@ -42,9 +42,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sirius.viewpoint.DSemanticDecorator;
+import org.eclipse.swt.graphics.Image;
 
 import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
@@ -84,14 +88,16 @@ public final class EclipseUtils {
 	public static EObject findEObjectFromSelection( ISelection selection ) {
 
 		Object o = null;
-		if( selection instanceof IStructuredSelection ) {
+		if( selection instanceof IStructuredSelection )
 			o = ((IStructuredSelection) selection).getFirstElement();
-		}
 
 		EObject eo = null;
 		if( o instanceof IAdaptable ) {
 			eo = ((IAdaptable) o).getAdapter( EObject.class );
 			eo = EclipseUtils.resolve( eo );
+
+		} else if( o instanceof EObject ) {
+			eo = (EObject) o;
 		}
 
 		return eo;
@@ -156,6 +162,11 @@ public final class EclipseUtils {
 	}
 
 
+	/**
+	 * @param imgFolder
+	 * @param baseName
+	 * @return
+	 */
 	public static IFile findImageOf( IContainer imgFolder, String baseName ) {
 
 		IFile result = null;
@@ -176,5 +187,39 @@ public final class EclipseUtils {
 		}
 
 		return result;
+	}
+
+
+	/**
+	 * @param eo
+	 * @return
+	 */
+	public static EditingDomain findEditingDomain( EObject eo ) {
+
+		IEditingDomainProvider editingDomainProvider = (IEditingDomainProvider) EcoreUtil.getExistingAdapter(
+				eo.eResource(),
+				IEditingDomainProvider.class );
+
+		if( editingDomainProvider == null
+				&& eo.eResource().getResourceSet() instanceof IEditingDomainProvider ) {
+			editingDomainProvider = (IEditingDomainProvider) eo.eResource().getResourceSet();
+
+		} else {
+			editingDomainProvider = (IEditingDomainProvider) EcoreUtil.getExistingAdapter(
+					eo.eResource().getResourceSet(),
+					IEditingDomainProvider.class );
+		}
+
+		return editingDomainProvider == null ? null : editingDomainProvider.getEditingDomain();
+	}
+
+
+	/**
+	 * @param img
+	 */
+	public static void dispose( Image img ) {
+
+		if( img != null && ! img.isDisposed())
+			img.dispose();
 	}
 }

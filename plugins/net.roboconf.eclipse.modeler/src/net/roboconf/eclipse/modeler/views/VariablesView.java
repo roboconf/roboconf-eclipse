@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -43,12 +44,13 @@ import org.eclipse.ui.part.ViewPart;
 import org.occiware.clouddesigner.occi.Link;
 
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import roboconfgraph.RoboconfComponent;
-import roboconfgraph.RoboconfExportedVariable;
-import roboconfgraph.RoboconfFacet;
-import roboconfgraph.RoboconfImportedVariable;
-import roboconfgraph.RoboconfOwnerLink;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -60,12 +62,14 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 	private TreeViewer viewer;
 
 
+
 	@Override
 	public void createPartControl( Composite parent ) {
 		this.viewer = new TreeViewer( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.viewer.setContentProvider( new VariablesTreeContentProvider());
 		this.viewer.setLabelProvider( new VariablesLabelProvider());
 
+		getSite().setSelectionProvider( this.viewer );
 		getSite().getPage().addSelectionListener( this );
 	}
 
@@ -81,7 +85,9 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 		EObject eo = EclipseUtils.findEObjectFromSelection( selection );
 		if( this.viewer != null
-				&& ! this.viewer.getTree().isDisposed()) {
+				&& ! this.viewer.getTree().isDisposed()
+				&& eo instanceof RoboconfFacet ) {
+
 			this.viewer.setInput( eo );
 			this.viewer.refresh();
 			this.viewer.expandAll();
@@ -128,11 +134,14 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 			List<Object> result = new ArrayList<> ();
 			if( Objects.equals( parentElement, EXPORTED )) {
-				for( Link link : ((RoboconfComponent) this.input).getLinks()) {
+				for( Link link : ((RoboconfFacet) this.input).getLinks()) {
 					if( link instanceof RoboconfOwnerLink
 							&& link.getTarget() instanceof RoboconfExportedVariable )
 						result.add( link.getTarget());
 				}
+
+				if( result.isEmpty())
+					result.add( "No exported variable" );
 
 			} else if( Objects.equals( parentElement, IMPORTED )) {
 				for( Link link : ((RoboconfComponent) this.input).getLinks()) {
@@ -140,6 +149,9 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 							&& link.getTarget() instanceof RoboconfImportedVariable )
 						result.add( link.getTarget());
 				}
+
+				if( result.isEmpty())
+					result.add( "No imported variable" );
 			}
 
 			return result.toArray( new Object[ result.size()]);
@@ -168,6 +180,28 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 	 * @author Vincent Zurczak - Linagora
 	 */
 	private static class VariablesLabelProvider extends LabelProvider {
+
+		private final Image listImg, varImg;
+
+
+		/**
+		 * Constructor.
+		 */
+		public VariablesLabelProvider() {
+			this.listImg = RoboconfModelerPlugin.findImage( "icons/16x16/list_16x16.gif" );
+			this.varImg = RoboconfModelerPlugin.findImage( "icons/16x16/task_16x16.gif" );
+		}
+
+
+		@Override
+		public void dispose() {
+
+			EclipseUtils.dispose( this.listImg );
+			EclipseUtils.dispose( this.varImg );
+
+			super.dispose();
+		}
+
 
 		@Override
 		public String getText( Object element ) {
@@ -209,6 +243,21 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 			}
 
 			return text;
+		}
+
+
+		@Override
+		public Image getImage( Object element ) {
+
+			Image result = this.varImg;
+			if( IMPORTED.equalsIgnoreCase( String.valueOf( element ))
+					|| EXPORTED.equalsIgnoreCase( String.valueOf( element )))
+				result = this.listImg;
+
+			else if( element instanceof String )
+				result = null;
+
+			return result;
 		}
 	}
 }

@@ -33,7 +33,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.PlatformUI;
 
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
