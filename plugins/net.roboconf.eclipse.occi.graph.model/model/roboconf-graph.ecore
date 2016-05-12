@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="roboconfgraph" nsURI="http://roboconf.net/graph" nsPrefix="roboconfgraph">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="roboconfgraph" nsURI="http://roboconf.net/graph/ecore" nsPrefix="roboconfgraph">
   <eClassifiers xsi:type="ecore:EClass" name="RoboconfComponent" eSuperTypes="#//RoboconfFacet">
     <eAnnotations source="OCCIE2Ecore">
       <details key="title"/>
@@ -16,32 +16,6 @@
       <details key="title"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//String">
-      <eAnnotations source="OCCIE2Ecore">
-        <details key="description"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RoboconfApplicationTemplate" eSuperTypes="platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//Resource">
-    <eAnnotations source="OCCIE2Ecore">
-      <details key="title"/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//String">
-      <eAnnotations source="OCCIE2Ecore">
-        <details key="description"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="desc" eType="ecore:EDataType platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//String">
-      <eAnnotations source="OCCIE2Ecore">
-        <details key="description"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//String">
-      <eAnnotations source="OCCIE2Ecore">
-        <details key="description"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalVariablesPrefix"
-        eType="ecore:EDataType platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#//String">
       <eAnnotations source="OCCIE2Ecore">
         <details key="description"/>
       </eAnnotations>

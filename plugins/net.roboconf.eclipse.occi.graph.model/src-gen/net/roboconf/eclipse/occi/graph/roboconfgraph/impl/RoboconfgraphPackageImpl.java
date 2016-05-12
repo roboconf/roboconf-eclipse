@@ -24,7 +24,6 @@
  */
 package net.roboconf.eclipse.occi.graph.roboconfgraph.impl;
 
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate;
 import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfChildrenLink;
 import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
 import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
@@ -64,13 +63,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 	 * @generated
 	 */
 	private EClass roboconfFacetEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass roboconfApplicationTemplateEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -219,51 +211,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getRoboconfApplicationTemplate() {
-		return roboconfApplicationTemplateEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRoboconfApplicationTemplate_Name() {
-		return (EAttribute)roboconfApplicationTemplateEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRoboconfApplicationTemplate_Desc() {
-		return (EAttribute)roboconfApplicationTemplateEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRoboconfApplicationTemplate_Version() {
-		return (EAttribute)roboconfApplicationTemplateEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRoboconfApplicationTemplate_ExternalVariablesPrefix() {
-		return (EAttribute)roboconfApplicationTemplateEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getRoboconfExportedVariable() {
 		return roboconfExportedVariableEClass;
 	}
@@ -401,12 +348,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 		roboconfFacetEClass = createEClass(ROBOCONF_FACET);
 		createEAttribute(roboconfFacetEClass, ROBOCONF_FACET__NAME);
 
-		roboconfApplicationTemplateEClass = createEClass(ROBOCONF_APPLICATION_TEMPLATE);
-		createEAttribute(roboconfApplicationTemplateEClass, ROBOCONF_APPLICATION_TEMPLATE__NAME);
-		createEAttribute(roboconfApplicationTemplateEClass, ROBOCONF_APPLICATION_TEMPLATE__DESC);
-		createEAttribute(roboconfApplicationTemplateEClass, ROBOCONF_APPLICATION_TEMPLATE__VERSION);
-		createEAttribute(roboconfApplicationTemplateEClass, ROBOCONF_APPLICATION_TEMPLATE__EXTERNAL_VARIABLES_PREFIX);
-
 		roboconfExportedVariableEClass = createEClass(ROBOCONF_EXPORTED_VARIABLE);
 		createEAttribute(roboconfExportedVariableEClass, ROBOCONF_EXPORTED_VARIABLE__NAME);
 		createEAttribute(roboconfExportedVariableEClass, ROBOCONF_EXPORTED_VARIABLE__VALUE);
@@ -459,7 +400,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 		// Add supertypes to classes
 		roboconfComponentEClass.getESuperTypes().add(this.getRoboconfFacet());
 		roboconfFacetEClass.getESuperTypes().add(theOCCIPackage.getResource());
-		roboconfApplicationTemplateEClass.getESuperTypes().add(theOCCIPackage.getResource());
 		roboconfExportedVariableEClass.getESuperTypes().add(theOCCIPackage.getResource());
 		roboconfImportedVariableEClass.getESuperTypes().add(theOCCIPackage.getResource());
 		roboconfOwnerLinkEClass.getESuperTypes().add(theOCCIPackage.getLink());
@@ -473,12 +413,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 
 		initEClass(roboconfFacetEClass, RoboconfFacet.class, "RoboconfFacet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRoboconfFacet_Name(), theOCCIPackage.getString(), "name", null, 0, 1, RoboconfFacet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(roboconfApplicationTemplateEClass, RoboconfApplicationTemplate.class, "RoboconfApplicationTemplate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRoboconfApplicationTemplate_Name(), theOCCIPackage.getString(), "name", null, 0, 1, RoboconfApplicationTemplate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRoboconfApplicationTemplate_Desc(), theOCCIPackage.getString(), "desc", null, 0, 1, RoboconfApplicationTemplate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRoboconfApplicationTemplate_Version(), theOCCIPackage.getString(), "version", null, 0, 1, RoboconfApplicationTemplate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRoboconfApplicationTemplate_ExternalVariablesPrefix(), theOCCIPackage.getString(), "externalVariablesPrefix", null, 0, 1, RoboconfApplicationTemplate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roboconfExportedVariableEClass, RoboconfExportedVariable.class, "RoboconfExportedVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRoboconfExportedVariable_Name(), theOCCIPackage.getString(), "name", null, 0, 1, RoboconfExportedVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -534,36 +468,6 @@ public class RoboconfgraphPackageImpl extends EPackageImpl implements Roboconfgr
 		   });	
 		addAnnotation
 		  (getRoboconfFacet_Name(), 
-		   source, 
-		   new String[] {
-			 "description", null
-		   });	
-		addAnnotation
-		  (roboconfApplicationTemplateEClass, 
-		   source, 
-		   new String[] {
-			 "title", null
-		   });	
-		addAnnotation
-		  (getRoboconfApplicationTemplate_Name(), 
-		   source, 
-		   new String[] {
-			 "description", null
-		   });	
-		addAnnotation
-		  (getRoboconfApplicationTemplate_Desc(), 
-		   source, 
-		   new String[] {
-			 "description", null
-		   });	
-		addAnnotation
-		  (getRoboconfApplicationTemplate_Version(), 
-		   source, 
-		   new String[] {
-			 "description", null
-		   });	
-		addAnnotation
-		  (getRoboconfApplicationTemplate_ExternalVariablesPrefix(), 
 		   source, 
 		   new String[] {
 			 "description", null

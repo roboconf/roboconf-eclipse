@@ -102,10 +102,6 @@ public class RoboconfgraphAdapterFactory extends AdapterFactoryImpl {
 				return createRoboconfFacetAdapter();
 			}
 			@Override
-			public Adapter caseRoboconfApplicationTemplate(RoboconfApplicationTemplate object) {
-				return createRoboconfApplicationTemplateAdapter();
-			}
-			@Override
 			public Adapter caseRoboconfExportedVariable(RoboconfExportedVariable object) {
 				return createRoboconfExportedVariableAdapter();
 			}
@@ -186,20 +182,6 @@ public class RoboconfgraphAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRoboconfFacetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate <em>Roboconf Application Template</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate
-	 * @generated
-	 */
-	public Adapter createRoboconfApplicationTemplateAdapter() {
 		return null;
 	}
 

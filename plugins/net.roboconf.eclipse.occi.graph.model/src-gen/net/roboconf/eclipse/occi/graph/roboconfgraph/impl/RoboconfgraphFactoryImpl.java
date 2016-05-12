@@ -80,7 +80,6 @@ public class RoboconfgraphFactoryImpl extends EFactoryImpl implements Roboconfgr
 		switch (eClass.getClassifierID()) {
 			case RoboconfgraphPackage.ROBOCONF_COMPONENT: return createRoboconfComponent();
 			case RoboconfgraphPackage.ROBOCONF_FACET: return createRoboconfFacet();
-			case RoboconfgraphPackage.ROBOCONF_APPLICATION_TEMPLATE: return createRoboconfApplicationTemplate();
 			case RoboconfgraphPackage.ROBOCONF_EXPORTED_VARIABLE: return createRoboconfExportedVariable();
 			case RoboconfgraphPackage.ROBOCONF_IMPORTED_VARIABLE: return createRoboconfImportedVariable();
 			case RoboconfgraphPackage.ROBOCONF_OWNER_LINK: return createRoboconfOwnerLink();
@@ -110,16 +109,6 @@ public class RoboconfgraphFactoryImpl extends EFactoryImpl implements Roboconfgr
 	public RoboconfFacet createRoboconfFacet() {
 		RoboconfFacetImpl roboconfFacet = new RoboconfFacetImpl();
 		return roboconfFacet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RoboconfApplicationTemplate createRoboconfApplicationTemplate() {
-		RoboconfApplicationTemplateImpl roboconfApplicationTemplate = new RoboconfApplicationTemplateImpl();
-		return roboconfApplicationTemplate;
 	}
 
 	/**

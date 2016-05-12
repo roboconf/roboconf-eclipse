@@ -60,7 +60,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://roboconf.net/graph";
+	String eNS_URI = "http://roboconf.net/graph/ecore";
 
 	/**
 	 * The package namespace name.
@@ -270,124 +270,6 @@ public interface RoboconfgraphPackage extends EPackage {
 	int ROBOCONF_COMPONENT_FEATURE_COUNT = ROBOCONF_FACET_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfApplicationTemplateImpl <em>Roboconf Application Template</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfApplicationTemplateImpl
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfApplicationTemplate()
-	 * @generated
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE = 2;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__ID = OCCIPackage.RESOURCE__ID;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__TITLE = OCCIPackage.RESOURCE__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Kind</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__KIND = OCCIPackage.RESOURCE__KIND;
-
-	/**
-	 * The feature id for the '<em><b>Mixins</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__MIXINS = OCCIPackage.RESOURCE__MIXINS;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__ATTRIBUTES = OCCIPackage.RESOURCE__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Summary</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__SUMMARY = OCCIPackage.RESOURCE__SUMMARY;
-
-	/**
-	 * The feature id for the '<em><b>Links</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__LINKS = OCCIPackage.RESOURCE__LINKS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__NAME = OCCIPackage.RESOURCE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Desc</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__DESC = OCCIPackage.RESOURCE_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Version</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__VERSION = OCCIPackage.RESOURCE_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>External Variables Prefix</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE__EXTERNAL_VARIABLES_PREFIX = OCCIPackage.RESOURCE_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Roboconf Application Template</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROBOCONF_APPLICATION_TEMPLATE_FEATURE_COUNT = OCCIPackage.RESOURCE_FEATURE_COUNT + 4;
-
-	/**
 	 * The meta object id for the '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfExportedVariableImpl <em>Roboconf Exported Variable</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -395,7 +277,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfExportedVariable()
 	 * @generated
 	 */
-	int ROBOCONF_EXPORTED_VARIABLE = 3;
+	int ROBOCONF_EXPORTED_VARIABLE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -504,7 +386,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfImportedVariable()
 	 * @generated
 	 */
-	int ROBOCONF_IMPORTED_VARIABLE = 4;
+	int ROBOCONF_IMPORTED_VARIABLE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -613,7 +495,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfOwnerLink()
 	 * @generated
 	 */
-	int ROBOCONF_OWNER_LINK = 5;
+	int ROBOCONF_OWNER_LINK = 4;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -695,7 +577,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfInheritanceLink()
 	 * @generated
 	 */
-	int ROBOCONF_INHERITANCE_LINK = 6;
+	int ROBOCONF_INHERITANCE_LINK = 5;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -777,7 +659,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfChildrenLink()
 	 * @generated
 	 */
-	int ROBOCONF_CHILDREN_LINK = 7;
+	int ROBOCONF_CHILDREN_LINK = 6;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -859,7 +741,7 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfRuntimeLink()
 	 * @generated
 	 */
-	int ROBOCONF_RUNTIME_LINK = 8;
+	int ROBOCONF_RUNTIME_LINK = 7;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -975,60 +857,6 @@ public interface RoboconfgraphPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRoboconfFacet_Name();
-
-	/**
-	 * Returns the meta object for class '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate <em>Roboconf Application Template</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Roboconf Application Template</em>'.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate
-	 * @generated
-	 */
-	EClass getRoboconfApplicationTemplate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getName()
-	 * @see #getRoboconfApplicationTemplate()
-	 * @generated
-	 */
-	EAttribute getRoboconfApplicationTemplate_Name();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getDesc <em>Desc</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Desc</em>'.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getDesc()
-	 * @see #getRoboconfApplicationTemplate()
-	 * @generated
-	 */
-	EAttribute getRoboconfApplicationTemplate_Desc();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getVersion <em>Version</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Version</em>'.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getVersion()
-	 * @see #getRoboconfApplicationTemplate()
-	 * @generated
-	 */
-	EAttribute getRoboconfApplicationTemplate_Version();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getExternalVariablesPrefix <em>External Variables Prefix</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>External Variables Prefix</em>'.
-	 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate#getExternalVariablesPrefix()
-	 * @see #getRoboconfApplicationTemplate()
-	 * @generated
-	 */
-	EAttribute getRoboconfApplicationTemplate_ExternalVariablesPrefix();
 
 	/**
 	 * Returns the meta object for class '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable <em>Roboconf Exported Variable</em>}'.
@@ -1213,48 +1041,6 @@ public interface RoboconfgraphPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROBOCONF_FACET__NAME = eINSTANCE.getRoboconfFacet_Name();
-
-		/**
-		 * The meta object literal for the '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfApplicationTemplateImpl <em>Roboconf Application Template</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfApplicationTemplateImpl
-		 * @see net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfgraphPackageImpl#getRoboconfApplicationTemplate()
-		 * @generated
-		 */
-		EClass ROBOCONF_APPLICATION_TEMPLATE = eINSTANCE.getRoboconfApplicationTemplate();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ROBOCONF_APPLICATION_TEMPLATE__NAME = eINSTANCE.getRoboconfApplicationTemplate_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Desc</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ROBOCONF_APPLICATION_TEMPLATE__DESC = eINSTANCE.getRoboconfApplicationTemplate_Desc();
-
-		/**
-		 * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ROBOCONF_APPLICATION_TEMPLATE__VERSION = eINSTANCE.getRoboconfApplicationTemplate_Version();
-
-		/**
-		 * The meta object literal for the '<em><b>External Variables Prefix</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ROBOCONF_APPLICATION_TEMPLATE__EXTERNAL_VARIABLES_PREFIX = eINSTANCE.getRoboconfApplicationTemplate_ExternalVariablesPrefix();
 
 		/**
 		 * The meta object literal for the '{@link net.roboconf.eclipse.occi.graph.roboconfgraph.impl.RoboconfExportedVariableImpl <em>Roboconf Exported Variable</em>}' class.

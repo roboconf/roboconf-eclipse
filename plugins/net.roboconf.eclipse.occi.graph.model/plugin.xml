@@ -31,7 +31,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated roboconf-graph -->
       <package
-            uri="http://roboconf.net/graph"
+            uri="http://roboconf.net/graph/ecore"
             class="net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfgraphPackage"
             genModel="model/roboconf-graph.genmodel"/>
    </extension>

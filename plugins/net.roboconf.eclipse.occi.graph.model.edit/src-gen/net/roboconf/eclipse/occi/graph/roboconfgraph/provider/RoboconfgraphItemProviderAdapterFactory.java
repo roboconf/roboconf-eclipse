@@ -140,29 +140,6 @@ public class RoboconfgraphItemProviderAdapterFactory extends RoboconfgraphAdapte
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RoboconfApplicationTemplateItemProvider roboconfApplicationTemplateItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfApplicationTemplate}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRoboconfApplicationTemplateAdapter() {
-		if (roboconfApplicationTemplateItemProvider == null) {
-			roboconfApplicationTemplateItemProvider = new RoboconfApplicationTemplateItemProvider(this);
-		}
-
-		return roboconfApplicationTemplateItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -401,7 +378,6 @@ public class RoboconfgraphItemProviderAdapterFactory extends RoboconfgraphAdapte
 	public void dispose() {
 		if (roboconfComponentItemProvider != null) roboconfComponentItemProvider.dispose();
 		if (roboconfFacetItemProvider != null) roboconfFacetItemProvider.dispose();
-		if (roboconfApplicationTemplateItemProvider != null) roboconfApplicationTemplateItemProvider.dispose();
 		if (roboconfExportedVariableItemProvider != null) roboconfExportedVariableItemProvider.dispose();
 		if (roboconfImportedVariableItemProvider != null) roboconfImportedVariableItemProvider.dispose();
 		if (roboconfOwnerLinkItemProvider != null) roboconfOwnerLinkItemProvider.dispose();

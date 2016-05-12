@@ -109,14 +109,6 @@ public class RoboconfgraphSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RoboconfgraphPackage.ROBOCONF_APPLICATION_TEMPLATE: {
-				RoboconfApplicationTemplate roboconfApplicationTemplate = (RoboconfApplicationTemplate)theEObject;
-				T result = caseRoboconfApplicationTemplate(roboconfApplicationTemplate);
-				if (result == null) result = caseResource(roboconfApplicationTemplate);
-				if (result == null) result = caseEntity(roboconfApplicationTemplate);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case RoboconfgraphPackage.ROBOCONF_EXPORTED_VARIABLE: {
 				RoboconfExportedVariable roboconfExportedVariable = (RoboconfExportedVariable)theEObject;
 				T result = caseRoboconfExportedVariable(roboconfExportedVariable);
@@ -196,21 +188,6 @@ public class RoboconfgraphSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRoboconfFacet(RoboconfFacet object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Roboconf Application Template</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Roboconf Application Template</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRoboconfApplicationTemplate(RoboconfApplicationTemplate object) {
 		return null;
 	}
 

@@ -62,15 +62,6 @@ public interface RoboconfgraphFactory extends EFactory {
 	RoboconfFacet createRoboconfFacet();
 
 	/**
-	 * Returns a new object of class '<em>Roboconf Application Template</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Roboconf Application Template</em>'.
-	 * @generated
-	 */
-	RoboconfApplicationTemplate createRoboconfApplicationTemplate();
-
-	/**
 	 * Returns a new object of class '<em>Roboconf Exported Variable</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1,9 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EMF / OCCI Model for Roboconf Graph(s)
+Bundle-Name: %pluginName
 Bundle-SymbolicName: net.roboconf.eclipse.occi.graph.model;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: net.roboconf.eclipse.occi.graph.roboconfgraph,
  net.roboconf.eclipse.occi.graph.roboconfgraph.impl,
