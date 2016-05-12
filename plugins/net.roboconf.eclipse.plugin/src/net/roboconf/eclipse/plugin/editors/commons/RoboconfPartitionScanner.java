@@ -25,12 +25,12 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
-import net.roboconf.core.dsl.ParsingConstants;
-
 import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.Token;
+
+import net.roboconf.core.dsl.ParsingConstants;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -39,6 +39,10 @@ public class RoboconfPartitionScanner extends RuleBasedPartitionScanner {
 
 	public final static String ROBOCONF_COMMENT = "__comment";
 
+
+	/**
+	 * Constructor.
+	 */
 	public RoboconfPartitionScanner() {
 		IPredicateRule[] rules = new IPredicateRule[ 1 ];
 		rules[ 0 ] = new EndOfLineRule( ParsingConstants.COMMENT_DELIMITER, new Token( ROBOCONF_COMMENT ));

@@ -25,16 +25,24 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
+import org.eclipse.jface.text.rules.IRule;
+import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.rules.WhitespaceRule;
+import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 /**
@@ -44,7 +52,7 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 
 	protected final ColorManager colorManager;
 
-	private RuleBasedScanner scanner;
+	private RuleBasedScanner scanner, commentScanner;
 	private DoubleClickStrategy doubleClickStrategy;
 
 
@@ -79,13 +87,12 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 	public IPresentationReconciler getPresentationReconciler( ISourceViewer sourceViewer ) {
 
 		PresentationReconciler reconciler = new PresentationReconciler();
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( getScanner());
+
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( findScanner( false ));
 		reconciler.setDamager( dr, IDocument.DEFAULT_CONTENT_TYPE );
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 
-		Color color = this.colorManager.getColor( ColorManager.COMMENT );
-		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
-
+		DefaultDamagerRepairer ndr = new DefaultDamagerRepairer( findScanner( true ));
 		reconciler.setDamager( ndr, RoboconfPartitionScanner.ROBOCONF_COMMENT );
 		reconciler.setRepairer( ndr, RoboconfPartitionScanner.ROBOCONF_COMMENT );
 
@@ -93,7 +100,7 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 	}
 
 
-	protected final RuleBasedScanner getScanner() {
+	protected final RuleBasedScanner findScanner( boolean comment ) {
 
 		if( this.scanner == null ) {
 			this.scanner = buildScanner( this.colorManager );
@@ -101,7 +108,13 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 			this.scanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
 		}
 
-		return this.scanner;
+		if( this.commentScanner == null ) {
+			this.commentScanner = new CommentScanner( this.colorManager );
+			Color color = this.colorManager.getColor( ColorManager.COMMENT );
+			this.commentScanner.setDefaultReturnToken( new Token( new TextAttribute( color )));
+		}
+
+		return comment ? this.commentScanner : this.scanner;
 	}
 
 
@@ -110,4 +123,31 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 	 * @return the scanner
 	 */
 	protected abstract RuleBasedScanner buildScanner( ColorManager colorManager );
+
+
+	/**
+	 * @author Vincent Zurczak - Linagora
+	 */
+	private static class CommentScanner extends RuleBasedScanner {
+
+		/**
+		 * Constructor.
+		 * @param colorManager
+		 */
+		public CommentScanner( ColorManager colorManager ) {
+
+			IToken todo = new Token( new TextAttribute( colorManager.getColor( ColorManager.TODO ), null, SWT.BOLD | TextAttribute.UNDERLINE ));
+			IToken myDefaultToken = new Token( new TextAttribute( colorManager.getColor( ColorManager.COMMENT )));
+
+			WordRule keywordsRule = new WordRule( new WordDetector(), myDefaultToken, true );
+			keywordsRule.addWord( "todo", todo );
+			keywordsRule.addWord( "fixme", todo );
+
+			List<IRule> rules = new ArrayList<IRule> ();
+			rules.add( new WhitespaceRule( new WhitespaceDetector()));
+			rules.add( keywordsRule );
+
+			setRules( rules.toArray( new IRule[ 0 ]));
+		}
+	}
 }

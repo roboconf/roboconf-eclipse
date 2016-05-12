@@ -26,16 +26,13 @@
 package net.roboconf.eclipse.plugin.editors.rules.autonomic;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.graphics.Color;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.NonRuleBasedDamagerRepairer;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
 
 /**
@@ -62,21 +59,19 @@ public class AutonomicRulesConfiguration extends RoboconfBaseConfiguration {
 	public IPresentationReconciler getPresentationReconciler( ISourceViewer sourceViewer ) {
 
 		PresentationReconciler reconciler = new PresentationReconciler();
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( getScanner());
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer( findScanner( false ));
 		reconciler.setDamager( dr, IDocument.DEFAULT_CONTENT_TYPE );
 		reconciler.setRepairer( dr, IDocument.DEFAULT_CONTENT_TYPE );
 
-		Color color = this.colorManager.getColor( ColorManager.COMMENT );
-
-		NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		DefaultDamagerRepairer ndr = new DefaultDamagerRepairer( findScanner( true ));
 		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SHARP );
 		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SHARP );
 
-		ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		ndr = new DefaultDamagerRepairer( findScanner( true ));
 		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SS );
 		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.SINGLE_LINE_COMMENT_SS );
 
-		ndr = new NonRuleBasedDamagerRepairer( new TextAttribute( color ));
+		ndr = new DefaultDamagerRepairer( findScanner( true ));
 		reconciler.setDamager( ndr, AutonomicRulesPartitionScanner.MULTILINE_COMMENT );
 		reconciler.setRepairer( ndr, AutonomicRulesPartitionScanner.MULTILINE_COMMENT );
 

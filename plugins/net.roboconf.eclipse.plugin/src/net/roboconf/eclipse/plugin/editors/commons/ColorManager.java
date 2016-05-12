@@ -40,6 +40,7 @@ public class ColorManager {
 	public static final RGB COMMENT = new RGB( 0, 128, 0 );
 	public static final RGB HL_KEYWORD = new RGB( 128, 0, 0 );
 	public static final RGB PROPERTY_NAME = new RGB( 128, 0, 0 );
+	public static final RGB TODO = new RGB( 127, 159, 201 );
 	public static final RGB DEFAULT = new RGB( 0, 0, 0 );
 
 	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );

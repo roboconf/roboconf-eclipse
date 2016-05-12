@@ -35,7 +35,7 @@ import org.eclipse.jface.text.rules.IWordDetector;
  */
 public class WordDetector implements IWordDetector {
 
-	private static final List<Character> WORD_END = Arrays.asList( ':', ',', ';', '{' );
+	private static final List<Character> WORD_END = Arrays.asList( ':', ',', ';', '{', '!', '?' );
 
 
 	@Override
