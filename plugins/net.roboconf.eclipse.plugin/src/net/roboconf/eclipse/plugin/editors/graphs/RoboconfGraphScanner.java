@@ -28,11 +28,6 @@ package net.roboconf.eclipse.plugin.editors.graphs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
-import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
-
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
@@ -41,6 +36,11 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
+
+import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -53,11 +53,19 @@ public class RoboconfGraphScanner extends RuleBasedScanner {
 	 */
 	public RoboconfGraphScanner( ColorManager manager ) {
 
+		// Our tokens with their styles.
 		IToken hl = new Token( new TextAttribute( manager.getColor( ColorManager.HL_KEYWORD ), null, SWT.BOLD ));
 		IToken properties = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME )));
 		IToken propertyQualifier = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME ), null, SWT.ITALIC ));
 
-		WordRule keywordsRule = new WordRule( new WordDetector(), Token.UNDEFINED, true );
+		// The default token cannot be Token.UNDEFINED.
+		// Otherwise, expressions like "testExternal" will see the "External" keyword be highlighted.
+		// In fact, when Token.UNDEFINED is returned (by default), the buffer rewinds and it's a mess.
+		// So, we use our own default token.
+		IToken myDefaultToken = new Token( null );
+
+		// Create and complete the rule.
+		WordRule keywordsRule = new WordRule( new WordDetector(), myDefaultToken, true );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_FACET, hl );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_IMPORT, hl );
 

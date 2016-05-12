@@ -28,11 +28,6 @@ package net.roboconf.eclipse.plugin.editors.instances;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
-import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
-
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IRule;
@@ -42,6 +37,11 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
+
+import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -54,10 +54,18 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 	 */
 	public RoboconfInstancesScanner( ColorManager manager ) {
 
+		// Our tokens with their styles.
 		IToken hl = new Token( new TextAttribute( manager.getColor( ColorManager.HL_KEYWORD ), null, SWT.BOLD ));
 		IToken properties = new Token( new TextAttribute( manager.getColor( ColorManager.PROPERTY_NAME )));
 
-		WordRule keywordsRule = new WordRule( new WordDetector(), Token.UNDEFINED, true );
+		// The default token cannot be Token.UNDEFINED.
+		// Otherwise, expressions like "testExternal" will see the "External" keyword be highlighted.
+		// In fact, when Token.UNDEFINED is returned (by default), the buffer rewinds and it's a mess.
+		// So, we use our own default token.
+		IToken myDefaultToken = new Token( null );
+
+		// Create and complete the first rule.
+		WordRule keywordsRule = new WordRule( new WordDetector(), myDefaultToken, true );
 		keywordsRule.addWord( ParsingConstants.KEYWORD_IMPORT, hl );
 
 		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_CHANNELS, properties );
@@ -66,11 +74,16 @@ public class RoboconfInstancesScanner extends RuleBasedScanner {
 		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_NAME, properties );
 		keywordsRule.addWord( ParsingConstants.PROPERTY_INSTANCE_STATE, properties );
 
+		// Add all the rules.
 		List<IRule> rules = new ArrayList<IRule> ();
 		rules.add( new WhitespaceRule( new WhitespaceDetector()));
-		rules.add( keywordsRule );
 		rules.add( new InstanceOfRule( hl ));
 		rules.add( new PropertyRule( properties ));
+
+		// The key word rule is more strict.
+		// The buffer does not rewind when it recognizes nothing.
+		// So, we add it in last position.
+		rules.add( keywordsRule );
 
 		setRules( rules.toArray( new IRule[ rules.size()]));
 	}

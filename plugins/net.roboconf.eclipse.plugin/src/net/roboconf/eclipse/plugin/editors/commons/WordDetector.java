@@ -25,12 +25,18 @@
 
 package net.roboconf.eclipse.plugin.editors.commons;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.jface.text.rules.IWordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class WordDetector implements IWordDetector {
+
+	private static final List<Character> WORD_END = Arrays.asList( ':', ',', ';', '{' );
+
 
 	@Override
 	public boolean isWordStart( char c ) {
@@ -39,6 +45,7 @@ public class WordDetector implements IWordDetector {
 
 	@Override
 	public boolean isWordPart( char c ) {
-		return ! Character.isWhitespace( c ) && c != ':' && c != '{' && c != ',' && c != ';';
+		return ! Character.isWhitespace( c )
+				&& ! WORD_END.contains( c );
 	}
 }
