@@ -50,7 +50,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 
-import net.roboconf.eclipse.plugin.Activator;
+import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.tooling.core.ProjectUtils;
 
 /**
@@ -73,7 +73,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor( true );
 		setWindowTitle( "New Roboconf Project" );
 
-		ImageDescriptor desc = Activator.getImageDescriptor( "icons/roboconf_75x66.png" );
+		ImageDescriptor desc = RoboconfEclipsePlugin.getImageDescriptor( "icons/roboconf_75x66.png" );
 		setDefaultPageImageDescriptor( desc );
 	}
 
@@ -161,14 +161,14 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 				IDE.openEditor( page, graphFile );
 
 			} catch( PartInitException e ) {
-				Activator.log( e, IStatus.ERROR );
+				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 
 			} finally {
 				selectFileInResourceExplorer( graphFile );
 			}
 
 		} catch( Exception e ) {
-			Activator.log( e, IStatus.ERROR );
+			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 			result = false;
 		}
 
@@ -205,7 +205,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			}
 
 		} catch( PartInitException e ) {
-			Activator.log( e, IStatus.ERROR );
+			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 		}
 	}
 }

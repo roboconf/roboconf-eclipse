@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.roboconf.core.utils.Utils;
-import net.roboconf.eclipse.plugin.Activator;
+import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.tooling.core.ProjectUtils.CreationBean;
 
 import org.eclipse.core.resources.IProject;
@@ -254,7 +254,7 @@ public class NewProjectWizardPage extends WizardPage {
 			}
 
 		} catch( CoreException e ) {
-			Activator.log( e, IStatus.ERROR );
+			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 		}
 
 		// Project location

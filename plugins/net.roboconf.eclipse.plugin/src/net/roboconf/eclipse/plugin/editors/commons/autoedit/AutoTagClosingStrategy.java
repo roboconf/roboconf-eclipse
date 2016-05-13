@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,51 +23,52 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.autoedit;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.DocumentCommand;
+import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextDoubleClickStrategy;
-import org.eclipse.jface.text.ITextViewer;
 
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class DoubleClickStrategy implements ITextDoubleClickStrategy {
+public class AutoTagClosingStrategy implements IAutoEditStrategy {
 
 	@Override
-	public void doubleClicked( ITextViewer part ) {
+	public void customizeDocumentCommand( IDocument document, DocumentCommand command ) {
 
-		try {
-			int caret = part.getSelectedRange().x;
-			if( caret >= 0 ) {
-				IDocument doc = part.getDocument();
-				int startPos = caret, endPos = caret;
-
-				// Find the word
-				while( endPos < doc.getLength() && isValidWordCharacter( doc.getChar( endPos )))
-					endPos ++;
-
-				while( startPos > 0 && isValidWordCharacter( doc.getChar( startPos )))
-					startPos --;
-
-				// When the caret is at the document beginning
-				if( startPos > 0 )
-					startPos ++;
-
-				part.setSelectedRange( startPos, endPos - startPos );
-			}
-
-		} catch( BadLocationException e ) {
-			RoboconfEclipsePlugin.log( e, IStatus.WARNING );
+		// "{" => insert "}" right after.
+		if( command.text.equals( "{" )) {
+			command.text += "}";
+			command.caretOffset = command.offset + +1;
+		    command.shiftsCaret = false;
 		}
-	}
 
+		// We wrote an instance property but we forgot the semicolon at the end of the line.
+		else if( command.text.startsWith( "\n" )) {
+			StringBuilder sb = new StringBuilder();
+			try {
+				for( int i=command.offset - 1; i>=0; i-- ) {
+					char c = document.getChar( i );
+					if( c == '\n' || c == '\r' )
+						break;
 
-	private boolean isValidWordCharacter( char c ) {
-		return Character.isJavaIdentifierPart( c ) || c == '-';
+					sb.insert( 0, c );
+				}
+
+				String s = sb.toString().trim();
+				if( s.contains( ":" )
+						&& ! s.endsWith( ";" ))
+					command.text = ";" + command.text;
+
+			} catch( BadLocationException e ) {
+				// Should not happen
+				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
+			}
+		}
 	}
 }

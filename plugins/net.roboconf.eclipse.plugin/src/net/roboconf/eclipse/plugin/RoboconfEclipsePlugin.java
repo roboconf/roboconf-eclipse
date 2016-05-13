@@ -35,19 +35,19 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle.
  * @author Vincent Zurczak - Linagora
  */
-public class Activator extends AbstractUIPlugin {
+public class RoboconfEclipsePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.roboconf.eclipse.plugin";
 
 	// The shared instance
-	private static Activator plugin;
+	private static RoboconfEclipsePlugin plugin;
 
 
 	/**
 	 * Constructor.
 	 */
-	public Activator() {
+	public RoboconfEclipsePlugin() {
 		// nothing
 	}
 
@@ -80,7 +80,7 @@ public class Activator extends AbstractUIPlugin {
 	 * Returns the shared instance.
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static RoboconfEclipsePlugin getDefault() {
 		return plugin;
 	}
 

@@ -39,7 +39,7 @@ import org.eclipse.jface.text.presentation.IPresentationDamager;
 import org.eclipse.jface.text.presentation.IPresentationRepairer;
 import org.eclipse.swt.custom.StyleRange;
 
-import net.roboconf.eclipse.plugin.Activator;
+import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 
 /**
  * FIXME: work on this class.
@@ -127,7 +127,7 @@ public class NonRuleBasedDamagerRepairer implements IPresentationDamager, IPrese
 				return new Region( start, end - start );
 
 			} catch( BadLocationException e ) {
-				Activator.log( e, IStatus.WARNING );
+				RoboconfEclipsePlugin.log( e, IStatus.WARNING );
 			}
 		}
 
