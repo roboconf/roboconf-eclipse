@@ -62,6 +62,7 @@ public class AutoTagClosingStrategy implements IAutoEditStrategy {
 
 				String s = sb.toString().trim();
 				if( s.contains( ":" )
+						&& ! s.contains( "#" )
 						&& ! s.endsWith( ";" ))
 					command.text = ";" + command.text;
 
