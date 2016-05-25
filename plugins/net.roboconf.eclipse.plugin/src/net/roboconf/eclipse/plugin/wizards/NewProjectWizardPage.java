@@ -29,16 +29,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.roboconf.core.utils.Utils;
-import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
-import net.roboconf.tooling.core.ProjectUtils.CreationBean;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -55,6 +52,12 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
+
+import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
+import net.roboconf.tooling.core.ProjectUtils.CreationBean;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -78,7 +81,11 @@ public class NewProjectWizardPage extends WizardPage {
 
 		this.creationBean.projectVersion( "1.0-SNAPSHOT" );
 		this.creationBean.mavenProject( true );
-		this.creationBean.pluginVersion( "0.4" );
+		this.creationBean.groupId( "net.roboconf" );
+
+		Bundle bundle = Platform.getBundle( "net.roboconf.eclipse.plugin" );
+		Version version = bundle.getVersion();
+		this.creationBean.pluginVersion( version.getMajor() + "." + version.getMinor());
 
 		setTitle( "New Roboconf Project" );
 		setDescription( "Create a new Roboconf project." );
@@ -315,6 +322,10 @@ public class NewProjectWizardPage extends WizardPage {
 			controls.add( createLabel( container, "Group ID:", "The project's group ID" ));
 			Text text = createText( container );
 			controls.add( text );
+
+			if( ! Utils.isEmptyOrWhitespaces( this.creationBean.getGroupId()))
+				text.setText( this.creationBean.getGroupId());
+
 			text.addModifyListener( new ModifyListener() {
 				@Override
 				public void modifyText( ModifyEvent e ) {
@@ -327,6 +338,7 @@ public class NewProjectWizardPage extends WizardPage {
 			controls.add( createLabel( container, "Plug-in version:", "The version of the Roboconf Maven plug-in" ));
 			text = createText( container );
 			controls.add( text );
+
 			if( ! Utils.isEmptyOrWhitespaces( this.creationBean.getPluginVersion()))
 				text.setText( this.creationBean.getPluginVersion());
 
