@@ -25,6 +25,10 @@
 
 package net.roboconf.eclipse.plugin.editors.instances;
 
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.basicProposal;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.findApplicationDirectory;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.startsWith;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,19 +41,12 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.PlatformUI;
 
 import net.roboconf.core.dsl.ParsingConstants;
 import net.roboconf.core.model.RuntimeModelIo;
@@ -350,53 +347,5 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 		}
 
 		return result;
-	}
-
-
-	/**
-	 * @return the file that contains the application to parse (can be null)
-	 */
-	private File findApplicationDirectory() {
-
-		File result = null;
-		IEditorInput input = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
-		if( input instanceof IFileEditorInput ) {
-			IProject p = ((IFileEditorInput) input).getFile().getProject();
-
-			// We do not always have a Maven project
-			IResource root = p.getFolder( new Path( "src/main/model" ));
-			if( ! root.exists())
-				root = p;
-
-			result = root.getLocation().toFile();
-		}
-
-		return result;
-	}
-
-
-	/**
-	 * A convenience method to shorten the creation of a basic proposal.
-	 * @param s
-	 * @param lastWord
-	 * @param offset
-	 * @return a non-null proposal
-	 */
-	private ICompletionProposal basicProposal( String s, String lastWord, int offset ) {
-		return new CompletionProposal(
-				s,
-				offset - lastWord.length(),
-				lastWord.length(),
-				s.length());
-	}
-
-
-	/**
-	 * @param s (not null)
-	 * @param prefix (not null)
-	 * @return true if s starts with prefix (case insensitively)
-	 */
-	private boolean startsWith( String s, String prefix ) {
-		return s.toLowerCase().startsWith( prefix.toLowerCase());
 	}
 }

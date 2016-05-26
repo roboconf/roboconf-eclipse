@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,35 +23,27 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.instances;
+package net.roboconf.eclipse.plugin.editors.commons.actions;
 
-import org.eclipse.ui.editors.text.TextEditor;
+import java.util.ResourceBundle;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.TextEditorAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfInstancesEditor extends TextEditor {
-
-	private final ColorManager colorManager;
-
+public class CommentAction  extends TextEditorAction {
 
 	/**
 	 * Constructor.
+	 * @param bundle
+	 * @param prefix
+	 * @param editor
 	 */
-	public RoboconfInstancesEditor() {
-		super();
-		this.colorManager = new ColorManager();
-		setSourceViewerConfiguration( new RoboconfInstancesConfiguration( this.colorManager ));
-		setDocumentProvider( new RoboconfDocumentProvider());
+	protected CommentAction( ResourceBundle bundle, String prefix, ITextEditor editor ) {
+		super( bundle, prefix, editor );
 	}
 
 
-	@Override
-	public void dispose() {
-		this.colorManager.dispose();
-		super.dispose();
-	}
 }

@@ -25,10 +25,18 @@
 
 package net.roboconf.eclipse.plugin.editors.graphs;
 
+import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
+import org.eclipse.jface.text.IAutoEditStrategy;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
+import org.eclipse.jface.text.source.ISourceViewer;
 
 import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
 import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
+import net.roboconf.eclipse.plugin.editors.commons.autoedit.AutoTagClosingStrategy;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -43,8 +51,31 @@ public class RoboconfGraphConfiguration extends RoboconfBaseConfiguration {
 		super( colorManager );
 	}
 
+
 	@Override
 	protected RuleBasedScanner buildScanner( ColorManager colorManager ) {
 		return new RoboconfGraphScanner( this.colorManager );
+	}
+
+
+	@Override
+	public IContentAssistant getContentAssistant( ISourceViewer sourceViewer ) {
+
+		ContentAssistant ca = new ContentAssistant();
+        IContentAssistProcessor cap = new RoboconfGraphCompletionProcessor();
+        ca.setContentAssistProcessor( cap, IDocument.DEFAULT_CONTENT_TYPE );
+        ca.setInformationControlCreator( getInformationControlCreator( sourceViewer ));
+
+        return ca;
+	}
+
+
+	@Override
+	public IAutoEditStrategy[] getAutoEditStrategies( ISourceViewer sourceViewer, String contentType ) {
+
+		return new IAutoEditStrategy[] {
+			new DefaultIndentLineAutoEditStrategy(),
+			new AutoTagClosingStrategy()
+		};
 	}
 }
