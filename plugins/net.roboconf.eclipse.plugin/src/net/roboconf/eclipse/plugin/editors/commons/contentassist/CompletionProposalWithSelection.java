@@ -103,6 +103,9 @@ public class CompletionProposalWithSelection implements ICompletionProposal {
 		}
 
 		// Select "place holders" (those that can be selected automatically by typing in "tab")
+		if( this.ranges.length == 0 )
+			return;
+
 		try {
 			LinkedModeModel model = new LinkedModeModel();
 			for( int i=0; i<this.ranges.length; i++ ) {
@@ -126,7 +129,7 @@ public class CompletionProposalWithSelection implements ICompletionProposal {
 
 	@Override
 	public Point getSelection( IDocument document ) {
-		return this.ranges.length > 0 ? this.ranges[ 0 ] : null;
+		return this.ranges.length > 0 ? this.ranges[ 0 ] : new Point( this.offset + this.length, 0 );
 	}
 
 

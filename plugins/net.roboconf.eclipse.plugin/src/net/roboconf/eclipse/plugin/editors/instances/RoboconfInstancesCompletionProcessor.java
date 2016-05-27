@@ -26,7 +26,9 @@
 package net.roboconf.eclipse.plugin.editors.instances;
 
 import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.basicProposal;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.buildProposalsFromMap;
 import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.findApplicationDirectory;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.resolveStringDescription;
 import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.startsWith;
 
 import java.io.File;
@@ -35,9 +37,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,11 +54,12 @@ import net.roboconf.core.dsl.ParsingConstants;
 import net.roboconf.core.model.RuntimeModelIo;
 import net.roboconf.core.model.RuntimeModelIo.ApplicationLoadResult;
 import net.roboconf.core.model.beans.Component;
-import net.roboconf.core.model.beans.ExportedVariable;
 import net.roboconf.core.model.helpers.ComponentHelpers;
 import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.eclipse.plugin.editors.commons.contentassist.CompletionProposalWithSelection;
+import net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils;
+import net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.RoboconfTypeBean;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -77,8 +80,8 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 
 		switch( ctx.kind ) {
 		case ATTRIBUTE:
-			for( String exportedVariableName : findExportedVariableNames( ctx ))
-				proposals.add( basicProposal( exportedVariableName, ctx.lastWord, offset ));
+			Map<String,String> candidates = findExportedVariableNames( ctx );
+			proposals.addAll( buildProposalsFromMap( viewer, candidates, ctx.lastWord, offset ));
 
 			// No break statement!
 
@@ -119,9 +122,8 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 			break;
 
 		case COMPONENT_NAME:
-			for( String componentName : findComponentNames( ctx ))
-				proposals.add( basicProposal( componentName, ctx.lastWord, offset ));
-
+			candidates = findComponentNames( ctx );
+			proposals.addAll( buildProposalsFromMap( viewer, candidates, ctx.lastWord, offset ));
 			break;
 
 		default:
@@ -280,15 +282,15 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 	 * @param ctx the current context
 	 * @return a non-null list of component names
 	 */
-	private List<String> findComponentNames( Ctx ctx ) {
+	private Map<String,String> findComponentNames( Ctx ctx ) {
 
-		List<String> result = new ArrayList<> ();
+		Map<String,String> result = new TreeMap<> ();
 		File root = findApplicationDirectory();
 		if( root != null ) {
 
 			// Ignore parsing errors, propose the most accurate and possible results
 			ApplicationLoadResult alr = RuntimeModelIo.loadApplicationFlexibly( root );
-			if( alr.getApplicationTemplate().getGraphs() != null ) {
+			BLOCK: if( alr.getApplicationTemplate().getGraphs() != null ) {
 
 				// If there is a parent component...
 				Component parentComponent = ComponentHelpers.findComponent( alr.getApplicationTemplate(), ctx.parentInstanceType );
@@ -302,10 +304,18 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 				else
 					this.errorMsg = "Component " + ctx.parentInstanceType + " does not exist.";
 
+				// Retrieve descriptions from raw graph files
+				if( candidates.isEmpty())
+					break BLOCK;
+
+				Map<String,RoboconfTypeBean> types = ContentAssistUtils.findAllTypes();
 				for( Component c : candidates ) {
-					if( startsWith( c.getName(), ctx.lastWord ))
-						result.add(  c.getName());
+					RoboconfTypeBean type = types.get( c.getName());
+					result.put( c.getName(), type == null || type.isFacet() ? null : type.getDescription());
 				}
+
+			} else {
+				this.errorMsg = "The graph contains errors. It could not be parsed.";
 			}
 		}
 
@@ -317,14 +327,11 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 	 * @param ctx the current context
 	 * @return a non-null list of variable names
 	 */
-	private Set<String> findExportedVariableNames( Ctx ctx ) {
+	private Map<String,String> findExportedVariableNames( Ctx ctx ) {
 
-		Set<String> result = new TreeSet<> ();
-		if( startsWith( ParsingConstants.PROPERTY_INSTANCE_NAME, ctx.lastWord ))
-			result.add( ParsingConstants.PROPERTY_INSTANCE_NAME + ": " );
-
-		if( startsWith( ParsingConstants.PROPERTY_INSTANCE_CHANNELS, ctx.lastWord ))
-			result.add( ParsingConstants.PROPERTY_INSTANCE_CHANNELS + ": " );
+		Map<String,String> result = new TreeMap<> ();
+		result.put( ParsingConstants.PROPERTY_INSTANCE_NAME + ": ", null );
+		result.put( ParsingConstants.PROPERTY_INSTANCE_CHANNELS + ": ", null );
 
 		File root = findApplicationDirectory();
 		if( root != null ) {
@@ -340,10 +347,13 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 				if( ownerComponent == null ) {
 					this.errorMsg = "Component " + ctx.parentInstanceType + " does not exist.";
 
-				} else for( ExportedVariable var : ownerComponent.exportedVariables.values()) {
-					if( startsWith( var.getName(), ctx.lastWord ))
-						result.add( var.getName() + ": " );
+				} else for( Map.Entry<String,String> entry : ComponentHelpers.findAllExportedVariables( ownerComponent ).entrySet()) {
+					String desc = resolveStringDescription( entry.getKey(), entry.getValue());
+					result.put( entry.getKey() + ": ", desc );
 				}
+
+			} else {
+				this.errorMsg = "The graph contains errors. It could not be parsed.";
 			}
 		}
 

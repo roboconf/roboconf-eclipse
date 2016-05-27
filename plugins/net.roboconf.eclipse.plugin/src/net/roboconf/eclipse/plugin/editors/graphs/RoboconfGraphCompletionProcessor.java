@@ -26,22 +26,17 @@
 package net.roboconf.eclipse.plugin.editors.graphs;
 
 import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.basicProposal;
-import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.findApplicationDirectory;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.buildProposalsFromMap;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.findAllExportedVariables;
+import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.findTypeNames;
 import static net.roboconf.eclipse.plugin.editors.commons.contentassist.ContentAssistUtils.startsWith;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -50,13 +45,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.swt.graphics.Point;
 
 import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.model.beans.AbstractType;
-import net.roboconf.core.model.beans.Component;
-import net.roboconf.core.model.beans.ExportedVariable;
-import net.roboconf.core.model.beans.Facet;
-import net.roboconf.core.model.helpers.VariableHelpers;
 import net.roboconf.core.utils.Utils;
-import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.eclipse.plugin.editors.commons.contentassist.CompletionProposalWithSelection;
 
@@ -150,12 +139,8 @@ public class RoboconfGraphCompletionProcessor implements IContentAssistProcessor
 			break;
 
 		case PROPERTY:
-			List<String> candidates = findPropertyCandidates( ctx );
-			for( String candidate : candidates ) {
-				if( startsWith( candidate, ctx.lastWord ))
-					proposals.add( basicProposal( candidate, ctx.lastWord, offset ));
-			}
-
+			Map<String,String> candidates = findPropertyCandidates( ctx );
+			proposals.addAll( buildProposalsFromMap( viewer, candidates, ctx.lastWord, offset ));
 			break;
 
 		default:
@@ -323,118 +308,29 @@ public class RoboconfGraphCompletionProcessor implements IContentAssistProcessor
 
 	/**
 	 * @param ctx the current context
-	 * @return a non-null list of candidate values for this property
+	 * @return a non-null map of candidate values for this property
+	 * <p>
+	 * Key = value to insert, value = description.
+	 * </p>
 	 */
-	private List<String> findPropertyCandidates( Ctx ctx ) {
+	private Map<String,String> findPropertyCandidates( Ctx ctx ) {
 
-		List<String> result = new ArrayList<> ();
-		if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_INSTALLER + "\\s*:\\s*" ))
-			result.addAll( Arrays.asList( KNOWN_INSTALLERS ));
+		Map<String,String> result = new TreeMap<> ();
+		if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_INSTALLER + "\\s*:\\s*" )) {
+			for( String installer : KNOWN_INSTALLERS )
+				result.put( installer, null );
 
-		else if( ctx.property.matches( ParsingConstants.PROPERTY_GRAPH_CHILDREN + "\\s*:\\s*.*" ))
-			result.addAll( findTypeNames( true, true ));
+		} else if( ctx.property.matches( ParsingConstants.PROPERTY_GRAPH_CHILDREN + "\\s*:\\s*.*" )) {
+			result.putAll( findTypeNames( true, true ));
 
-		else if( ctx.property.matches( ParsingConstants.PROPERTY_GRAPH_EXTENDS + "\\s*:\\s*.*" ))
-			result.addAll( findTypeNames( ctx.facet, ! ctx.facet ));
+		} else if( ctx.property.matches( ParsingConstants.PROPERTY_GRAPH_EXTENDS + "\\s*:\\s*.*" )) {
+			result.putAll( findTypeNames( ctx.facet, ! ctx.facet ));
 
-		else if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_FACETS + "\\s*:\\s*.*" ))
-			result.addAll( findTypeNames( true, false ));
+		} else if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_FACETS + "\\s*:\\s*.*" )) {
+			result.putAll( findTypeNames( true, false ));
 
-		else if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_IMPORTS + "\\s*:\\s*.*" ))
-			result.addAll( findAllExportedVariables());
-
-		return result;
-	}
-
-
-	/**
-	 * @return a non-null list of exported variables
-	 */
-	private Collection<String> findAllExportedVariables() {
-
-		Set<String> result = new TreeSet<> ();
-		for( AbstractType type : findAllTypes()) {
-			result.add( type.getName() + ".*" );
-			for( String varName : type.exportedVariables.keySet())
-				result.add( type.getName() + "." + varName );
-		}
-
-		return result;
-	}
-
-
-	/**
-	 * @param includeFacets true to include facet names in the result
-	 * @param includeComponents true to include component names in the result
-	 * @return a non-null list of type names
-	 */
-	private Collection<String> findTypeNames( boolean includeFacets, boolean includeComponents ) {
-
-		Set<String> result = new TreeSet<> ();
-		for( AbstractType type : findAllTypes()) {
-
-			if( includeFacets && type instanceof Facet )
-				result.add( type.getName());
-
-			if( includeComponents && type instanceof Component )
-				result.add( type.getName());
-		}
-
-		return result;
-	}
-
-
-	/**
-	 * Finds all the Roboconf types.
-	 * @return a non-null list of types
-	 */
-	private List<AbstractType> findAllTypes() {
-
-		List<File> graphFiles = new ArrayList<> ();
-		File graphDirectory = findApplicationDirectory();
-		if( graphDirectory != null )
-			graphFiles = Utils.listAllFiles( graphDirectory, "graph" );
-
-		final Pattern typePattern = Pattern.compile( "^([^{]+)\\{([^}]+)\\}", Pattern.MULTILINE );
-		final Pattern exportsPattern = Pattern.compile( ParsingConstants.PROPERTY_GRAPH_EXPORTS + "\\s*:([^;]+);", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE );
-
-		List<AbstractType> result = new ArrayList<> ();
-		for( File f : graphFiles ) {
-			try {
-				String s = Utils.readFileContent( f );
-				s = s.replaceAll( "#[^\n]*", "" );
-
-				Matcher m = typePattern.matcher( s );
-				while( m.find()) {
-
-					String name = m.group( 1 ).trim();
-					boolean isFacet = name.matches( ParsingConstants.KEYWORD_FACET + "\\s+.*" );
-					if( isFacet )
-						name = name.substring( ParsingConstants.KEYWORD_FACET.length()).trim();
-
-					AbstractType type = isFacet ? new Facet() : new Component();
-					type.setName( name );
-					result.add( type );
-
-					String properties = m.group( 2 ).trim();
-					Matcher exportsMatcher = exportsPattern.matcher( properties );
-					while( exportsMatcher.find()) {
-
-						String exports = exportsMatcher.group( 1 ).trim();
-						for( String varDecl : Utils.splitNicely( exports, "," )) {
-							if( Utils.isEmptyOrWhitespaces( varDecl ))
-								continue;
-
-							Map.Entry<String,String> entry = VariableHelpers.parseExportedVariable( varDecl );
-							ExportedVariable var = new ExportedVariable( entry.getKey(), entry.getValue());
-							type.exportedVariables.put( var.getName(), var );
-						}
-					}
-				}
-
-			} catch( IOException e ) {
-				RoboconfEclipsePlugin.log( e, IStatus.ERROR, "Failed to read content from file " + f.getName());
-			}
+		} else if( ctx.property.matches( ParsingConstants.PROPERTY_COMPONENT_IMPORTS + "\\s*:\\s*.*" )) {
+			result.putAll( findAllExportedVariables());
 		}
 
 		return result;
