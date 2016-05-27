@@ -25,11 +25,18 @@
 
 package net.roboconf.eclipse.plugin.editors.commons.editors;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
 import net.roboconf.eclipse.plugin.editors.commons.actions.CommentAction;
@@ -93,5 +100,54 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 			sourceMenu.add( new Separator());
 			sourceMenu.add( this.correctIndentationAction );
 		}
+	}
+
+
+	@Override
+	public void doSave( IProgressMonitor progressMonitor ) {
+
+		// Remove trailing spaces, except for the line currently edited
+		IDocumentProvider dp = getDocumentProvider();
+		IDocument doc = dp.getDocument( getEditorInput());
+		ITextSelection textSelection = (ITextSelection) getSelectionProvider().getSelection();
+		String text = doc.get();
+
+		List<String> lines = Arrays.asList( text.split( "\\n" ));
+		StringBuilder sb = new StringBuilder();
+
+		int currentLine = 0, newOffset = 0;
+		boolean currentLineWasFound = false;
+		for( String line : lines ) {
+
+			// Not the current line? Remove trailing spaces.
+			if( currentLine != textSelection.getStartLine()) {
+				line = line.replaceAll( "( |\t)*$", "" );
+			}
+
+			// Do not remove the trailing spaces AND keep track of the new offset.
+			else {
+				currentLineWasFound = true;
+				newOffset += line.length();
+			}
+
+			currentLine ++;
+			sb.append( line );
+			sb.append( "\n" );
+
+			// Update the new selection offset after update
+			if( ! currentLineWasFound )
+				newOffset += line.length() + 1;
+		}
+
+		// Update the document's content
+		if( ! sb.toString().equals( text )) {
+			doc.set( sb.toString());
+			getSelectionProvider().setSelection( new TextSelection( doc, newOffset, 0 ));
+		}
+
+		//doc.
+
+		// Save...
+		super.doSave( progressMonitor );
 	}
 }
