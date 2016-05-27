@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,45 +23,55 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons.actions;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
-import org.eclipse.ui.editors.text.TextEditor;
+import java.util.HashMap;
+import java.util.Map;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.utils.Utils;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class CommentAction extends AbstractCommentAction {
+public class ColorManager {
 
-	/**
-	 * Constructor.
-	 * @param textEditor
-	 */
-	public CommentAction( TextEditor textEditor ) {
-		super( "Comment", textEditor );
-	}
+	public static final RGB COMMENT = new RGB( 0, 128, 0 );
+	public static final RGB HL_KEYWORD = new RGB( 128, 0, 0 );
+	public static final RGB PROPERTY_NAME = new RGB( 128, 0, 0 );
+	public static final RGB TODO = new RGB( 127, 159, 201 );
+	public static final RGB DEFAULT = new RGB( 0, 0, 0 );
 
-
-	@Override
-	public String processLine( String line ) {
-		return commentLine( line );
-	}
+	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );
 
 
 	/**
-	 * Comments a line.
-	 * @param line a non-null line
-	 * @return a non-null line
+	 * Disposes the graphical resources.
 	 */
-	public static String commentLine( String line ) {
+	public void dispose() {
 
-		String result = line;
-		if( ! Utils.isEmptyOrWhitespaces( line )
-				&& ! line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
-			result = ParsingConstants.COMMENT_DELIMITER + line;
+		for( Color color : this.fColorTable.values()) {
+			if( ! color.isDisposed())
+				color.dispose();
+		}
 
-		return result;
+		this.fColorTable.clear();
+	}
+
+
+	/**
+	 * @param rgb
+	 * @return
+	 */
+	public Color getColor( RGB rgb ) {
+
+		Color color = this.fColorTable.get( rgb );
+		if( color == null ) {
+			color = new Color( Display.getCurrent(), rgb );
+			this.fColorTable.put( rgb, color );
+		}
+
+		return color;
 	}
 }

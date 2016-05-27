@@ -25,31 +25,19 @@
 
 package net.roboconf.eclipse.plugin.editors.rules.autonomic;
 
-import org.eclipse.ui.editors.text.TextEditor;
-
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.editors.AbstractRoboconfTextEditor;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class AutonomicRulesEditor extends TextEditor {
-
-	private final ColorManager colorManager;
-
+public class AutonomicRulesEditor extends AbstractRoboconfTextEditor {
 
 	/**
 	 * Constructor.
 	 */
 	public AutonomicRulesEditor() {
 		super();
-		this.colorManager = new ColorManager();
 		setSourceViewerConfiguration( new AutonomicRulesConfiguration( this.colorManager ));
 		setDocumentProvider( new AutonomicRulesDocumentProvider());
-	}
-
-	@Override
-	public void dispose() {
-		this.colorManager.dispose();
-		super.dispose();
 	}
 }

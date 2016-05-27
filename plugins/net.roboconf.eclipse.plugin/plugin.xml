@@ -6,7 +6,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="net.roboconf.eclipse.plugin.editors.instances.RoboconfInstancesEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfTextEditorActionContributor"
             extensions="instances"
             icon="icons/roboconf_16x16.jpg"
             id="net.roboconf.eclipse.plugin.editors.RoboconfInstancesEditor"
@@ -14,7 +14,7 @@
       </editor>
       <editor
             class="net.roboconf.eclipse.plugin.editors.graphs.RoboconfGraphEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfTextEditorActionContributor"
             extensions="graph"
             icon="icons/roboconf_16x16.jpg"
             id="net.roboconf.eclipse.plugin.editors.RoboconfGraphEditor"
@@ -22,7 +22,7 @@
       </editor>
       <editor
             class="net.roboconf.eclipse.plugin.editors.rules.autonomic.AutonomicRulesEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfTextEditorActionContributor"
             extensions="drl"
             icon="icons/rule_16x16.gif"
             id="net.roboconf.eclipse.plugin.editors.RoboconfRulesEditor"
@@ -30,7 +30,7 @@
       </editor>
       <editor
             class="net.roboconf.eclipse.plugin.editors.commands.RoboconfCommandsEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfTextEditorActionContributor"
             extensions="commands"
             icon="icons/commands_16x16.gif"
             id="net.roboconf.eclipse.plugin.editors.RoboconfCommandsEditor"

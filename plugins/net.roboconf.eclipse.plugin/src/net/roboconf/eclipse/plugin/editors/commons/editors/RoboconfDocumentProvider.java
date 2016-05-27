@@ -23,29 +23,32 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
-import org.eclipse.jface.text.rules.EndOfLineRule;
-import org.eclipse.jface.text.rules.IPredicateRule;
-import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
-import org.eclipse.jface.text.rules.Token;
-
-import net.roboconf.core.dsl.ParsingConstants;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfPartitionScanner extends RuleBasedPartitionScanner {
+public class RoboconfDocumentProvider extends FileDocumentProvider {
 
-	public final static String ROBOCONF_COMMENT = "__comment";
+	@Override
+	protected IDocument createDocument( Object element ) throws CoreException {
 
+		IDocument document = super.createDocument( element );
+		if( document != null ) {
+			IDocumentPartitioner partitioner = new FastPartitioner(
+					new RoboconfPartitionScanner(),
+					new String[] { RoboconfPartitionScanner.ROBOCONF_COMMENT });
 
-	/**
-	 * Constructor.
-	 */
-	public RoboconfPartitionScanner() {
-		IPredicateRule[] rules = new IPredicateRule[ 1 ];
-		rules[ 0 ] = new EndOfLineRule( ParsingConstants.COMMENT_DELIMITER, new Token( ROBOCONF_COMMENT ));
-		setPredicateRules( rules );
+			partitioner.connect( document );
+			document.setDocumentPartitioner( partitioner );
+		}
+
+		return document;
 	}
 }

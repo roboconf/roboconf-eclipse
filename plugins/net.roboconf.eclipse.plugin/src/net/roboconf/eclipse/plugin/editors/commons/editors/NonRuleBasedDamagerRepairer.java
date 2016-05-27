@@ -23,7 +23,7 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,45 +23,29 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons.actions;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
-import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.jface.text.rules.EndOfLineRule;
+import org.eclipse.jface.text.rules.IPredicateRule;
+import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
+import org.eclipse.jface.text.rules.Token;
 
 import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.utils.Utils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class CommentAction extends AbstractCommentAction {
+public class RoboconfPartitionScanner extends RuleBasedPartitionScanner {
+
+	public final static String ROBOCONF_COMMENT = "__comment";
+
 
 	/**
 	 * Constructor.
-	 * @param textEditor
 	 */
-	public CommentAction( TextEditor textEditor ) {
-		super( "Comment", textEditor );
-	}
-
-
-	@Override
-	public String processLine( String line ) {
-		return commentLine( line );
-	}
-
-
-	/**
-	 * Comments a line.
-	 * @param line a non-null line
-	 * @return a non-null line
-	 */
-	public static String commentLine( String line ) {
-
-		String result = line;
-		if( ! Utils.isEmptyOrWhitespaces( line )
-				&& ! line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
-			result = ParsingConstants.COMMENT_DELIMITER + line;
-
-		return result;
+	public RoboconfPartitionScanner() {
+		IPredicateRule[] rules = new IPredicateRule[ 1 ];
+		rules[ 0 ] = new EndOfLineRule( ParsingConstants.COMMENT_DELIMITER, new Token( ROBOCONF_COMMENT ));
+		setPredicateRules( rules );
 	}
 }

@@ -25,31 +25,20 @@
 
 package net.roboconf.eclipse.plugin.editors.commands;
 
-import org.eclipse.ui.editors.text.TextEditor;
-
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfDocumentProvider;
+import net.roboconf.eclipse.plugin.editors.commons.editors.AbstractRoboconfTextEditor;
+import net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfDocumentProvider;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfCommandsEditor extends TextEditor {
-
-	private final ColorManager colorManager;
+public class RoboconfCommandsEditor extends AbstractRoboconfTextEditor {
 
 	/**
 	 * Constructor.
 	 */
 	public RoboconfCommandsEditor() {
 		super();
-		this.colorManager = new ColorManager();
 		setSourceViewerConfiguration( new RoboconfCommandsConfiguration( this.colorManager ));
 		setDocumentProvider( new RoboconfDocumentProvider());
-	}
-
-	@Override
-	public void dispose() {
-		this.colorManager.dispose();
-		super.dispose();
 	}
 }

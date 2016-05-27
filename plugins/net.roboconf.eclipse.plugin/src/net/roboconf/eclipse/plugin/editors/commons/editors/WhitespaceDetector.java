@@ -23,55 +23,17 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.text.rules.IWhitespaceDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class ColorManager {
+public class WhitespaceDetector implements IWhitespaceDetector {
 
-	public static final RGB COMMENT = new RGB( 0, 128, 0 );
-	public static final RGB HL_KEYWORD = new RGB( 128, 0, 0 );
-	public static final RGB PROPERTY_NAME = new RGB( 128, 0, 0 );
-	public static final RGB TODO = new RGB( 127, 159, 201 );
-	public static final RGB DEFAULT = new RGB( 0, 0, 0 );
-
-	private final Map<RGB,Color> fColorTable = new HashMap<RGB,Color>( 10 );
-
-
-	/**
-	 * Disposes the graphical resources.
-	 */
-	public void dispose() {
-
-		for( Color color : this.fColorTable.values()) {
-			if( ! color.isDisposed())
-				color.dispose();
-		}
-
-		this.fColorTable.clear();
-	}
-
-
-	/**
-	 * @param rgb
-	 * @return
-	 */
-	public Color getColor( RGB rgb ) {
-
-		Color color = this.fColorTable.get( rgb );
-		if( color == null ) {
-			color = new Color( Display.getCurrent(), rgb );
-			this.fColorTable.put( rgb, color );
-		}
-
-		return color;
+	@Override
+	public boolean isWhitespace( char c ) {
+		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 	}
 }

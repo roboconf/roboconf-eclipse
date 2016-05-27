@@ -32,8 +32,8 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.source.ISourceViewer;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
+import net.roboconf.eclipse.plugin.editors.commons.editors.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfBaseConfiguration;
 
 /**
  * @author Vincent Zurczak - Linagora

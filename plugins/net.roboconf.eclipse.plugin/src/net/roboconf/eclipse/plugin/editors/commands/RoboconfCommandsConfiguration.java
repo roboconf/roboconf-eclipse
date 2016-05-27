@@ -27,8 +27,8 @@ package net.roboconf.eclipse.plugin.editors.commands;
 
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.RoboconfBaseConfiguration;
+import net.roboconf.eclipse.plugin.editors.commons.editors.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.editors.RoboconfBaseConfiguration;
 
 /**
  * @author Vincent Zurczak - Linagora

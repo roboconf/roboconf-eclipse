@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,32 +23,29 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentPartitioner;
-import org.eclipse.jface.text.rules.FastPartitioner;
-import org.eclipse.ui.editors.text.FileDocumentProvider;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jface.text.rules.IWordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class RoboconfDocumentProvider extends FileDocumentProvider {
+public class WordDetector implements IWordDetector {
+
+	private static final List<Character> WORD_END = Arrays.asList( ':', ',', ';', '{', '!', '?' );
+
 
 	@Override
-	protected IDocument createDocument( Object element ) throws CoreException {
+	public boolean isWordStart( char c ) {
+		return Character.isLetter( c ) || c == '(';
+	}
 
-		IDocument document = super.createDocument( element );
-		if( document != null ) {
-			IDocumentPartitioner partitioner = new FastPartitioner(
-					new RoboconfPartitionScanner(),
-					new String[] { RoboconfPartitionScanner.ROBOCONF_COMMENT });
-
-			partitioner.connect( document );
-			document.setDocumentPartitioner( partitioner );
-		}
-
-		return document;
+	@Override
+	public boolean isWordPart( char c ) {
+		return ! Character.isWhitespace( c )
+				&& ! WORD_END.contains( c );
 	}
 }

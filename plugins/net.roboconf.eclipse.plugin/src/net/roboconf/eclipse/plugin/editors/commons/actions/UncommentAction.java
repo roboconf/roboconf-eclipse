@@ -23,29 +23,45 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.actions;
 
-import java.util.Arrays;
-import java.util.List;
+import org.eclipse.ui.editors.text.TextEditor;
 
-import org.eclipse.jface.text.rules.IWordDetector;
+import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.core.utils.Utils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class WordDetector implements IWordDetector {
+public class UncommentAction extends AbstractCommentAction {
 
-	private static final List<Character> WORD_END = Arrays.asList( ':', ',', ';', '{', '!', '?' );
-
-
-	@Override
-	public boolean isWordStart( char c ) {
-		return Character.isLetter( c ) || c == '(';
+	/**
+	 * Constructor.
+	 * @param textEditor
+	 */
+	public UncommentAction( TextEditor textEditor ) {
+		super( "Uncomment", textEditor );
 	}
 
+
 	@Override
-	public boolean isWordPart( char c ) {
-		return ! Character.isWhitespace( c )
-				&& ! WORD_END.contains( c );
+	public String processLine( String line ) {
+		return uncommentLine( line );
+	}
+
+
+	/**
+	 * Uncomments a line.
+	 * @param line a non-null line
+	 * @return a non-null line
+	 */
+	public static String uncommentLine( String line ) {
+
+		String result = line;
+		if( ! Utils.isEmptyOrWhitespaces( line )
+				&& line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
+			result = line.replaceFirst( "^(\\s*)" + ParsingConstants.COMMENT_DELIMITER + "+", "$1" );
+
+		return result;
 	}
 }

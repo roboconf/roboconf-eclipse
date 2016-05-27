@@ -37,9 +37,9 @@ import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
-import net.roboconf.eclipse.plugin.editors.commons.ColorManager;
-import net.roboconf.eclipse.plugin.editors.commons.WhitespaceDetector;
-import net.roboconf.eclipse.plugin.editors.commons.WordDetector;
+import net.roboconf.eclipse.plugin.editors.commons.editors.ColorManager;
+import net.roboconf.eclipse.plugin.editors.commons.editors.WhitespaceDetector;
+import net.roboconf.eclipse.plugin.editors.commons.editors.WordDetector;
 
 /**
  * @author Vincent Zurczak - Linagora

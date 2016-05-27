@@ -23,7 +23,7 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.editors;
 
 import java.util.ArrayList;
 import java.util.List;

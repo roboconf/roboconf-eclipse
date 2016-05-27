@@ -1,5 +1,5 @@
 /**
- * Copyright 2014-2016 Linagora, Université Joseph Fourier, Floralis
+ * Copyright 2016 Linagora, Université Joseph Fourier, Floralis
  *
  * The present code is developed in the scope of the joint LINAGORA -
  * Université Joseph Fourier - Floralis research program and is designated
@@ -23,17 +23,50 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin.editors.commons;
+package net.roboconf.eclipse.plugin.editors.commons.actions;
 
-import org.eclipse.jface.text.rules.IWhitespaceDetector;
+import org.eclipse.ui.editors.text.TextEditor;
+
+import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.core.utils.Utils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class WhitespaceDetector implements IWhitespaceDetector {
+public class ToggleCommentsAction extends AbstractCommentAction {
+
+	private int uncommented = 0;
+
+
+	/**
+	 * Constructor.
+	 * @param textEditor
+	 */
+	public ToggleCommentsAction( TextEditor textEditor ) {
+		super( "Toggle Comments", textEditor );
+	}
+
 
 	@Override
-	public boolean isWhitespace( char c ) {
-		return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+	public void analyzeLine( String line ) {
+
+		if( ! Utils.isEmptyOrWhitespaces( line )
+				&& ! line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
+			this.uncommented ++;
+	}
+
+
+	@Override
+	public String processLine( String line ) {
+
+		// If there are uncommented lines, toggle means comment them all.
+		// Otherwise, uncomment them.
+		String result = line;
+		if( this.uncommented > 0 )
+			result = CommentAction.commentLine( line );
+		else
+			result = UncommentAction.uncommentLine( line );
+
+		return result;
 	}
 }
