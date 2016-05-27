@@ -26,6 +26,7 @@
 package net.roboconf.eclipse.plugin.editors.commons.actions;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,23 +39,25 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
+import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public abstract class AbstractCommentAction extends Action {
+public class CorrectIndentationAction extends Action {
 
+	private static final int LB_INDENT = 1;
 	private TextEditor textEditor;
 
 
 	/**
 	 * Constructor.
-	 * @param actionName
 	 * @param textEditor
 	 */
-	public AbstractCommentAction( String actionName, TextEditor textEditor ) {
-		super( actionName );
+	public CorrectIndentationAction( TextEditor textEditor ) {
+		super( "Correct Indentation" );
 		this.textEditor = textEditor;
 	}
 
@@ -67,23 +70,6 @@ public abstract class AbstractCommentAction extends Action {
 	}
 
 
-	/**
-	 * All the lines are pre-processed.
-	 * @param line a non-null line
-	 */
-	public void analyzeLine( String line ) {
-		// nothing
-	}
-
-
-	/**
-	 * Processes / Updates a line.
-	 * @param line a non-null line
-	 * @return a non-null line
-	 */
-	public abstract String processLine( String line );
-
-
 	@Override
 	public void run() {
 
@@ -93,21 +79,53 @@ public abstract class AbstractCommentAction extends Action {
 			String text = textSelection.getText();
 
 			List<String> lines = Arrays.asList( text.split( "\\n" ));
-			for( String line : lines )
-				analyzeLine( line );
-
 			StringBuilder sb = new StringBuilder();
+
+			// Find the previous indentation
+			IDocumentProvider dp = this.textEditor.getDocumentProvider();
+			IDocument doc = dp.getDocument( this.textEditor.getEditorInput());
+			int indent = 0;
+			try {
+				indent = findPreviousIndentation( doc.get( 0, textSelection.getOffset()));
+
+			} catch( BadLocationException e ) {
+				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
+			}
+
+			// Update lines
+			boolean splitLine = false;
 			for( Iterator<String> it = lines.iterator(); it.hasNext(); ) {
-				String newLine = processLine( it.next());
-				sb.append( newLine );
+				String line = it.next();
+
+				// Pre-fix
+				String workLine = RoboconfEclipseUtils.removeComments( line ).trim();
+				if( workLine.startsWith( "}" ))
+					indent --;
+
+				// Add the line
+				for( int i=0; i<indent; i++ )
+					sb.append( "\t" );
+
+				sb.append( line.replaceFirst( "^\\s*", "" ));
 				if( it.hasNext())
 					sb.append( "\n" );
+
+				// Post-fix: find the next indentation
+				if( workLine.endsWith( "{" )) {
+					indent ++;
+
+				} else if( ! splitLine && workLine.endsWith( "\\" )) {
+					indent += LB_INDENT;
+					splitLine = true;
+
+				} else if( splitLine && workLine.endsWith( ";" )) {
+					indent -= LB_INDENT;
+					splitLine = false;
+				}
 			}
 
 			// Update only if there are changes
 			if( ! sb.toString().equals( text )) {
-				IDocumentProvider dp = this.textEditor.getDocumentProvider();
-				IDocument doc = dp.getDocument( this.textEditor.getEditorInput());
 				try {
 					doc.replace( textSelection.getOffset(), textSelection.getLength(), sb.toString());
 
@@ -116,5 +134,40 @@ public abstract class AbstractCommentAction extends Action {
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * @param text a non-null text
+	 * @return a null or positive integer
+	 */
+	private int findPreviousIndentation( String text ) {
+
+		int indent = 0;
+		List<String> lines = Arrays.asList( text.split( "\\n" ));
+		Collections.reverse( lines );
+		for( String line : lines ) {
+
+			// Find a non-empty line
+			if( Utils.isEmptyOrWhitespaces( line ))
+				continue;
+
+			// Count the number of tabulations at the beginning
+			for( char c : line.toCharArray()) {
+				if( c == '\t' )
+					indent ++;
+				else
+					break;
+			}
+
+			// If we end with an opening curly bracket, increment by one
+			String workLine = RoboconfEclipseUtils.removeComments( line ).trim();
+			if( workLine.endsWith( "{" ))
+				indent ++;
+
+			break;
+		}
+
+		return indent;
 	}
 }

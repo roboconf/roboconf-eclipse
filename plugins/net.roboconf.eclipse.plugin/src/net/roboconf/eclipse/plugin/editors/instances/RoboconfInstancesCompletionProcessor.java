@@ -55,6 +55,7 @@ import net.roboconf.core.model.beans.Component;
 import net.roboconf.core.model.beans.ExportedVariable;
 import net.roboconf.core.model.helpers.ComponentHelpers;
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.eclipse.plugin.editors.commons.contentassist.CompletionProposalWithSelection;
 
 /**
@@ -197,7 +198,7 @@ public class RoboconfInstancesCompletionProcessor implements IContentAssistProce
 
 		// Simplify the search: remove all the comments.
 		String text = viewer.getDocument().get().substring( 0, offset );
-		text = text.replaceAll( "#[^\n]*", "" );
+		text = RoboconfEclipseUtils.removeComments( text );
 
 		// Keep on simplifying the search: remove complete instances
 		// Since instances can contain other instances (recursivity), we must

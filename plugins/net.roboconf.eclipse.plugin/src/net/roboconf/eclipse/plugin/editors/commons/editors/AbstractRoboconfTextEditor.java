@@ -27,11 +27,13 @@ package net.roboconf.eclipse.plugin.editors.commons.editors;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
 import net.roboconf.eclipse.plugin.editors.commons.actions.CommentAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.CorrectIndentationAction;
 import net.roboconf.eclipse.plugin.editors.commons.actions.ToggleCommentsAction;
 import net.roboconf.eclipse.plugin.editors.commons.actions.UncommentAction;
 
@@ -45,6 +47,7 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 	private CommentAction commentAction;
 	private UncommentAction uncommentAction;
 	private ToggleCommentsAction toggleCommentsAction;
+	private CorrectIndentationAction correctIndentationAction;
 
 
 	/**
@@ -70,6 +73,7 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 		this.commentAction = new CommentAction( this );
 		this.uncommentAction = new UncommentAction( this );
 		this.toggleCommentsAction = new ToggleCommentsAction( this );
+		this.correctIndentationAction = new CorrectIndentationAction( this );
 	}
 
 
@@ -85,6 +89,9 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 			sourceMenu.add( this.commentAction );
 			sourceMenu.add( this.uncommentAction );
 			sourceMenu.add( this.toggleCommentsAction );
+
+			sourceMenu.add( new Separator());
+			sourceMenu.add( this.correctIndentationAction );
 		}
 	}
 }
