@@ -182,18 +182,23 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 	 */
 	private void selectFileInResourceExplorer( IFile graphFile ) {
 
-		// If possible, reuse an already open view
+		// Show a view with the workspace as model
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IViewPart viewPart = page.findView( PROJECTS_VIEW );
-		if( viewPart == null )
-			viewPart = page.findView( PACKAGES_VIEW );
-
+		IViewPart viewPart = null;
 		try {
-			// Otherwise, open it
-			if( viewPart == null )
-				viewPart = page.showView( PROJECTS_VIEW );
+			viewPart = page.showView( PROJECTS_VIEW );
 
-			// Select and expand
+		} catch( PartInitException e ) {
+			try {
+				viewPart = page.showView( PACKAGES_VIEW );
+
+			} catch( PartInitException e1 ) {
+				RoboconfEclipsePlugin.log( e1, IStatus.ERROR );
+			}
+		}
+
+		// Select and expand
+		if( viewPart != null ) {
 			try {
 				Method getTreeViewerMethod = viewPart.getClass().getMethod( "getTreeViewer" );
 				TreeViewer viewer = (TreeViewer) getTreeViewerMethod.invoke( viewPart );
@@ -202,10 +207,8 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 
 			} catch( Exception e ) {
 				viewPart.getViewSite().getSelectionProvider().setSelection( new StructuredSelection( graphFile ));
+				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 			}
-
-		} catch( PartInitException e ) {
-			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 		}
 	}
 }
