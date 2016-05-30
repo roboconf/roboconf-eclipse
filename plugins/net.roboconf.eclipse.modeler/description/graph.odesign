@@ -34,6 +34,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfFacet" referenceName="resources">
                 <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Facet '+container.resources->filter(roboconfgraph::RoboconfFacet)->size()"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="title" valueExpression="aql:instance.id"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
@@ -43,6 +44,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfComponent" referenceName="resources">
                 <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Component '+container.resources->filter(roboconfgraph::RoboconfComponent)->size()"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="title" valueExpression="aql:instance.id"/>
                 <subModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:self"/>
                 <subModelOperations xsi:type="tool_1:ExternalJavaActionCall" name="Set installer name" action="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='Set%20Installer%20Name']"/>
               </firstModelOperations>
