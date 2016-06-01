@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -38,6 +40,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -57,9 +60,15 @@ import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
  */
 public class VariablesView extends ViewPart implements ISelectionListener {
 
+	public static final String VIEW_ID = "net.roboconf.eclipse.modeler.views.variablesView";
+
 	private static final String EXPORTED = "Exported Variables";
 	private static final String IMPORTED = "Imported Variables";
+	private static final String NO_EXPORTS = "No exported variable";
+	private static final String NO_IMPORTS = "No imported variable";
+
 	private TreeViewer viewer;
+	private EContentAdapter emfListener;
 
 
 
@@ -71,6 +80,19 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 		getSite().setSelectionProvider( this.viewer );
 		getSite().getPage().addSelectionListener( this );
+
+		this.emfListener = new EContentAdapter() {
+			@Override
+			public void notifyChanged( Notification notification ) {
+
+				Display.getDefault().asyncExec( new Runnable() {
+					@Override
+					public void run() {
+						VariablesView.this.viewer.refresh();
+					}
+				});
+			}
+		};
 	}
 
 
@@ -88,9 +110,16 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				&& ! this.viewer.getTree().isDisposed()
 				&& eo instanceof RoboconfFacet ) {
 
+			EObject oldInput = (EObject) this.viewer.getInput();
 			this.viewer.setInput( eo );
 			this.viewer.refresh();
 			this.viewer.expandAll();
+
+			if( oldInput != null
+					&& oldInput.eResource() != null )
+				oldInput.eResource().eAdapters().remove( this.emfListener );
+
+			eo.eResource().eAdapters().add( this.emfListener );
 		}
 	}
 
@@ -141,7 +170,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				}
 
 				if( result.isEmpty())
-					result.add( "No exported variable" );
+					result.add( NO_EXPORTS );
 
 			} else if( Objects.equals( parentElement, IMPORTED )) {
 				for( Link link : ((RoboconfComponent) this.input).getLinks()) {
@@ -151,7 +180,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				}
 
 				if( result.isEmpty())
-					result.add( "No imported variable" );
+					result.add( NO_IMPORTS );
 			}
 
 			return result.toArray( new Object[ result.size()]);
@@ -170,8 +199,13 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 		@Override
 		public boolean hasChildren( Object element ) {
+
 			// Both components and facets are... facets.
-			return element instanceof String || element instanceof RoboconfFacet;
+			boolean hasChildren = element instanceof RoboconfFacet;
+			if( ! hasChildren && element instanceof String )
+				hasChildren = Objects.equals( element, EXPORTED ) || Objects.equals( element, IMPORTED );
+
+			return hasChildren;
 		}
 	}
 
@@ -234,9 +268,16 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				RoboconfExportedVariable var = (RoboconfExportedVariable) element;
 				StringBuilder sb = new StringBuilder();
 				sb.append( var.getName());
+
 				if( ! Utils.isEmptyOrWhitespaces( var.getValue())) {
 					sb.append( " = " );
 					sb.append( var.getValue());
+				}
+
+				if( ! Utils.isEmptyOrWhitespaces( var.getPublicAlias())) {
+					sb.append( "   (alias for external applications: " );
+					sb.append( var.getPublicAlias());
+					sb.append( ")" );
 				}
 
 				text = sb.toString();

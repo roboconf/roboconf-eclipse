@@ -66,7 +66,7 @@ public class DeleteExportedVariableCommand extends AbstractHandler {
 	@Override
 	public void setEnabled( Object evaluationContext ) {
 
-		boolean enabled = true;
+		boolean enabled = false;
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
 		if( selection != null
 				&& ! selection.isEmpty()) {
@@ -119,6 +119,11 @@ public class DeleteExportedVariableCommand extends AbstractHandler {
 		@Override
 		public void redo() {
 			execute();
+		}
+
+		@Override
+		public void undo() {
+			// nothing, no undo
 		}
 
 		@Override

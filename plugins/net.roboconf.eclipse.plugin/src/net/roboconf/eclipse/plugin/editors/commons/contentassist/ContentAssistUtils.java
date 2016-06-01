@@ -59,9 +59,6 @@ import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
  */
 public final class ContentAssistUtils {
 
-	public static final String DESC_HACK = "desc.hack";
-
-
 	/**
 	 * Constructor.
 	 */

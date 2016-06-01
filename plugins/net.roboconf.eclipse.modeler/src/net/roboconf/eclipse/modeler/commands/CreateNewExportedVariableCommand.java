@@ -69,7 +69,7 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 	@Override
 	public void setEnabled( Object evaluationContext ) {
 
-		boolean enabled = true;
+		boolean enabled = false;
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
 		if( selection != null
 				&& ! selection.isEmpty()) {

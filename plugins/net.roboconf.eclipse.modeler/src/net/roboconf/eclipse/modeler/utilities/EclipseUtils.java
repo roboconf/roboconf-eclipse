@@ -196,18 +196,22 @@ public final class EclipseUtils {
 	 */
 	public static EditingDomain findEditingDomain( EObject eo ) {
 
-		IEditingDomainProvider editingDomainProvider = (IEditingDomainProvider) EcoreUtil.getExistingAdapter(
-				eo.eResource(),
-				IEditingDomainProvider.class );
+		IEditingDomainProvider editingDomainProvider = null;
+		if( eo != null && eo.eResource() != null ) {
 
-		if( editingDomainProvider == null
-				&& eo.eResource().getResourceSet() instanceof IEditingDomainProvider ) {
-			editingDomainProvider = (IEditingDomainProvider) eo.eResource().getResourceSet();
-
-		} else {
 			editingDomainProvider = (IEditingDomainProvider) EcoreUtil.getExistingAdapter(
-					eo.eResource().getResourceSet(),
+					eo.eResource(),
 					IEditingDomainProvider.class );
+
+			if( editingDomainProvider == null
+					&& eo.eResource().getResourceSet() instanceof IEditingDomainProvider ) {
+				editingDomainProvider = (IEditingDomainProvider) eo.eResource().getResourceSet();
+
+			} else {
+				editingDomainProvider = (IEditingDomainProvider) EcoreUtil.getExistingAdapter(
+						eo.eResource().getResourceSet(),
+						IEditingDomainProvider.class );
+			}
 		}
 
 		return editingDomainProvider == null ? null : editingDomainProvider.getEditingDomain();

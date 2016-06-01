@@ -145,8 +145,6 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 			getSelectionProvider().setSelection( new TextSelection( doc, newOffset, 0 ));
 		}
 
-		//doc.
-
 		// Save...
 		super.doSave( progressMonitor );
 	}
