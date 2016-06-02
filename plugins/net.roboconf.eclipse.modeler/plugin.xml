@@ -13,11 +13,18 @@
   	<!-- FIXME: to replace by the usual Eclipse category -->
      <wizard
            category="net.roboconf.eclipse.plugin.wizards"
-           class="net.roboconf.eclipse.modeler.wizards.NewWizard"
+           class="net.roboconf.eclipse.modeler.wizards.NewModelFileWizard"
            icon="icons/16x16/roboconf_16x16.jpg"
-           name="Diagram for Roboconf Graph(s)"
-           id="net.roboconf.eclipse.graphs">
+           name="Diagram File for Roboconf Graph(s)"
+           id="net.roboconf.eclipse.modeler.graphs.file">
       </wizard>
+     <wizard
+           category="net.roboconf.eclipse.plugin.wizards"
+           class="net.roboconf.eclipse.modeler.wizards.NewModelProjectWizard"
+           icon="icons/16x16/roboconf_16x16.jpg"
+           id="net.roboconf.eclipse.modeler.graphs.project"
+           name="Diagram Project for Roboconf Graph(s)">
+     </wizard>
    </extension>
   <extension
         point="org.eclipse.sirius.externalJavaAction">

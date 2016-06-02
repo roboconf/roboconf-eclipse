@@ -25,20 +25,11 @@
 
 package net.roboconf.eclipse.modeler.wizards;
 
-import org.occiware.clouddesigner.occi.design.utils.NewDiagramWizard;
-
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class NewWizard extends NewDiagramWizard {
+public interface WizardConstants {
 
-	/**
-	 * Constructor.
-	 */
-	public NewWizard() {
-		super(
-				"viewpoint:/net.roboconf.eclipse.modeler/graph",
-				"graph-ui",
-				"Roboconf Graph(s) Representation");
-	}
+	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
+	String EXT_MODEL = "graph-ui";
 }

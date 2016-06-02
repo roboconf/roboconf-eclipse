@@ -33,6 +33,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.occiware.clouddesigner.occi.Configuration;
 
@@ -69,11 +70,12 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 	@Override
 	public void setEnabled( Object evaluationContext ) {
 
-		boolean enabled = false;
-		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().getActiveEditor()
-				.getEditorSite().getSelectionProvider().getSelection();
+		ISelection selection = null;
+		IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if( editor != null )
+			selection = editor.getEditorSite().getSelectionProvider().getSelection();
 
+		boolean enabled = false;
 		if( selection != null
 				&& ! selection.isEmpty()) {
 			EObject eo = EclipseUtils.findEObjectFromSelection( selection );
