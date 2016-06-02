@@ -190,7 +190,7 @@ public final class ContentAssistUtils {
 	/**
 	 * @author Vincent Zurczak - Linagora
 	 */
-	public static class RoboconfTypeBean {
+	public final static class RoboconfTypeBean {
 
 		public final Map<String,String> exportedVariables = new TreeMap<> ();
 		private final String name, description;
