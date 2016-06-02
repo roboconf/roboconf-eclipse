@@ -60,6 +60,23 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 	private RoboconfFacet facetOrComponent;
 
 
+	/**
+	 * Constructor.
+	 */
+	public ManageImportedVariableCommand() {
+		// nothing
+	}
+
+
+	/**
+	 * Constructor.
+	 * @param facetOrComponent the "selected" facet or component
+	 */
+	public ManageImportedVariableCommand( RoboconfFacet facetOrComponent ) {
+		this.facetOrComponent = facetOrComponent;
+	}
+
+
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 

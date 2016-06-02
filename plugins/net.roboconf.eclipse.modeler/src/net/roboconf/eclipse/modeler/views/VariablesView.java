@@ -29,10 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -48,6 +53,8 @@ import org.occiware.clouddesigner.occi.Link;
 
 import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
+import net.roboconf.eclipse.modeler.commands.EditExportedVariableCommand;
+import net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
 import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
@@ -74,6 +81,8 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void createPartControl( Composite parent ) {
+
+		// Create the viewer
 		this.viewer = new TreeViewer( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		this.viewer.setContentProvider( new VariablesTreeContentProvider());
 		this.viewer.setLabelProvider( new VariablesLabelProvider());
@@ -81,6 +90,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 		getSite().setSelectionProvider( this.viewer );
 		getSite().getPage().addSelectionListener( this );
 
+		// Create the EMF listener
 		this.emfListener = new EContentAdapter() {
 			@Override
 			public void notifyChanged( Notification notification ) {
@@ -93,6 +103,51 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				});
 			}
 		};
+
+		// Handle double-clicks
+		this.viewer.addDoubleClickListener( new IDoubleClickListener() {
+			@Override
+			public void doubleClick( DoubleClickEvent event ) {
+
+				try {
+					Object o = ((IStructuredSelection) event.getSelection()).getFirstElement();
+					if( o instanceof RoboconfExportedVariable ) {
+						EditExportedVariableCommand cmd = new EditExportedVariableCommand((RoboconfExportedVariable) o);
+						cmd.execute( null );
+
+					} else if( o instanceof RoboconfImportedVariable ) {
+
+						// Find the owner of this variable (...)
+						RoboconfFacet owner = null;
+						RoboconfImportedVariable var = (RoboconfImportedVariable) o;
+						bigLoop: for( EObject eo : var.eContainer().eContents()) {
+							if( !( eo instanceof RoboconfFacet ))
+								continue;
+
+							for( Link link : ((RoboconfFacet) eo).getLinks()) {
+								if( link instanceof RoboconfOwnerLink
+										&& link.getTarget().equals( var )) {
+
+									owner = (RoboconfFacet) eo;
+									break bigLoop;
+								}
+							}
+						}
+
+						if( owner != null ) {
+							ManageImportedVariableCommand cmd = new ManageImportedVariableCommand( owner );
+							cmd.execute( null );
+
+						} else {
+							RoboconfModelerPlugin.log( "The variable's owner could not be determined.", IStatus.WARNING );
+						}
+					}
+
+				} catch( ExecutionException e ) {
+					RoboconfModelerPlugin.log( e, IStatus.ERROR );
+				}
+			}
+		});
 	}
 
 

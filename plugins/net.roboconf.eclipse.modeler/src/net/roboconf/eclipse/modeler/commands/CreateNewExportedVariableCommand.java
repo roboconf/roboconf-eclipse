@@ -70,7 +70,10 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 	public void setEnabled( Object evaluationContext ) {
 
 		boolean enabled = false;
-		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor()
+				.getEditorSite().getSelectionProvider().getSelection();
+
 		if( selection != null
 				&& ! selection.isEmpty()) {
 			EObject eo = EclipseUtils.findEObjectFromSelection( selection );

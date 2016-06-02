@@ -47,6 +47,23 @@ public class EditExportedVariableCommand extends AbstractHandler {
 	private RoboconfExportedVariable var;
 
 
+	/**
+	 * Constructor.
+	 */
+	public EditExportedVariableCommand() {
+		// nothing
+	}
+
+
+	/**
+	 * Constructor.
+	 * @param var the "selected" variable
+	 */
+	public EditExportedVariableCommand( RoboconfExportedVariable var ) {
+		this.var = var;
+	}
+
+
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
