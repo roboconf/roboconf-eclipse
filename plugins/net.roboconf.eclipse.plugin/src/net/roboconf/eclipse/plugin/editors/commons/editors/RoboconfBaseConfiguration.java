@@ -40,6 +40,8 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
+import org.eclipse.jface.text.source.DefaultAnnotationHover;
+import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.SWT;
@@ -80,6 +82,12 @@ public abstract class RoboconfBaseConfiguration extends SourceViewerConfiguratio
 			this.doubleClickStrategy = new DoubleClickStrategy();
 
 		return this.doubleClickStrategy;
+	}
+
+
+	@Override
+	public IAnnotationHover getAnnotationHover( ISourceViewer sourceViewer ) {
+		return new DefaultAnnotationHover();
 	}
 
 

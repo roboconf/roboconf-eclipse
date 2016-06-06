@@ -62,30 +62,35 @@
   <extension
         point="org.eclipse.ui.commands">
      <command
+           categoryId="net.roboconf.eclipse.commands"
            defaultHandler="net.roboconf.eclipse.modeler.commands.CreateNewExportedVariableCommand"
            description="Create a new exported variable"
            id="net.roboconf.eclipse.modeler.createNewExportedVariableCommand"
            name="Create a new exported variable">
      </command>
      <command
+           categoryId="net.roboconf.eclipse.commands"
            defaultHandler="net.roboconf.eclipse.modeler.commands.EditExportedVariableCommand"
            description="Edit an exported variable"
            id="net.roboconf.eclipse.modeler.editExportedVariableCommand"
            name="Edit an exported variable">
      </command>
      <command
+           categoryId="net.roboconf.eclipse.commands"
            defaultHandler="net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand"
            description="Manage imported variables"
            id="net.roboconf.eclipse.modeler.manageImportedVariables"
            name="Manage Imported Variables">
      </command>
      <command
+           categoryId="net.roboconf.eclipse.commands"
            defaultHandler="net.roboconf.eclipse.modeler.commands.DeleteExportedVariableCommand"
            description="Delete the selected variable"
            id="net.roboconf.eclipse.modeler.deleteExportedVariable"
            name="Delete an exported variable">
      </command>
      <command
+           categoryId="net.roboconf.eclipse.commands"
            defaultHandler="net.roboconf.eclipse.modeler.commands.GenerateFilesCommand"
            id="net.roboconf.eclipse.modeler.generateFiles"
            name="Generate Files">
@@ -124,15 +129,6 @@
               style="push"
               tooltip="Manage imported variables">
         </command>
-     </menuContribution>
-     <menuContribution
-           allPopups="false"
-           locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-    	 <menu
-            icon="icons/16x16/roboconf_16x16.jpg"
-            id="net.roboconf.eclipse.actions"
-            label="Roboconf">
-        </menu>
      </menuContribution>
      <menuContribution
            allPopups="false"

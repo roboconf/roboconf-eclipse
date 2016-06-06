@@ -52,6 +52,7 @@ import net.roboconf.core.dsl.ParsingConstants;
 import net.roboconf.core.model.beans.ExportedVariable;
 import net.roboconf.core.model.helpers.VariableHelpers;
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 
 /**
@@ -104,7 +105,7 @@ public final class ContentAssistUtils {
 			IProject p = ((IFileEditorInput) input).getFile().getProject();
 
 			// We do not always have a Maven project
-			IResource root = p.getFolder( new Path( "src/main/model" ));
+			IResource root = p.getFolder( new Path( RoboconfEclipseConstants.SRC_MAIN_MODEL ));
 			if( ! root.exists())
 				root = p;
 

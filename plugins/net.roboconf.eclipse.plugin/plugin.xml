@@ -45,13 +45,149 @@
       </category>
       <wizard
             category="net.roboconf.eclipse.plugin.wizards"
-            class="net.roboconf.eclipse.plugin.wizards.NewProjectWizard"
+            class="net.roboconf.eclipse.plugin.wizards.NewRoboconfProjectWizard"
             hasPages="true"
             icon="icons/roboconf_16x16.jpg"
             id="net.roboconf.eclipse.plugin.wizard"
             name="Roboconf Project"
             project="true">
       </wizard>
+   </extension>
+   <extension
+         id="net.roboconf.eclipse.project.RoboconfNature"
+         name="Roboconf Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="net.roboconf.eclipse.plugin.nature.RoboconfNature">
+         </run>
+      </runtime>
+      <builder
+            id="net.roboconf.eclipse.project.RoboconfBuilder">
+      </builder>
+   </extension>
+   <extension
+         id="net.roboconf.eclipse.project.RoboconfBuilder"
+         name="Roboconf Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="net.roboconf.eclipse.plugin.builder.RoboconfIncrementalBuilder">
+         </run></builder>
+   </extension>
+   <extension
+         id="net.roboconf.eclipse.project.RoboconfMarker"
+         name="Roboconf Marker"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <attribute
+            name="net.roboconf.eclipse.plugin.marker.errorCode">
+      </attribute>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="Commands related to Roboconf"
+            id="net.roboconf.eclipse.commands"
+            name="Roboconf Commands">
+      </category>
+      <command
+            categoryId="net.roboconf.eclipse.commands"
+            defaultHandler="net.roboconf.eclipse.plugin.handlers.SwitchProjectNature"
+            description="Adds or removes the Roboconf nature from a project"
+            id="net.roboconf.eclipse.plugin.switchRoboconfNature"
+            name="Switch Roboconf Nature">
+         <commandParameter
+               id="net.roboconf.eclipse.plugin.switchRoboconfNature.delete"
+               name="delete"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:net.roboconf.eclipse.actions?after=additions">
+         <command
+               commandId="net.roboconf.eclipse.plugin.switchRoboconfNature"
+               label="Add Roboconf Nature"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IProject">
+                        </instanceof>
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="net.roboconf.eclipse.project.RoboconfNature">
+                           </test>
+                        </not>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="net.roboconf.eclipse.plugin.switchRoboconfNature"
+               label="Remove Roboconf Nature"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IProject">
+                        </instanceof>
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="net.roboconf.eclipse.project.RoboconfNature">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+            <parameter
+                  name="net.roboconf.eclipse.plugin.switchRoboconfNature.delete"
+                  value="yes">
+            </parameter>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/roboconf_16x16.jpg"
+               id="net.roboconf.eclipse.actions"
+               label="Roboconf">
+         </menu>
+      </menuContribution>
    </extension>
 
 </plugin>

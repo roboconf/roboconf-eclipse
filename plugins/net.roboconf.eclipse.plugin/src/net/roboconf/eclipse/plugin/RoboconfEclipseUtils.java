@@ -25,6 +25,18 @@
 
 package net.roboconf.eclipse.plugin;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+
 /**
  * @author Vincent Zurczak - Linagora
  */
@@ -45,5 +57,59 @@ public final class RoboconfEclipseUtils {
 	 */
 	public static String removeComments( String line ) {
 		return line.replaceAll( "\\s*#[^\n]*", "" );
+	}
+
+
+	/**
+	 * Adds the Roboconf nature to a project, if it does not already has it.
+	 * @param project a non-null project and open project
+	 * @param monitor a progress monitor
+	 * @throws CoreException if something went wrong
+	 */
+	public static void addRoboconfNature( IProject project, IProgressMonitor monitor )
+	throws CoreException {
+
+		IProjectDescription description = project.getDescription();
+		String[] natures = description.getNatureIds();
+		if( Arrays.asList( natures ).contains( RoboconfEclipseConstants.NATURE_ID ))
+			return;
+
+		String[] newNatures = new String[ natures.length + 1 ];
+		System.arraycopy( natures, 0, newNatures, 0, natures.length );
+		newNatures[ natures.length ] = RoboconfEclipseConstants.NATURE_ID;
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IStatus status = workspace.validateNatureSet( newNatures );
+
+		if( status.getCode() == IStatus.OK ) {
+			description.setNatureIds( newNatures );
+			project.setDescription( description, monitor );
+		}
+	}
+
+
+	/**
+	 * Removes the Roboconf nature from a project, if it has it.
+	 * @param project a non-null project and open project
+	 * @param monitor a progress monitor
+	 * @throws CoreException if something went wrong
+	 */
+	public static void removeRoboconfNature( IProject project, IProgressMonitor monitor )
+	throws CoreException {
+
+		IProjectDescription description = project.getDescription();
+		String[] natures = description.getNatureIds();
+		List<String> naturesAsList = new ArrayList<String>( Arrays.asList( natures ));
+
+		if( naturesAsList.remove( RoboconfEclipseConstants.NATURE_ID )) {
+
+			String[] newNatures = naturesAsList.toArray( new String[ naturesAsList.size()]);
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IStatus status = workspace.validateNatureSet( newNatures );
+
+			if( status.getCode() == IStatus.OK ) {
+				description.setNatureIds( newNatures );
+				project.setDescription( description, monitor );
+			}
+		}
 	}
 }

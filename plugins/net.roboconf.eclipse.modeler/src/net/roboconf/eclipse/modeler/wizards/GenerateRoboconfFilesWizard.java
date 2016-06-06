@@ -36,12 +36,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-import net.roboconf.eclipse.plugin.wizards.NewProjectWizard;
+import net.roboconf.eclipse.plugin.wizards.NewRoboconfProjectWizard;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class GenerateRoboconfFilesWizard extends NewProjectWizard {
+public class GenerateRoboconfFilesWizard extends NewRoboconfProjectWizard {
 
 	private ChoiceWizardPage choicePage;
 	private SingleFileWizardPage singleFilePage;

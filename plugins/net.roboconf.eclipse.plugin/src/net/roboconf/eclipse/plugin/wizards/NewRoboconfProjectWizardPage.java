@@ -62,7 +62,7 @@ import net.roboconf.tooling.core.ProjectUtils.CreationBean;
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class NewProjectWizardPage extends WizardPage {
+public class NewRoboconfProjectWizardPage extends WizardPage {
 
 	private final CreationBean creationBean = new CreationBean();
 	private boolean atDefaultLocation = true;
@@ -76,7 +76,7 @@ public class NewProjectWizardPage extends WizardPage {
 	/**
 	 * Constructor.
 	 */
-	public NewProjectWizardPage() {
+	public NewRoboconfProjectWizardPage() {
 		super( "main.page" );
 
 		this.creationBean.projectVersion( "1.0-SNAPSHOT" );
@@ -115,12 +115,12 @@ public class NewProjectWizardPage extends WizardPage {
 			@Override
 			public void modifyText( ModifyEvent e ) {
 				String projectName = ((Text) e.widget).getText();
-				NewProjectWizardPage.this.creationBean.artifactId( projectName );
+				NewRoboconfProjectWizardPage.this.creationBean.artifactId( projectName );
 				String alias = projectName.replaceAll( "(_|-|\\s)+", " " );
 				aliasText.setText( alias );
 
 				IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation().append( projectName );
-				NewProjectWizardPage.this.wkText.setText( path.toOSString());
+				NewRoboconfProjectWizardPage.this.wkText.setText( path.toOSString());
 				validate();
 			}
 		});
@@ -128,7 +128,7 @@ public class NewProjectWizardPage extends WizardPage {
 		aliasText.addModifyListener( new ModifyListener() {
 			@Override
 			public void modifyText( ModifyEvent e ) {
-				NewProjectWizardPage.this.creationBean.projectName(((Text) e.widget).getText());
+				NewRoboconfProjectWizardPage.this.creationBean.projectName(((Text) e.widget).getText());
 				validate();
 			}
 		});
@@ -138,7 +138,7 @@ public class NewProjectWizardPage extends WizardPage {
 		text.addModifyListener( new ModifyListener() {
 			@Override
 			public void modifyText( ModifyEvent e ) {
-				NewProjectWizardPage.this.creationBean.projectDescription(((Text) e.widget).getText());
+				NewRoboconfProjectWizardPage.this.creationBean.projectDescription(((Text) e.widget).getText());
 				validate();
 			}
 		});
@@ -149,7 +149,7 @@ public class NewProjectWizardPage extends WizardPage {
 		text.addModifyListener( new ModifyListener() {
 			@Override
 			public void modifyText( ModifyEvent e ) {
-				NewProjectWizardPage.this.creationBean.projectVersion(((Text) e.widget).getText());
+				NewRoboconfProjectWizardPage.this.creationBean.projectVersion(((Text) e.widget).getText());
 				validate();
 			}
 		});
@@ -164,7 +164,7 @@ public class NewProjectWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected( SelectionEvent e ) {
 				boolean selection = ((Button) e.widget).getSelection();
-				NewProjectWizardPage.this.creationBean.mavenProject( selection );
+				NewRoboconfProjectWizardPage.this.creationBean.mavenProject( selection );
 				updateWidgets( container, controls );
 			}
 		});
@@ -185,13 +185,13 @@ public class NewProjectWizardPage extends WizardPage {
 		this.useDefaultLocButton.addSelectionListener( new SelectionAdapter () {
 			@Override
 			public void widgetSelected( SelectionEvent e ) {
-				NewProjectWizardPage.this.atDefaultLocation = NewProjectWizardPage.this.useDefaultLocButton.getSelection();
+				NewRoboconfProjectWizardPage.this.atDefaultLocation = NewRoboconfProjectWizardPage.this.useDefaultLocButton.getSelection();
 
-				boolean use = ! NewProjectWizardPage.this.useDefaultLocButton.getSelection();
+				boolean use = ! NewRoboconfProjectWizardPage.this.useDefaultLocButton.getSelection();
 				locLabel.setEnabled( use );
-				NewProjectWizardPage.this.wkButton.setEnabled( use );
-				NewProjectWizardPage.this.wkText.setEnabled( use );
-				NewProjectWizardPage.this.wkText.setFocus();
+				NewRoboconfProjectWizardPage.this.wkButton.setEnabled( use );
+				NewRoboconfProjectWizardPage.this.wkText.setEnabled( use );
+				NewRoboconfProjectWizardPage.this.wkText.setFocus();
 			}
 		});
 
@@ -330,7 +330,7 @@ public class NewProjectWizardPage extends WizardPage {
 				@Override
 				public void modifyText( ModifyEvent e ) {
 					String s = ((Text) e.widget).getText();
-					NewProjectWizardPage.this.creationBean.groupId( s );
+					NewRoboconfProjectWizardPage.this.creationBean.groupId( s );
 					validate();
 				}
 			});
@@ -345,7 +345,7 @@ public class NewProjectWizardPage extends WizardPage {
 			text.addModifyListener( new ModifyListener() {
 				@Override
 				public void modifyText( ModifyEvent e ) {
-					NewProjectWizardPage.this.creationBean.pluginVersion(((Text) e.widget).getText());
+					NewRoboconfProjectWizardPage.this.creationBean.pluginVersion(((Text) e.widget).getText());
 					validate();
 				}
 			});
@@ -378,7 +378,7 @@ public class NewProjectWizardPage extends WizardPage {
 		this.wkText.addModifyListener( new ModifyListener() {
 			@Override
 			public void modifyText( ModifyEvent e ) {
-				NewProjectWizardPage.this.wkLocation = ((Text) e.widget).getText();
+				NewRoboconfProjectWizardPage.this.wkLocation = ((Text) e.widget).getText();
 			}
 		});
 
@@ -393,8 +393,8 @@ public class NewProjectWizardPage extends WizardPage {
 				String fn = dlg.open();
 
 				if( fn != null ) {
-					NewProjectWizardPage.this.wkText.setText( fn );
-					NewProjectWizardPage.this.wkText.setSelection( fn.length());
+					NewRoboconfProjectWizardPage.this.wkText.setText( fn );
+					NewRoboconfProjectWizardPage.this.wkText.setSelection( fn.length());
 				}
 			}
 		});

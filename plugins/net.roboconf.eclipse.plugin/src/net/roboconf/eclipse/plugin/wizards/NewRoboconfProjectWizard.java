@@ -27,7 +27,6 @@ package net.roboconf.eclipse.plugin.wizards;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -39,7 +38,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IViewPart;
@@ -50,24 +48,26 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 
+import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
+import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.tooling.core.ProjectUtils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class NewProjectWizard extends Wizard implements INewWizard {
+public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 
 	private static final String PROJECTS_VIEW = "org.eclipse.ui.navigator.ProjectExplorer";
 	private static final String PACKAGES_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 
-	protected NewProjectWizardPage projectPage;
+	protected NewRoboconfProjectWizardPage projectPage;
 
 
 	/**
 	 * Constructor.
 	 */
-	public NewProjectWizard() {
+	public NewRoboconfProjectWizard() {
 
 		super();
 		setNeedsProgressMonitor( true );
@@ -94,7 +94,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		this.projectPage = new NewProjectWizardPage();
+		this.projectPage = new NewRoboconfProjectWizardPage();
 		addPage( this.projectPage );
 	}
 
@@ -113,17 +113,19 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			throws CoreException, InvocationTargetException, InterruptedException {
 
 				try {
-					monitor.beginTask( "Creating the project...", 5 );
-					File target = NewProjectWizard.this.projectPage.getTargetDirectory();
-					String name = NewProjectWizard.this.projectPage.getCreationBean().getArtifactId();
+					// Create the project
+					monitor.beginTask( "Creating the project...", 6 );
+					File target = NewRoboconfProjectWizard.this.projectPage.getTargetDirectory();
+					String name = NewRoboconfProjectWizard.this.projectPage.getCreationBean().getArtifactId();
 					if( target == null )
 						target = new File( ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString(), name );
 
-					ProjectUtils.createProjectSkeleton( target, NewProjectWizard.this.projectPage.getCreationBean());
+					ProjectUtils.createProjectSkeleton( target, NewRoboconfProjectWizard.this.projectPage.getCreationBean());
 					monitor.worked( 4 );
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( name );
 
-					target = NewProjectWizard.this.projectPage.getTargetDirectory();
+					// Setting the location
+					target = NewRoboconfProjectWizard.this.projectPage.getTargetDirectory();
 					if( target != null ) {
 						IProjectDescription projectDescription = ResourcesPlugin.getWorkspace().newProjectDescription( name );
 						projectDescription.setLocationURI( target.toURI());
@@ -133,7 +135,13 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 						project.create( monitor );
 					}
 
+					// Open the project
 					project.open( monitor );
+					monitor.worked( 1 );
+
+					// Add the required nature
+					monitor.subTask( "Adding the project nature" );
+					RoboconfEclipseUtils.addRoboconfNature( project, monitor );
 					monitor.worked( 1 );
 
 				} catch( Exception e ) {
@@ -154,7 +162,10 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 			String projectName = this.projectPage.getCreationBean().getArtifactId();
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
-			String loc = this.projectPage.getCreationBean().isMavenProject() ? "src/main/model/graph/main.graph" : "graph/main.graph";
+			String loc = "graph/main.graph";
+			if( this.projectPage.getCreationBean().isMavenProject())
+				loc = RoboconfEclipseConstants.SRC_MAIN_MODEL + loc;
+
 			final IFile graphFile = project.getFile( loc );
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			try {
@@ -199,16 +210,7 @@ public class NewProjectWizard extends Wizard implements INewWizard {
 
 		// Select and expand
 		if( viewPart != null ) {
-			try {
-				Method getTreeViewerMethod = viewPart.getClass().getMethod( "getTreeViewer" );
-				TreeViewer viewer = (TreeViewer) getTreeViewerMethod.invoke( viewPart );
-				if( viewer != null )
-					viewer.setSelection( new StructuredSelection( graphFile ), true );
-
-			} catch( Exception e ) {
-				viewPart.getViewSite().getSelectionProvider().setSelection( new StructuredSelection( graphFile ));
-				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
-			}
+			viewPart.getViewSite().getSelectionProvider().setSelection( new StructuredSelection( graphFile ));
 		}
 	}
 }
