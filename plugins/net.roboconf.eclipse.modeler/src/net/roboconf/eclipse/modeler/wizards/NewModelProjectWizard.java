@@ -27,6 +27,8 @@ package net.roboconf.eclipse.modeler.wizards;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -40,13 +42,15 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sirius.business.api.modelingproject.ModelingProject;
 import org.eclipse.sirius.business.api.session.Session;
 import org.eclipse.sirius.ext.base.Option;
-import org.eclipse.sirius.ext.base.Options;
 import org.eclipse.sirius.ui.tools.api.project.ModelingProjectManager;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -58,8 +62,6 @@ import org.occiware.clouddesigner.occi.Extension;
 import org.occiware.clouddesigner.occi.OCCIFactory;
 import org.occiware.clouddesigner.occi.OCCIRegistry;
 import org.occiware.clouddesigner.occi.design.utils.WizardUtils;
-
-import com.google.common.collect.Maps;
 
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 
@@ -123,15 +125,10 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 							NewModelProjectWizard.this.page.getLocationPath(),
 							true, monitor);
 
-					ModelingProject.asModelingProject( NewModelProjectWizard.this.project ).get().getSession().getSelectedViewpoints( false );
-
 				} catch( CoreException e ) {
 					RoboconfModelerPlugin.log( e, IStatus.ERROR );
-				}
-
-				// Verify the project was correctly created.
-				if( NewModelProjectWizard.this.project == null )
 					throw new IllegalArgumentException();
+				}
 
 				// Update the workspace
 				try {
@@ -177,7 +174,6 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 	}
 
 
-
 	/**
 	 * Widely inspired from OCCIware's extension project wizard.
 	 * @author Vincent Zurczak - Linagora
@@ -185,7 +181,7 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 	private static class InitExtensionModel extends WorkspaceModifyOperation {
 
 		private final IProject project;
-		private final String modelFileName;
+		private final IFile modelFile;
 		private URI semanticModelURI;
 
 
@@ -195,7 +191,9 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 		public InitExtensionModel( IProject project, String modelFileName ) {
 			super( null );
 			this.project = project;
-			this.modelFileName = modelFileName;
+
+			final String platformPath = "/" + this.project.getName() + "/model/" + modelFileName;
+			this.modelFile = ResourcesPlugin.getWorkspace().getRoot().getFile( new Path( platformPath ));
 		}
 
 
@@ -203,16 +201,17 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 		protected void execute( IProgressMonitor monitor )
 		throws CoreException, InterruptedException {
 
+			// Create an empty OCCI configuration.
+			createSemanticResource();
+
+			// Transform the project into a modeling AFTER writing the model into a file.
 			final Option<ModelingProject> created = ModelingProject.asModelingProject( this.project );
 			if( created.some()) {
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().syncExec( new Runnable() {
 
 					@Override
 					public void run() {
-						// Create default empty Extension model
-						createSemanticResource();
-
-						// Enable OCCI viewpoints
+						createViewPoint();
 						final ModelingProject modelingProject = created.get();
 						WizardUtils.enableViewpoint( modelingProject.getSession(), WizardConstants.VIEWPOINT_ID );
 					}
@@ -222,55 +221,53 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 
 
 		/**
-		 * @return
+		 * Creates the (XML) model file.
 		 */
-		private Option<IFile> createSemanticResource() {
+		private void createSemanticResource() {
+
+			// Create the (empty) model
+			InitExtensionModel.this.semanticModelURI = URI.createPlatformResourceURI( this.modelFile.getFullPath().toOSString(), true );
+			ResourceSet resourceSet = new ResourceSetImpl();
+			final Resource res = resourceSet.createResource( InitExtensionModel.this.semanticModelURI );
+
+			// Populate the model
+			String refExtensionURI = OCCIRegistry.getInstance().getExtensionURI( "http://schemas.ogf.org/occi/core#" );
+			final Resource refExtensionResource = res.getResourceSet().getResource( URI.createURI( refExtensionURI, true ), true);
+			final Extension refExtension = (Extension) refExtensionResource.getContents().get( 0 );
 
 			final Configuration rootObject = OCCIFactory.eINSTANCE.createConfiguration();
 			rootObject.setDescription( "Graph(s) model for " + this.project.getName());
+			rootObject.getUse().add( refExtension );
+			res.getContents().add( rootObject );
+
+			// Save the model
+			Map<Object,Object> saveOptions = new HashMap<> ();
+			saveOptions.put( XMIResource.OPTION_ENCODING, "UTF-8" );
+			try {
+				res.save( saveOptions );
+
+			} catch( IOException e ) {
+				RoboconfModelerPlugin.log( e, IStatus.ERROR );
+			}
+		}
+
+
+		/**
+		 * Creates the view point.
+		 */
+		private void createViewPoint() {
 
 			final Option<ModelingProject> modelingProject = ModelingProject.asModelingProject( this.project );
 			final Session session = modelingProject.get().getSession();
-			final String platformPath = "/" + this.project.getName() + "/model/" + this.modelFileName;
 			session.getTransactionalEditingDomain().getCommandStack().execute(
 					new RecordingCommand( session.getTransactionalEditingDomain()) {
 
 				@Override
 				protected void doExecute() {
-
-					// Load the (empty) model
-					InitExtensionModel.this.semanticModelURI = URI.createPlatformResourceURI( platformPath, true );
-					final Resource res = session.getSessionResource().getResourceSet().createResource( InitExtensionModel.this.semanticModelURI );
-
-					// Populate the model
-					String[] refSchemes = {
-							"http://schemas.ogf.org/occi/core#",
-							//"http://roboconf.net/graph/ecore"
-					};
-
-					for( String scheme : refSchemes ) {
-						String refExtensionURI = OCCIRegistry.getInstance().getExtensionURI( scheme );
-						final Resource refExtensionResource = res.getResourceSet().getResource(URI.createURI(refExtensionURI, true), true);
-						final Extension refExtension = (Extension) refExtensionResource.getContents().get(0);
-						rootObject.getUse().add(refExtension);
-					}
-
-					res.getContents().add( rootObject );
-
-					// Save the model
-					try {
-						res.save( Maps.newHashMap());
-
-					} catch (final IOException e) {
-						RoboconfModelerPlugin.log( e, IStatus.ERROR );
-					}
-
-					session.addSemanticResource( InitExtensionModel.this.semanticModelURI, new NullProgressMonitor());
-					session.save( new NullProgressMonitor());
+					IProgressMonitor monitor =  new NullProgressMonitor();
+					session.addSemanticResource( InitExtensionModel.this.semanticModelURI, monitor );
 				}
 			});
-
-			return Options.newSome( ResourcesPlugin.getWorkspace().getRoot().getFile(new Path( platformPath )));
 		}
 	}
 }
