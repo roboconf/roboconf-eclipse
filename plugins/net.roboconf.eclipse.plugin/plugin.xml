@@ -189,5 +189,12 @@
          </menu>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.core.runtime.xml"
+            file-extensions="graph-ui">
+      </file-association>
+   </extension>
 
 </plugin>
