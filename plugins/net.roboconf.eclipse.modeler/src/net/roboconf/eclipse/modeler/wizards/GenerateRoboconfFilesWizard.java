@@ -25,17 +25,50 @@
 
 package net.roboconf.eclipse.modeler.wizards;
 
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.occiware.clouddesigner.occi.Configuration;
+import org.occiware.clouddesigner.occi.Link;
+
+import net.roboconf.core.dsl.ParsingModelIo;
+import net.roboconf.core.dsl.converters.FromGraphs;
+import net.roboconf.core.dsl.parsing.FileDefinition;
+import net.roboconf.core.model.beans.AbstractType;
+import net.roboconf.core.model.beans.Component;
+import net.roboconf.core.model.beans.ExportedVariable;
+import net.roboconf.core.model.beans.Facet;
+import net.roboconf.core.model.beans.Graphs;
+import net.roboconf.core.model.beans.ImportedVariable;
+import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfChildrenLink;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfInheritanceLink;
+import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
 import net.roboconf.eclipse.plugin.wizards.NewRoboconfProjectWizard;
 
 /**
@@ -43,15 +76,24 @@ import net.roboconf.eclipse.plugin.wizards.NewRoboconfProjectWizard;
  */
 public class GenerateRoboconfFilesWizard extends NewRoboconfProjectWizard {
 
-	private ChoiceWizardPage choicePage;
-	private SingleFileWizardPage singleFilePage;
+	private final ISelection selection;
+	private GenerateRoboconfFilesWizardPage choicePage;
+	private WizardNewFileCreationPage singleFilePage;
+
+
+	/**
+	 * Constructor.
+	 */
+	public GenerateRoboconfFilesWizard() {
+		this.selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
+	}
 
 
 	@Override
 	public void addPages() {
 
 		// Choice page
-		this.choicePage = new ChoiceWizardPage();
+		this.choicePage = new GenerateRoboconfFilesWizardPage();
 		addPage( this.choicePage );
 
 		// Add the project page
@@ -60,7 +102,17 @@ public class GenerateRoboconfFilesWizard extends NewRoboconfProjectWizard {
 		this.projectPage.setPageComplete( false );
 
 		// Add another page for the file generation
-		this.singleFilePage = new SingleFileWizardPage();
+		IStructuredSelection ss = new StructuredSelection();
+		if( this.selection instanceof IStructuredSelection )
+			ss = (IStructuredSelection) this.selection;
+
+		this.singleFilePage = new WizardNewFileCreationPage( "single.file.page", ss );
+		this.singleFilePage.setAllowExistingResources( true );
+		this.singleFilePage.setTitle( "Generate a Roboconf Graph" );
+		this.singleFilePage.setDescription( "Generate the definition of a Roboconf graph." );
+		this.singleFilePage.setFileExtension( "graph" );
+		this.singleFilePage.setFileName( "main.graph" );
+
 		addPage( this.singleFilePage );
 	}
 
@@ -83,128 +135,187 @@ public class GenerateRoboconfFilesWizard extends NewRoboconfProjectWizard {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard
+	 * #performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
-
 		boolean result = true;
-		if( this.choicePage.generateProject )
-			result = super.performFinish();
 
-		// TODO: generate the graph from the model
+		// Generate a whole project
+		if( this.choicePage.generateProject ) {
+			result = super.performFinish();
+		}
+
+		// Generate a single file
+		else {
+			IPath filePath = this.singleFilePage.getContainerFullPath().append( this.singleFilePage.getFileName());
+			final IFile fileToCreate = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
+
+			WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
+				@Override
+				protected void execute( IProgressMonitor monitor )
+				throws CoreException, InvocationTargetException, InterruptedException {
+
+					try {
+						monitor.beginTask( "Creating the file cotnent...", 6 );
+						overwriteGraphFileContent( fileToCreate );
+						monitor.worked( 6 );
+
+					} catch( Exception e ) {
+						throw new InvocationTargetException( e );
+
+					} finally {
+						monitor.done();
+					}
+				}
+			};
+
+			try {
+				// Run the operation.
+				getContainer().run( true, false, op );
+
+				// Open the graph file
+				showFile( fileToCreate );
+
+			} catch( Exception e ) {
+				RoboconfModelerPlugin.log( e, IStatus.ERROR );
+				result = false;
+			}
+		}
 
 		return result;
 	}
 
 
-	/**
-	 * @author Vincent Zurczak - Linagora
-	 */
-	private static class ChoiceWizardPage extends WizardPage {
+	@Override
+	protected void overwriteGraphFileContent( IFile mainGraphFile ) {
 
-		private boolean generateProject = true;
+		// Find the selected file
+		IFile graphUiFile = null;
+		if( this.selection instanceof IStructuredSelection
+				&& ! this.selection.isEmpty()) {
 
-
-		/**
-		 * Constructor.
-		 */
-		public ChoiceWizardPage() {
-			super( "choice.page" );
-
-			setTitle( "Generate Roboconf Files" );
-			setDescription( "Select the generation options." );
+			Object o = ((IStructuredSelection) this.selection).getFirstElement();
+			if( o instanceof IFile )
+				graphUiFile = (IFile) o;
 		}
 
+		if( graphUiFile == null ) {
+			RoboconfModelerPlugin.log( "A *.graph-ui file was expected.", IStatus.ERROR );
+			return;
+		}
 
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.IDialogPage
-		 * #createControl(org.eclipse.swt.widgets.Composite)
-		 */
-		@Override
-		public void createControl( Composite parent ) {
+		// Load the model
+		ResourceSet resSet = new ResourceSetImpl();
+		Resource resource = resSet.getResource( URI.createURI( graphUiFile.getFullPath().toOSString()), true );
+		Configuration config = (Configuration) resource.getContents().get( 0 );
 
-			// Basic fields
-			getShell().setText( "Generate Roboconf Files" );
-			final Composite container = new Composite( parent, SWT.NONE );
-			GridLayoutFactory.swtDefaults().numColumns( 2 ).extendedMargins( 15, 15, 20, 0 ).spacing( 15, 15 ).applyTo( container );
-			container.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ));
+		// Convert the model.
+		// Step one: create the Roboconf types.
+		Map<String,AbstractType> typeNameToType = new HashMap<> ();
+		for( EObject eo : config.eContents()) {
 
-			// Project
-			final Button projectButton = new Button( container, SWT.RADIO );
-			//projectButton.setImage( this.projectImg );
-			projectButton.setSelection( this.generateProject );
-			projectButton.setLayoutData( new GridData( SWT.TOP, SWT.TOP, false, false ));
+			// Filter types
+			if( !( eo instanceof RoboconfFacet )) {
+				continue;
+			}
 
-			StringBuilder sb = new StringBuilder();
-			sb.append( "Generate a new Eclipse project." );
-			sb.append( "\n" );
-			sb.append( "Generate a new project with various options: application name, output location, Maven properties, etc." );
-			sb.append( "" );
-			new Label( container, SWT.NONE ).setText( sb.toString());
+			// Start the conversion
+			boolean isComp = eo instanceof RoboconfComponent;
+			RoboconfFacet rawType = (RoboconfFacet) eo;
 
-			// Graph(s) file
-			Button fileButton = new Button( container, SWT.RADIO );
-			//fileButton.setImage( this.fileImg );
-			fileButton.setSelection( ! this.generateProject );
-			fileButton.setLayoutData( new GridData( SWT.TOP, SWT.TOP, false, false ));
+			AbstractType finalType = isComp ? new Component() : new Facet();
+			finalType.setName( rawType.getName());
+			typeNameToType.put( rawType.getName(), finalType );
 
-			sb = new StringBuilder();
-			sb.append( "Generate a graph(s) file." );
-			sb.append( "\n" );
-			sb.append( "Generate a single file that contains the whole graph definitions" );
-			sb.append( "" );
-			new Label( container, SWT.NONE ).setText( sb.toString());
+			// Deal with owner relations
+			for( Link link : rawType.getLinks()) {
+				if( link instanceof RoboconfOwnerLink ) {
 
-			// Call backs
-			Listener listener = new Listener() {
-				@Override
-				public void handleEvent( Event event ) {
-					ChoiceWizardPage.this.generateProject = event.widget == projectButton;
-					getWizard().getContainer().updateButtons();
+					// Exports
+					if( link.getTarget() instanceof RoboconfExportedVariable ) {
+						RoboconfExportedVariable rawVar = (RoboconfExportedVariable) link.getTarget();
+						ExportedVariable finalVar = new ExportedVariable( rawVar.getName(), rawVar.getValue());
+						finalType.exportedVariables.put( finalVar.getName(), finalVar );
+					}
+
+					// Imports => only if we have a component
+					else if( link.getTarget() instanceof RoboconfImportedVariable && isComp ) {
+						RoboconfImportedVariable rawVar = (RoboconfImportedVariable) link.getTarget();
+						ImportedVariable finalVar = new ImportedVariable( rawVar.getName(), rawVar.isOptional(), rawVar.isExternal());
+						((Component) finalType).importedVariables.put( finalVar.getName(), finalVar );
+					}
 				}
-			};
-
-			projectButton.addListener( SWT.Selection, listener );
-			fileButton.addListener( SWT.Selection, listener );
-
-			setControl( container );
-		}
-	}
-
-
-	/**
-	 * @author Vincent Zurczak - Linagora
-	 */
-	private static class SingleFileWizardPage extends WizardPage {
-
-		/**
-		 * Constructor.
-		 */
-		public SingleFileWizardPage() {
-			super( "single.file.page" );
-
-			setTitle( "Generate a Roboconf Graph" );
-			setDescription( "Generate the definition of a Roboconf graph." );
+			}
 		}
 
+		// Step two: build the relations between types.
+		for( EObject eo : config.eContents()) {
 
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.dialogs.IDialogPage
-		 * #createControl(org.eclipse.swt.widgets.Composite)
-		 */
-		@Override
-		public void createControl( Composite parent ) {
+			// Filter types
+			if( !( eo instanceof RoboconfFacet )) {
+				continue;
+			}
 
-			// Basic fields
-			final Composite container = new Composite( parent, SWT.NONE );
-			GridLayoutFactory.swtDefaults().numColumns( 2 ).extendedMargins( 15, 15, 20, 0 ).spacing( 15, 5 ).applyTo( container );
-			container.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ));
+			// Start the conversion
+			boolean isComp = eo instanceof RoboconfComponent;
+			RoboconfFacet rawType = (RoboconfFacet) eo;
 
-			// TODO: Project
-			Label l = new Label( container, SWT.NONE );
-			l.setText( "Not implemented" );
-			setPageComplete( false );
+			AbstractType sourceType = typeNameToType.get( rawType.getName());
+			if( sourceType == null ) {
+				RoboconfModelerPlugin.log( "Type not found during conversion (source): " + rawType.getName(), IStatus.ERROR );
+				continue;
+			}
 
-			setControl( container );
+			for( Link link : rawType.getLinks()) {
+				if( !( link.getTarget() instanceof RoboconfFacet )) {
+					// Ignore (can be a owner link).
+					continue;
+				}
+
+				RoboconfFacet target = (RoboconfFacet) link.getTarget();
+				AbstractType targetType = typeNameToType.get( target.getName());
+				if( targetType == null ) {
+					RoboconfModelerPlugin.log( "Type not found during conversion (target): " + target.getName(), IStatus.ERROR );
+					continue;
+				}
+
+				// Inheritance
+				if( link instanceof RoboconfInheritanceLink ) {
+					if( isComp && targetType instanceof Facet )
+						((Component) sourceType).associateFacet((Facet) targetType);
+					else if( targetType instanceof Facet )
+						((Facet) sourceType).extendFacet((Facet) targetType);
+					else if( isComp )
+						((Component) sourceType).extendComponent((Component) targetType);
+				}
+
+				// Children
+				else if( link instanceof RoboconfChildrenLink ) {
+					sourceType.addChild( targetType );
+				}
+			}
+		}
+
+		// Step three: find roots components
+		Graphs graphs = new Graphs();
+		for( Map.Entry<String,AbstractType> entry : typeNameToType.entrySet()) {
+			if( entry.getValue() instanceof Facet )
+				graphs.getFacetNameToFacet().put( entry.getKey(), (Facet) entry.getValue());
+			else if( entry.getValue().getChildren().isEmpty())
+				graphs.getRootComponents().add((Component) entry.getValue());
+		}
+
+		// Serialize the model
+		FileDefinition defToWrite = new FromGraphs().buildFileDefinition( graphs, mainGraphFile.getLocation().toFile(), true );
+		try {
+			ParsingModelIo.saveRelationsFile( defToWrite, true, "\n" );
+			mainGraphFile.refreshLocal( IResource.DEPTH_ONE, new NullProgressMonitor());
+
+		} catch( Exception e ) {
+			RoboconfModelerPlugin.log( e, IStatus.ERROR );
 		}
 	}
 }

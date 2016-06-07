@@ -15,7 +15,7 @@
            category="net.roboconf.eclipse.plugin.wizards"
            class="net.roboconf.eclipse.modeler.wizards.NewModelFileWizard"
            icon="icons/16x16/roboconf_16x16.jpg"
-           name="Diagram File for Roboconf Graph(s)"
+           name="Diagram File for Roboconf Graphs"
            id="net.roboconf.eclipse.modeler.graphs.file">
       </wizard>
      <wizard
@@ -23,7 +23,7 @@
            class="net.roboconf.eclipse.modeler.wizards.NewModelProjectWizard"
            icon="icons/16x16/roboconf_16x16.jpg"
            id="net.roboconf.eclipse.modeler.graphs.project"
-           name="Diagram Project for Roboconf Graph(s)">
+           name="Diagram Project for Roboconf Graphs">
      </wizard>
    </extension>
   <extension

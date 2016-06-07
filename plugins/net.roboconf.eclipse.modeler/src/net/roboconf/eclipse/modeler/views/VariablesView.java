@@ -171,10 +171,12 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 			this.viewer.expandAll();
 
 			if( oldInput != null
-					&& oldInput.eResource() != null )
-				oldInput.eResource().eAdapters().remove( this.emfListener );
+					&& oldInput.eResource() != null
+					&& ! Objects.equals( oldInput.eResource(), eo.eResource())) {
 
-			eo.eResource().eAdapters().add( this.emfListener );
+				oldInput.eResource().eAdapters().remove( this.emfListener );
+				eo.eResource().eAdapters().add( this.emfListener );
+			}
 		}
 	}
 

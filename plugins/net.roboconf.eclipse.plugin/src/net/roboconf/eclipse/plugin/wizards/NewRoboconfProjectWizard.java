@@ -158,7 +158,7 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 			// Run the operation.
 			getContainer().run( true, false, op );
 
-			// Open the graph file
+			// Overwrite the graph file?
 			String projectName = this.projectPage.getCreationBean().getArtifactId();
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
@@ -167,16 +167,10 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 				loc = RoboconfEclipseConstants.SRC_MAIN_MODEL + loc;
 
 			final IFile graphFile = project.getFile( loc );
-			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			try {
-				IDE.openEditor( page, graphFile );
+			overwriteGraphFileContent( graphFile );
 
-			} catch( PartInitException e ) {
-				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
-
-			} finally {
-				selectFileInResourceExplorer( graphFile );
-			}
+			// Open the graph file
+			showFile( graphFile );
 
 		} catch( Exception e ) {
 			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
@@ -184,6 +178,33 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 		}
 
 		return result;
+	}
+
+
+	/**
+	 * Show the graph file.
+	 * @param graphFile the graph file
+	 */
+	protected void showFile( IFile graphFile ) {
+
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			IDE.openEditor( page, graphFile );
+
+		} catch( PartInitException e ) {
+			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
+
+		} finally {
+			selectFileInResourceExplorer( graphFile );
+		}
+	}
+
+
+	/**
+	 * @param graphFile the main graph file, whose content can be overwritten
+	 */
+	protected void overwriteGraphFileContent( IFile graphFile ) {
+		// nothing
 	}
 
 
