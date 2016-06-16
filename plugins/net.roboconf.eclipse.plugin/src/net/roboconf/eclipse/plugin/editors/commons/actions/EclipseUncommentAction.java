@@ -27,41 +27,24 @@ package net.roboconf.eclipse.plugin.editors.commons.actions;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.utils.Utils;
+import net.roboconf.tooling.core.textactions.ITextAction;
+import net.roboconf.tooling.core.textactions.UncommentAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class CommentAction extends AbstractCommentAction {
+public class EclipseUncommentAction extends EclipseAbstractTextAction {
 
 	/**
 	 * Constructor.
 	 * @param textEditor
 	 */
-	public CommentAction( TextEditor textEditor ) {
-		super( "Comment", textEditor );
+	public EclipseUncommentAction( TextEditor textEditor ) {
+		super( "Uncomment", textEditor );
 	}
-
 
 	@Override
-	public String processLine( String line ) {
-		return commentLine( line );
-	}
-
-
-	/**
-	 * Comments a line.
-	 * @param line a non-null line
-	 * @return a non-null line
-	 */
-	public static String commentLine( String line ) {
-
-		String result = line;
-		if( ! Utils.isEmptyOrWhitespaces( line )
-				&& ! line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
-			result = ParsingConstants.COMMENT_DELIMITER + line;
-
-		return result;
+	public ITextAction getRoboconfAction() {
+		return new UncommentAction();
 	}
 }

@@ -23,15 +23,28 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.plugin;
+package net.roboconf.eclipse.plugin.editors.commons.actions;
+
+import org.eclipse.ui.editors.text.TextEditor;
+
+import net.roboconf.tooling.core.textactions.CommentAction;
+import net.roboconf.tooling.core.textactions.ITextAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public interface RoboconfEclipseConstants {
+public class EclipseCommentAction extends EclipseAbstractTextAction {
 
-	String NATURE_ID = "net.roboconf.eclipse.project.RoboconfNature"; 	//$NON-NLS-1$
-	String BUILDER_ID = "net.roboconf.eclipse.project.RoboconfBuilder"; //$NON-NLS-1$
-	String MARKER_ID = "net.roboconf.eclipse.project.RoboconfMarker"; 	//$NON-NLS-1$
-	String MARKER_ERROR_CODE = "net.roboconf.eclipse.plugin.marker.errorCode";	//$NON-NLS-1$
+	/**
+	 * Constructor.
+	 * @param textEditor
+	 */
+	public EclipseCommentAction( TextEditor textEditor ) {
+		super( "Comment", textEditor );
+	}
+
+	@Override
+	public ITextAction getRoboconfAction() {
+		return new CommentAction();
+	}
 }

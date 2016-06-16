@@ -45,7 +45,7 @@ public class AutoTagClosingStrategy implements IAutoEditStrategy {
 		if( command.text.equals( "{" )) {
 			command.text += "}";
 			command.caretOffset = command.offset + +1;
-		    command.shiftsCaret = false;
+			command.shiftsCaret = false;
 		}
 
 		// We wrote an instance property but we forgot the semicolon at the end of the line.

@@ -27,41 +27,24 @@ package net.roboconf.eclipse.plugin.editors.commons.actions;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.utils.Utils;
+import net.roboconf.tooling.core.textactions.ITextAction;
+import net.roboconf.tooling.core.textactions.ToggleCommentsAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class UncommentAction extends AbstractCommentAction {
+public class EclipseToggleCommentsAction extends EclipseAbstractTextAction {
 
 	/**
 	 * Constructor.
 	 * @param textEditor
 	 */
-	public UncommentAction( TextEditor textEditor ) {
-		super( "Uncomment", textEditor );
+	public EclipseToggleCommentsAction( TextEditor textEditor ) {
+		super( "Toggle Comments", textEditor );
 	}
-
 
 	@Override
-	public String processLine( String line ) {
-		return uncommentLine( line );
-	}
-
-
-	/**
-	 * Uncomments a line.
-	 * @param line a non-null line
-	 * @return a non-null line
-	 */
-	public static String uncommentLine( String line ) {
-
-		String result = line;
-		if( ! Utils.isEmptyOrWhitespaces( line )
-				&& line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
-			result = line.replaceFirst( "^(\\s*)" + ParsingConstants.COMMENT_DELIMITER + "+", "$1" );
-
-		return result;
+	public ITextAction getRoboconfAction() {
+		return new ToggleCommentsAction();
 	}
 }

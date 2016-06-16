@@ -62,11 +62,11 @@ public class RoboconfGraphConfiguration extends RoboconfBaseConfiguration {
 	public IContentAssistant getContentAssistant( ISourceViewer sourceViewer ) {
 
 		ContentAssistant ca = new ContentAssistant();
-        IContentAssistProcessor cap = new RoboconfGraphCompletionProcessor();
-        ca.setContentAssistProcessor( cap, IDocument.DEFAULT_CONTENT_TYPE );
-        ca.setInformationControlCreator( getInformationControlCreator( sourceViewer ));
+		IContentAssistProcessor cap = new RoboconfGraphCompletionProcessor();
+		ca.setContentAssistProcessor( cap, IDocument.DEFAULT_CONTENT_TYPE );
+		ca.setInformationControlCreator( getInformationControlCreator( sourceViewer ));
 
-        return ca;
+		return ca;
 	}
 
 

@@ -43,89 +43,89 @@ import org.osgi.framework.BundleContext;
  */
 public class RoboconfModelerPlugin extends AbstractUIPlugin {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "net.roboconf.eclipse.modeler";
+	// The plug-in ID
+	public static final String PLUGIN_ID = "net.roboconf.eclipse.modeler";
 
-    // The shared instance
-    private static RoboconfModelerPlugin plugin;
-    private Set<Viewpoint> viewpoints;
-
-
-    /**
-     * Constructor.
-     */
-    public RoboconfModelerPlugin() {
-    	// nothing
-    }
+	// The shared instance
+	private static RoboconfModelerPlugin plugin;
+	private Set<Viewpoint> viewpoints;
 
 
-    @Override
+	/**
+	 * Constructor.
+	 */
+	public RoboconfModelerPlugin() {
+		// nothing
+	}
+
+
+	@Override
 	public void start(BundleContext context) throws Exception {
-      super.start(context);
-	  plugin = this;
+		super.start(context);
+		plugin = this;
 
-	  this.viewpoints = new HashSet<> ();
-	  this.viewpoints.addAll( ViewpointRegistry.getInstance().registerFromPlugin(
-			  PLUGIN_ID + "/description/graph.odesign" ));
-    }
+		this.viewpoints = new HashSet<> ();
+		this.viewpoints.addAll( ViewpointRegistry.getInstance().registerFromPlugin(
+				PLUGIN_ID + "/description/graph.odesign" ));
+	}
 
 
-    @Override
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
-    	plugin = null;
-    	if (this.viewpoints != null) {
-    		for (final Viewpoint viewpoint: this.viewpoints) {
-    			ViewpointRegistry.getInstance().disposeFromPlugin(viewpoint);
-    		}
+		plugin = null;
+		if (this.viewpoints != null) {
+			for (final Viewpoint viewpoint: this.viewpoints) {
+				ViewpointRegistry.getInstance().disposeFromPlugin(viewpoint);
+			}
 
-    		this.viewpoints.clear();
-    		this.viewpoints = null;
-    	}
+			this.viewpoints.clear();
+			this.viewpoints = null;
+		}
 
-    	super.stop(context);
-    }
-
-
-    /**
-     * @return the shared instance
-     */
-    public static RoboconfModelerPlugin getDefault() {
-    	return plugin;
-    }
+		super.stop(context);
+	}
 
 
-    /**
-     * Logs an exception.
-     * @param e the exception to log
-     * @param severity the severity, given as one of the {@link IStatus} constants
-     */
-    public static void log( Exception e, int severity ) {
-
-    	String msg = e.getMessage();
-    	if( msg == null || msg.trim().length() == 0 )
-    		msg = "An error occurred.";
-
-    	IStatus status = new Status( severity, PLUGIN_ID, msg, e );
-    	getDefault().getLog().log( status );
-    }
+	/**
+	 * @return the shared instance
+	 */
+	public static RoboconfModelerPlugin getDefault() {
+		return plugin;
+	}
 
 
-    /**
-     * Logs a message.
-     * @param message the message to log
-     * @param severity the severity, given as one of the {@link IStatus} constants
-     */
-    public static void log( String message, int severity ) {
-    	IStatus status = new Status( severity, PLUGIN_ID, message );
-    	getDefault().getLog().log( status );
-    }
+	/**
+	 * Logs an exception.
+	 * @param e the exception to log
+	 * @param severity the severity, given as one of the {@link IStatus} constants
+	 */
+	public static void log( Exception e, int severity ) {
+
+		String msg = e.getMessage();
+		if( msg == null || msg.trim().length() == 0 )
+			msg = "An error occurred.";
+
+		IStatus status = new Status( severity, PLUGIN_ID, msg, e );
+		getDefault().getLog().log( status );
+	}
 
 
-    public static Image findImage( String filePath ) {
+	/**
+	 * Logs a message.
+	 * @param message the message to log
+	 * @param severity the severity, given as one of the {@link IStatus} constants
+	 */
+	public static void log( String message, int severity ) {
+		IStatus status = new Status( severity, PLUGIN_ID, message );
+		getDefault().getLog().log( status );
+	}
 
-    	ImageDescriptor desc = imageDescriptorFromPlugin( PLUGIN_ID, filePath );
-    	Image img = null;
+
+	public static Image findImage( String filePath ) {
+
+		ImageDescriptor desc = imageDescriptorFromPlugin( PLUGIN_ID, filePath );
+		Image img = null;
 		try {
 			img = desc.createImage();
 
@@ -133,6 +133,6 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 			log( "Image " + filePath + " could not be found.", IStatus.ERROR );
 		}
 
-    	return img;
-    }
+		return img;
+	}
 }

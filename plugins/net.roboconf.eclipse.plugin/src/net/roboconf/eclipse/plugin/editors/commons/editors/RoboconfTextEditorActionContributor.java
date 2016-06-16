@@ -32,18 +32,18 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.BasicTextEditorActionContributor;
 
-import net.roboconf.eclipse.plugin.editors.commons.actions.CommentAction;
-import net.roboconf.eclipse.plugin.editors.commons.actions.ToggleCommentsAction;
-import net.roboconf.eclipse.plugin.editors.commons.actions.UncommentAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseCommentAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseToggleCommentsAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseUncommentAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class RoboconfTextEditorActionContributor extends BasicTextEditorActionContributor {
 
-	private final CommentAction commentAction;
-	private final UncommentAction uncommentAction;
-	private final ToggleCommentsAction toggleCommentsAction;
+	private final EclipseCommentAction commentAction;
+	private final EclipseUncommentAction uncommentAction;
+	private final EclipseToggleCommentsAction toggleCommentsAction;
 
 
 	/**
@@ -51,9 +51,9 @@ public class RoboconfTextEditorActionContributor extends BasicTextEditorActionCo
 	 */
 	public RoboconfTextEditorActionContributor() {
 		super();
-		this.commentAction = new CommentAction( null );
-		this.uncommentAction = new UncommentAction( null );
-		this.toggleCommentsAction = new ToggleCommentsAction( null );
+		this.commentAction = new EclipseCommentAction( null );
+		this.uncommentAction = new EclipseUncommentAction( null );
+		this.toggleCommentsAction = new EclipseToggleCommentsAction( null );
 	}
 
 

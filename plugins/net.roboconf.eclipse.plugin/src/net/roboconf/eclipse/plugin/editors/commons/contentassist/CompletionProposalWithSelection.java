@@ -44,13 +44,16 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
+import net.roboconf.tooling.core.SelectionRange;
+import net.roboconf.tooling.core.autocompletion.ICompletionProposer.RoboconfCompletionProposal;
+
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class CompletionProposalWithSelection implements ICompletionProposal {
 
 	private final String replacementString, displayString, additionalProposalInfo;
-	private final Point[] ranges;
+	private final List<SelectionRange> ranges;
 	private final int offset, length;
 	private final ITextViewer viewer;
 
@@ -58,36 +61,28 @@ public class CompletionProposalWithSelection implements ICompletionProposal {
 	/**
 	 * Constructor.
 	 * @param viewer
-	 * @param replacementString
-	 * @param displayString
-	 * @param aadditionalProposalInfo
-	 * @param ranges
+	 * @param proposal
 	 * @param offset
-	 * @param currentPrefixToReplace
 	 */
 	public CompletionProposalWithSelection(
 			ITextViewer viewer,
-			String replacementString,
-			String currentPrefixToReplace,
-			String displayString,
-			String aadditionalProposalInfo,
-			List<Point> ranges,
+			RoboconfCompletionProposal proposal,
 			int offset ) {
 
-		// Basic fields.
-		this.replacementString = replacementString;
-		this.displayString = displayString;
-		this.additionalProposalInfo = aadditionalProposalInfo;
-		this.ranges = ranges.toArray( new Point[ ranges.size()]);
+		// Basic fields
+		this.replacementString = proposal.getProposalString();
+		this.displayString = proposal.getProposalName();
+		this.additionalProposalInfo = proposal.getProposalDescription();
+		this.ranges = proposal.getSelection();
 		this.viewer = viewer;
 
-		// Handle cases where the cursor is after a prefix to replace too.
-		this.length = currentPrefixToReplace == null ? 0 : currentPrefixToReplace.length();
-		this.offset = offset - this.length;
+		// More tricky ones
+		this.length = proposal.getReplacementOffset();
+		this.offset = offset - proposal.getReplacementOffset();
 
-		// Adjust ranges
-		for( Point p : ranges )
-			p.x -= this.length;
+		// Update the ranges' offset (relative => absolute)
+		for( SelectionRange range : this.ranges )
+			range.setOffset( range.getOffset() + offset );
 	}
 
 
@@ -103,14 +98,15 @@ public class CompletionProposalWithSelection implements ICompletionProposal {
 		}
 
 		// Select "place holders" (those that can be selected automatically by typing in "tab")
-		if( this.ranges.length == 0 )
+		if( this.ranges.size() == 0 )
 			return;
 
 		try {
 			LinkedModeModel model = new LinkedModeModel();
-			for( int i=0; i<this.ranges.length; i++ ) {
+			for( int i=0; i<this.ranges.size(); i++ ) {
+				SelectionRange range = this.ranges.get( i );
 				LinkedPositionGroup group = new LinkedPositionGroup();
-				group.addPosition( new LinkedPosition( document, this.ranges[ i ].x, this.ranges[ i ].y, i ));
+				group.addPosition( new LinkedPosition( document, range.getOffset(), range.getLength(), i ));
 				model.addGroup( group );
 			}
 
@@ -129,7 +125,14 @@ public class CompletionProposalWithSelection implements ICompletionProposal {
 
 	@Override
 	public Point getSelection( IDocument document ) {
-		return this.ranges.length > 0 ? this.ranges[ 0 ] : new Point( this.offset + this.length, 0 );
+
+		Point result;
+		if( this.ranges.size() > 0 )
+			result = new Point( this.ranges.get( 0 ).getOffset(), this.ranges.get( 0 ).getLength());
+		else
+			result = new Point( this.offset + this.replacementString.length(), 0 );
+
+		return result;
 	}
 
 

@@ -48,7 +48,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 
-import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.tooling.core.ProjectUtils;
@@ -164,7 +163,7 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 
 			String loc = "graph/main.graph";
 			if( this.projectPage.getCreationBean().isMavenProject())
-				loc = RoboconfEclipseConstants.SRC_MAIN_MODEL + loc;
+				loc = "src/main/model/" + loc;
 
 			final IFile graphFile = project.getFile( loc );
 			overwriteGraphFileContent( graphFile );

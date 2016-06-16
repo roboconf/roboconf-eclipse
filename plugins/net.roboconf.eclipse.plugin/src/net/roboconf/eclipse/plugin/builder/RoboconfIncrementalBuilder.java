@@ -116,7 +116,7 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 	 */
 	private IFolder findApplicationRootLocation() {
 		// FIXME: it can be under "target" too.
-		return (IFolder) getProject().findMember( RoboconfEclipseConstants.SRC_MAIN_MODEL );
+		return (IFolder) getProject().findMember( "src/main/model/" );
 	}
 
 

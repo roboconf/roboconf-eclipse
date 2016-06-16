@@ -27,46 +27,24 @@ package net.roboconf.eclipse.plugin.editors.commons.actions;
 
 import org.eclipse.ui.editors.text.TextEditor;
 
-import net.roboconf.core.dsl.ParsingConstants;
-import net.roboconf.core.utils.Utils;
+import net.roboconf.tooling.core.textactions.CorrectIndentationAction;
+import net.roboconf.tooling.core.textactions.ITextAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class ToggleCommentsAction extends AbstractCommentAction {
-
-	private int uncommented = 0;
-
+public class EclipseCorrectIndentationAction extends EclipseAbstractTextAction {
 
 	/**
 	 * Constructor.
 	 * @param textEditor
 	 */
-	public ToggleCommentsAction( TextEditor textEditor ) {
-		super( "Toggle Comments", textEditor );
+	public EclipseCorrectIndentationAction( TextEditor textEditor ) {
+		super( "Correct Indentation", textEditor );
 	}
 
-
 	@Override
-	public void analyzeLine( String line ) {
-
-		if( ! Utils.isEmptyOrWhitespaces( line )
-				&& ! line.trim().startsWith( ParsingConstants.COMMENT_DELIMITER ))
-			this.uncommented ++;
-	}
-
-
-	@Override
-	public String processLine( String line ) {
-
-		// If there are uncommented lines, toggle means comment them all.
-		// Otherwise, uncomment them.
-		String result = line;
-		if( this.uncommented > 0 )
-			result = CommentAction.commentLine( line );
-		else
-			result = UncommentAction.uncommentLine( line );
-
-		return result;
+	public ITextAction getRoboconfAction() {
+		return new CorrectIndentationAction();
 	}
 }

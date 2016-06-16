@@ -39,10 +39,10 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 
-import net.roboconf.eclipse.plugin.editors.commons.actions.CommentAction;
-import net.roboconf.eclipse.plugin.editors.commons.actions.CorrectIndentationAction;
-import net.roboconf.eclipse.plugin.editors.commons.actions.ToggleCommentsAction;
-import net.roboconf.eclipse.plugin.editors.commons.actions.UncommentAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseCorrectIndentationAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseCommentAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseToggleCommentsAction;
+import net.roboconf.eclipse.plugin.editors.commons.actions.EclipseUncommentAction;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -51,10 +51,10 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 
 	protected final ColorManager colorManager;
 
-	private CommentAction commentAction;
-	private UncommentAction uncommentAction;
-	private ToggleCommentsAction toggleCommentsAction;
-	private CorrectIndentationAction correctIndentationAction;
+	private EclipseCommentAction commentAction;
+	private EclipseUncommentAction uncommentAction;
+	private EclipseToggleCommentsAction toggleCommentsAction;
+	private EclipseCorrectIndentationAction eclipseCorrectIndentationAction;
 
 
 	/**
@@ -77,10 +77,10 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 	protected void createActions() {
 		super.createActions();
 
-		this.commentAction = new CommentAction( this );
-		this.uncommentAction = new UncommentAction( this );
-		this.toggleCommentsAction = new ToggleCommentsAction( this );
-		this.correctIndentationAction = new CorrectIndentationAction( this );
+		this.commentAction = new EclipseCommentAction( this );
+		this.uncommentAction = new EclipseUncommentAction( this );
+		this.toggleCommentsAction = new EclipseToggleCommentsAction( this );
+		this.eclipseCorrectIndentationAction = new EclipseCorrectIndentationAction( this );
 	}
 
 
@@ -98,7 +98,7 @@ public class AbstractRoboconfTextEditor extends TextEditor {
 			sourceMenu.add( this.toggleCommentsAction );
 
 			sourceMenu.add( new Separator());
-			sourceMenu.add( this.correctIndentationAction );
+			sourceMenu.add( this.eclipseCorrectIndentationAction );
 		}
 	}
 

@@ -25,25 +25,20 @@
 
 package net.roboconf.eclipse.plugin.editors.commons.actions;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
+import net.roboconf.tooling.core.textactions.ITextAction;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public abstract class AbstractCommentAction extends Action {
+public abstract class EclipseAbstractTextAction extends Action {
 
 	private TextEditor textEditor;
 
@@ -53,7 +48,7 @@ public abstract class AbstractCommentAction extends Action {
 	 * @param actionName
 	 * @param textEditor
 	 */
-	public AbstractCommentAction( String actionName, TextEditor textEditor ) {
+	public EclipseAbstractTextAction( String actionName, TextEditor textEditor ) {
 		super( actionName );
 		this.textEditor = textEditor;
 	}
@@ -68,20 +63,9 @@ public abstract class AbstractCommentAction extends Action {
 
 
 	/**
-	 * All the lines are pre-processed.
-	 * @param line a non-null line
+	 * @return a Roboconf action
 	 */
-	public void analyzeLine( String line ) {
-		// nothing
-	}
-
-
-	/**
-	 * Processes / Updates a line.
-	 * @param line a non-null line
-	 * @return a non-null line
-	 */
-	public abstract String processLine( String line );
+	public abstract ITextAction getRoboconfAction();
 
 
 	@Override
@@ -89,31 +73,25 @@ public abstract class AbstractCommentAction extends Action {
 
 		ISelection selection = this.textEditor.getSelectionProvider().getSelection();
 		if( selection instanceof ITextSelection ) {
+
+			// Get the selection
 			ITextSelection textSelection = ((ITextSelection) selection);
-			String text = textSelection.getText();
+			IDocumentProvider dp = this.textEditor.getDocumentProvider();
+			IDocument doc = dp.getDocument( this.textEditor.getEditorInput());
+			String documentContent = doc.get();
 
-			List<String> lines = Arrays.asList( text.split( "\\n" ));
-			for( String line : lines )
-				analyzeLine( line );
-
-			StringBuilder sb = new StringBuilder();
-			for( Iterator<String> it = lines.iterator(); it.hasNext(); ) {
-				String newLine = processLine( it.next());
-				sb.append( newLine );
-				if( it.hasNext())
-					sb.append( "\n" );
-			}
+			// Get the new content
+			final ITextAction roboconfAction = getRoboconfAction();
+			String newDocumentContent = roboconfAction.update(
+					documentContent,
+					textSelection.getOffset(),
+					textSelection.getLength());
 
 			// Update only if there are changes
-			if( ! sb.toString().equals( text )) {
-				IDocumentProvider dp = this.textEditor.getDocumentProvider();
-				IDocument doc = dp.getDocument( this.textEditor.getEditorInput());
-				try {
-					doc.replace( textSelection.getOffset(), textSelection.getLength(), sb.toString());
-
-				} catch( BadLocationException e ) {
-					RoboconfEclipsePlugin.log( e, IStatus.ERROR );
-				}
+			if( ! newDocumentContent.equals( doc.get())) {
+				doc.set( newDocumentContent );
+				textSelection = new TextSelection( roboconfAction.getNewCursorPosition(), 0 );
+				this.textEditor.getSelectionProvider().setSelection( textSelection );
 			}
 		}
 	}
