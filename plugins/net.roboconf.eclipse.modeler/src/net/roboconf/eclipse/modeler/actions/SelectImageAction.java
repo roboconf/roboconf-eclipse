@@ -51,6 +51,21 @@ import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
  */
 public class SelectImageAction implements IExternalJavaAction {
 
+	private static final String[] EXTENSIONS = {
+			"*.jpg;*.jpeg;*.gif;*.svg;*.png",
+			"*.jpg", "*.jpeg", "*.gif", "*.png", "*.svg"
+	};
+
+	private static final String[] NAMES = {
+			"All images (" + EXTENSIONS[ 0 ] + ")",
+			"JPG images (" + EXTENSIONS[ 1 ] + ")",
+			"JPEG images (" + EXTENSIONS[ 2 ] + ")",
+			"GIF images (" + EXTENSIONS[ 3 ] + ")",
+			"PNG images (" + EXTENSIONS[ 4 ] + ")",
+			"SVG images (" + EXTENSIONS[ 5 ] + ")",
+	};
+
+
 	@Override
 	public boolean canExecute( Collection<? extends EObject> selections ) {
 
@@ -69,7 +84,8 @@ public class SelectImageAction implements IExternalJavaAction {
 
 		// Open a selection dialog
 		FileDialog dialog = new FileDialog( new Shell(), SWT.OPEN );
-		dialog.setFilterExtensions( new String [] { "*.png", "*jpg", "*jpeg", "*svg", "*png" });
+		dialog.setFilterExtensions( EXTENSIONS );
+		dialog.setFilterNames( NAMES );
 		String result = dialog.open();
 
 		// If a file was selected, import it in the project
