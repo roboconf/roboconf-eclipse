@@ -51,6 +51,7 @@ import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
  */
 public class SelectImageAction implements IExternalJavaAction {
 
+	private static final String LAST_BROWSED_DIRECTORY = "roboconf.last.browsed.directory";
 	private static final String[] EXTENSIONS = {
 			"*.jpg;*.jpeg;*.gif;*.svg;*.png",
 			"*.jpg", "*.jpeg", "*.gif", "*.png", "*.svg"
@@ -82,10 +83,14 @@ public class SelectImageAction implements IExternalJavaAction {
 	@Override
 	public void execute( Collection<? extends EObject> selections, Map<String,Object> parameters ) {
 
+		// Get the last browsed directory
+		String lastDir = RoboconfModelerPlugin.getDefault().getPreferenceStore().getString( LAST_BROWSED_DIRECTORY );
+
 		// Open a selection dialog
 		FileDialog dialog = new FileDialog( new Shell(), SWT.OPEN );
 		dialog.setFilterExtensions( EXTENSIONS );
 		dialog.setFilterNames( NAMES );
+		dialog.setFilterPath( lastDir );
 		String result = dialog.open();
 
 		// If a file was selected, import it in the project
@@ -95,6 +100,12 @@ public class SelectImageAction implements IExternalJavaAction {
 			try {
 				if( ! imgFolder.exists())
 					imgFolder.create( true, true, new NullProgressMonitor());
+
+				// Update the preferences
+				File selectedFile = new File( result );
+				RoboconfModelerPlugin.getDefault().getPreferenceStore().setValue(
+						LAST_BROWSED_DIRECTORY,
+						selectedFile.getParentFile().getAbsolutePath());
 
 				// We can only select a component or a facet, and a component inherits from a facet.
 				int index = result.lastIndexOf( '.' );
@@ -106,7 +117,7 @@ public class SelectImageAction implements IExternalJavaAction {
 				EclipseUtils.deleteImageOf( imgFolder, name );
 
 				// Copy the content then.
-				Utils.copyStream( new File( result ), targetFile.getLocation().toFile());
+				Utils.copyStream( selectedFile, targetFile.getLocation().toFile());
 
 				// Refresh the images directory.
 				imgFolder.refreshLocal( IResource.DEPTH_ONE, new NullProgressMonitor());
