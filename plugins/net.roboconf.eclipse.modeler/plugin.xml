@@ -163,4 +163,85 @@
         </command>
      </menuContribution>
   </extension>
+  <extension
+        point="org.eclipse.emf.validation.constraintProviders">
+     <constraintProvider
+           cache="true">
+        <package
+              namespaceUri="http://roboconf.net/graph/ecore">
+        </package>
+        <constraints
+              categories="net.roboconf.eclipse.modeler.emfconstraints">
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.InheritanceConstraint"
+                 id="net.roboconf.eclipse.modeler.InheritanceConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="Verify constraints about direct inheritance"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfFacet">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.TransitiveInheritanceConstraint"
+                 id="net.roboconf.eclipse.modeler.TransitiveInheritanceConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="A facet or a component cannot directly or indirectly inherit from themsleves"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfFacet">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.TransitiveParentshipConstraint"
+                 id="net.roboconf.eclipse.modeler.SelfParentshipConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="A facet or a component cannot directly or indirectly have themselves as a children"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfFacet">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.SelfDependencyConstraint"
+                 id="net.roboconf.eclipse.modeler.SelfDependencyConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="A facet or a component cannot have a dependency to themselves unless the dependency is optional"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfFacet">
+              </target>
+           </constraint>
+        </constraints>
+     </constraintProvider>
+     <category
+           id="net.roboconf.eclipse.modeler.emfconstraints"
+           mandatory="true"
+           name="EMF Constraints for Roboconf OCCI Model">
+     </category>
+  </extension>
 </plugin>

@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" xmlns:validation="http://www.eclipse.org/sirius/description/validation/1.1.0" name="graph" version="10.1.3.201511131800">
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" name="graph" version="10.1.3.201511131800">
   <ownedViewpoints name="graph" label="Roboconf Graphs" modelFileExtension="graph-ui" icon="/net.roboconf.eclipse.modeler/icons/16x16/roboconf_16x16.jpg">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Diagram" domainClass="Configuration" enablePopupBars="true">
       <metamodel href="platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#/"/>
       <metamodel href="../../net.roboconf.eclipse/occi.graph.model/model/roboconf-graph.ecore#/"/>
-      <validationSet>
-        <ownedRules xsi:type="validation:SemanticValidationRule" name="facet cannot inherit from components" level="ERROR" message="Facets cannot inherit from components." targetClass="roboconfgraph.RoboconfInheritanceLink">
-          <audits auditExpression="aql:if( self.source. oclIsKindOf(roboconfgraph::RoboconfFacet)) then self.target.oclIsKindOf(roboconfgraph::RoboconfComponent)"/>
-        </ownedRules>
-        <ownedRules xsi:type="validation:SemanticValidationRule" name="a component cannot inherit from more than one component" level="ERROR" targetClass="roboconfgraph.RoboconfComponent">
-          <audits auditExpression="aql:container.links->select(i | i.oclIsKindOf(roboconfgraph::RoboconfInheritanceLink)->filter(j | j.target.oclIsKindOf(roboconfgraph::RoboconfComponent).size() &lt;= 1"/>
-        </ownedRules>
-      </validationSet>
       <defaultLayer name="Default">
         <nodeMappings name="component" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconfgraph.RoboconfComponent">
           <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-component.svg">
@@ -45,8 +37,6 @@
               <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfComponent" referenceName="resources">
                 <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Component '+container.resources->filter(roboconfgraph::RoboconfComponent)->size()"/>
                 <subModelOperations xsi:type="tool_1:SetValue" featureName="title" valueExpression="aql:instance.id"/>
-                <subModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:self"/>
-                <subModelOperations xsi:type="tool_1:ExternalJavaActionCall" name="Set installer name" action="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='Set%20Installer%20Name']"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
