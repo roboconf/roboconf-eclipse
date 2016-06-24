@@ -46,12 +46,10 @@ import net.roboconf.core.ErrorCode.ErrorLevel;
 import net.roboconf.core.RoboconfError;
 import net.roboconf.core.model.ApplicationTemplateDescriptor;
 import net.roboconf.core.model.ParsingError;
-import net.roboconf.core.model.RuntimeModelIo;
-import net.roboconf.core.model.RuntimeModelIo.ApplicationLoadResult;
-import net.roboconf.core.model.helpers.RoboconfErrorHelpers;
 import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
+import net.roboconf.tooling.core.validation.ProjectValidator;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -76,8 +74,7 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 			IFolder rootFolder = findApplicationRootLocation();
 			if( rootFolder != null ) {
 				File appRoot = rootFolder.getLocation().toFile();
-				ApplicationLoadResult alr = RuntimeModelIo.loadApplication( appRoot );
-				Collection<RoboconfError> errors = RoboconfErrorHelpers.resolveErrorsWithLocation( alr );
+				Collection<RoboconfError> errors = ProjectValidator.validateProject( appRoot );
 				mapRoboconfErrors( errors, monitor );
 			}
 
