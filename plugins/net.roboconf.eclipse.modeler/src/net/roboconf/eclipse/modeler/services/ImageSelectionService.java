@@ -30,10 +30,10 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora

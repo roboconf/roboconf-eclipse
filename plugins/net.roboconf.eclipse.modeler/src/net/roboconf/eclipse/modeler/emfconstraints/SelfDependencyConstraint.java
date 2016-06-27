@@ -25,11 +25,8 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
-import org.occiware.clouddesigner.occi.Link;
-
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfRuntimeLink;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * A Roboconf type cannot depend on it self unless the dependency is optional.
@@ -51,16 +48,17 @@ public class SelfDependencyConstraint extends AbstractRoboconfModelConstraint {
 	private String validate( RoboconfFacet facet, String type ) {
 
 		String result = null;
-		for( Link link : facet.getLinks()) {
-			if( !( link instanceof RoboconfRuntimeLink ))
-				continue;
-
-//			if( link.getTarget().equals( facet )
-//					&& ! ((RoboconfRuntimeLink) link).) {
-//				result = "A facet can only inherit from facets.";
-//				break;
-//			}
-		}
+		// TODO:
+//		for( Link link : facet.getLinks()) {
+//			if( !( link instanceof RoboconfRuntimeLink ))
+//				continue;
+//
+////			if( link.getTarget().equals( facet )
+////					&& ! ((RoboconfRuntimeLink) link).) {
+////				result = "A facet can only inherit from facets.";
+////				break;
+////			}
+//		}
 
 		return result;
 	}

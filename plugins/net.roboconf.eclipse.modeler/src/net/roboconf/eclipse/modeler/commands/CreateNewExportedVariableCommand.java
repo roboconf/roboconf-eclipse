@@ -35,14 +35,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
-import org.occiware.clouddesigner.occi.Configuration;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfEmfFactory;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.modeler.dialogs.ExportedVariableDialog;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfgraphFactory;
+import net.roboconf.eclipse.modeler.views.VariablesView;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -59,8 +58,9 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 		if( dlg.open() == Window.OK ) {
 
 			// Perform the modifications within a transactional command
-			Command cmd = new NewExportedVariabledCommand( this.facetOrComponent, dlg.getName(), dlg.getValue(), dlg.getAlias());
+			NewExportedVariabledCommand cmd = new NewExportedVariabledCommand( this.facetOrComponent, dlg.getName(), dlg.getValue(), dlg.getAlias());
 			EclipseUtils.findEditingDomain( this.facetOrComponent ).getCommandStack().execute( cmd );
+			VariablesView.refreshElement( this.facetOrComponent, cmd.getVar());
 		}
 
 		return null;
@@ -94,9 +94,7 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 
 		private final RoboconfFacet facetOrComponent;
 		private final String name, value, alias;
-
 		private RoboconfExportedVariable var;
-		private RoboconfOwnerLink link;
 
 
 		/**
@@ -113,30 +111,31 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 			this.value = value;
 		}
 
+		/**
+		 * @return the var
+		 */
+		public RoboconfExportedVariable getVar() {
+			return this.var;
+		}
+
 		@Override
 		public void execute() {
 
-			this.var = RoboconfgraphFactory.eINSTANCE.createRoboconfExportedVariable();
+			this.var = RoboconfEmfFactory.eINSTANCE.createRoboconfExportedVariable();
 			this.var.setName( this.name );
-			this.var.setPublicAlias( this.alias );
-			this.var.setValue( this.value );
-
-			this.link = RoboconfgraphFactory.eINSTANCE.createRoboconfOwnerLink();
-			this.link.setTarget( this.var );
-			this.link.setSource( this.facetOrComponent );
+			this.var.setExternalAlias( this.alias );
+			this.var.setDefaultValue( this.value );
 			redo();
 		}
 
 		@Override
 		public void undo() {
-			this.facetOrComponent.getLinks().remove( this.link );
-			((Configuration) this.facetOrComponent.eContainer()).getResources().remove( this.var );
+			this.facetOrComponent.getExports().remove( this.var );
 		}
 
 		@Override
 		public void redo() {
-			((Configuration) this.facetOrComponent.eContainer()).getResources().add( this.var );
-			this.facetOrComponent.getLinks().add( this.link );
+			this.facetOrComponent.getExports().add( this.var );
 		}
 
 		@Override

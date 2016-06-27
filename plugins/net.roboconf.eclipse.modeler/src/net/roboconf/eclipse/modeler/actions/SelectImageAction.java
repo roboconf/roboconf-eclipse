@@ -41,10 +41,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora

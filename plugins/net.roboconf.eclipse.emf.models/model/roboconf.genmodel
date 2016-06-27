@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright 2016 Linagora, Université Joseph Fourier, Floralis&#xA;&#xA;The present code is developed in the scope of the joint LINAGORA -&#xA;Université Joseph Fourier - Floralis research program and is designated&#xA;as a &quot;Result&quot; pursuant to the terms and conditions of the LINAGORA&#xA;- Université Joseph Fourier - Floralis research program. Each copyright&#xA;holder of Results enumerated here above fully &amp; independently holds complete&#xA;ownership of the complete Intellectual Property rights applicable to the whole&#xA;of said Results, and may freely exploit it in any manner which does not infringe&#xA;the moral rights of the other copyright holders.&#xA;&#xA;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#xA;you may not use this file except in compliance with the License.&#xA;You may obtain a copy of the License at&#xA;&#xA;      http://www.apache.org/licenses/LICENSE-2.0&#xA; &#xA;Unless required by applicable law or agreed to in writing, software&#xA;distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xA;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xA;See the License for the specific language governing permissions and&#xA;limitations under the License."
+    modelDirectory="/net.roboconf.eclipse.emf.models/src" modelPluginID="net.roboconf.eclipse.emf.models"
+    modelName="RoboconfEmfModel" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>roboconf.ecore</foreignModel>
+  <genPackages prefix="RoboconfEmf" basePackage="net.roboconf.eclipse.emf.models"
+      resource="XML" disposableProviderFactory="true" ecorePackage="roboconf.ecore#/">
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfGraphs">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfGraphs/mixed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfGraphs/xMLNSPrefixMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfGraphs/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfGraphs/facets"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfGraphs/components"/>
+    </genClasses>
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfChildrenLink"/>
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfComponent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfComponent/installerName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfComponent/imports"/>
+    </genClasses>
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfExportedVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfExportedVariable/defaultValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfExportedVariable/externalAlias"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfExportedVariable/name"/>
+    </genClasses>
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfFacet">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/exports"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfFacet/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/subTypes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/superTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/children"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/ancestors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference roboconf.ecore#//RoboconfFacet/dependencies"/>
+    </genClasses>
+    <genClasses ecoreClass="roboconf.ecore#//RoboconfImportedVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfImportedVariable/optional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfImportedVariable/external"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute roboconf.ecore#//RoboconfImportedVariable/name"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

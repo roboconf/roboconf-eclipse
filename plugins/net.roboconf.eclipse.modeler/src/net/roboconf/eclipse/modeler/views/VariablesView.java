@@ -31,15 +31,14 @@ import java.util.Objects;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -48,19 +47,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.occiware.clouddesigner.occi.Link;
 
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.modeler.commands.EditExportedVariableCommand;
 import net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -69,13 +67,12 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 	public static final String VIEW_ID = "net.roboconf.eclipse.modeler.views.variablesView";
 
+	public static final String IMPORTED = "Imported Variables";
 	private static final String EXPORTED = "Exported Variables";
-	private static final String IMPORTED = "Imported Variables";
 	private static final String NO_EXPORTS = "No exported variable";
 	private static final String NO_IMPORTS = "No imported variable";
 
 	private TreeViewer viewer;
-	private EContentAdapter emfListener;
 
 
 
@@ -87,22 +84,8 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 		this.viewer.setContentProvider( new VariablesTreeContentProvider());
 		this.viewer.setLabelProvider( new VariablesLabelProvider());
 
-		getSite().setSelectionProvider( this.viewer );
 		getSite().getPage().addSelectionListener( this );
-
-		// Create the EMF listener
-		this.emfListener = new EContentAdapter() {
-			@Override
-			public void notifyChanged( Notification notification ) {
-
-				Display.getDefault().asyncExec( new Runnable() {
-					@Override
-					public void run() {
-						VariablesView.this.viewer.refresh();
-					}
-				});
-			}
-		};
+		getSite().setSelectionProvider( this.viewer );
 
 		// Handle double-clicks
 		this.viewer.addDoubleClickListener( new IDoubleClickListener() {
@@ -116,31 +99,9 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 						cmd.execute( null );
 
 					} else if( o instanceof RoboconfImportedVariable ) {
-
-						// Find the owner of this variable (...)
-						RoboconfFacet owner = null;
-						RoboconfImportedVariable var = (RoboconfImportedVariable) o;
-						bigLoop: for( EObject eo : var.eContainer().eContents()) {
-							if( !( eo instanceof RoboconfFacet ))
-								continue;
-
-							for( Link link : ((RoboconfFacet) eo).getLinks()) {
-								if( link instanceof RoboconfOwnerLink
-										&& link.getTarget().equals( var )) {
-
-									owner = (RoboconfFacet) eo;
-									break bigLoop;
-								}
-							}
-						}
-
-						if( owner != null ) {
-							ManageImportedVariableCommand cmd = new ManageImportedVariableCommand( owner );
-							cmd.execute( null );
-
-						} else {
-							RoboconfModelerPlugin.log( "The variable's owner could not be determined.", IStatus.WARNING );
-						}
+						RoboconfComponent owner = (RoboconfComponent) ((RoboconfImportedVariable) o).eContainer();
+						ManageImportedVariableCommand cmd = new ManageImportedVariableCommand( owner );
+						cmd.execute( null );
 					}
 
 				} catch( ExecutionException e ) {
@@ -165,17 +126,47 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				&& ! this.viewer.getTree().isDisposed()
 				&& eo instanceof RoboconfFacet ) {
 
-			EObject oldInput = (EObject) this.viewer.getInput();
 			this.viewer.setInput( eo );
 			this.viewer.refresh();
 			this.viewer.expandAll();
+		}
 
-			if( oldInput != null
-					&& oldInput.eResource() != null
-					&& ! Objects.equals( oldInput.eResource(), eo.eResource())) {
+		// Editor closed?
+		else if( !( eo instanceof EObject )) {
+			System.out.println( "ok" );
+		}
+	}
 
-				oldInput.eResource().eAdapters().remove( this.emfListener );
-				eo.eResource().eAdapters().add( this.emfListener );
+
+	/**
+	 * A static method to update an element in the view.
+	 * <p>
+	 * This is a dirty workaround since EContentAdapters seem to ignore
+	 * some model modifications. :/
+	 * </p>
+	 *
+	 * @param eo an EMF object
+	 * @param selection th object to select (can be null)
+	 */
+	public static void refreshElement( final EObject eo, final Object selection ) {
+
+		final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		if( part instanceof VariablesView ) {
+
+			// Verify the object and the displayed graph have the same origin
+			Object input = ((VariablesView) part).viewer.getInput();
+			if( input instanceof EObject
+					&& Objects.equals( eo.eResource(), ((EObject) input).eResource())) {
+
+				// Refresh the object
+				Display.getDefault().asyncExec( new Runnable() {
+					@Override
+					public void run() {
+						((VariablesView) part).viewer.refresh( eo );
+						if( selection != null )
+							((VariablesView) part).viewer.setSelection( new StructuredSelection( selection ));
+					}
+				});
 			}
 		}
 	}
@@ -220,21 +211,15 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 			List<Object> result = new ArrayList<> ();
 			if( Objects.equals( parentElement, EXPORTED )) {
-				for( Link link : ((RoboconfFacet) this.input).getLinks()) {
-					if( link instanceof RoboconfOwnerLink
-							&& link.getTarget() instanceof RoboconfExportedVariable )
-						result.add( link.getTarget());
-				}
+				for( RoboconfExportedVariable var : ((RoboconfFacet) this.input).getExports())
+					result.add( var );
 
 				if( result.isEmpty())
 					result.add( NO_EXPORTS );
 
 			} else if( Objects.equals( parentElement, IMPORTED )) {
-				for( Link link : ((RoboconfComponent) this.input).getLinks()) {
-					if( link instanceof RoboconfOwnerLink
-							&& link.getTarget() instanceof RoboconfImportedVariable )
-						result.add( link.getTarget());
-				}
+				for( RoboconfImportedVariable var : ((RoboconfComponent) this.input).getImports())
+					result.add( var );
 
 				if( result.isEmpty())
 					result.add( NO_IMPORTS );
@@ -326,14 +311,14 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				StringBuilder sb = new StringBuilder();
 				sb.append( var.getName());
 
-				if( ! Utils.isEmptyOrWhitespaces( var.getValue())) {
+				if( ! Utils.isEmptyOrWhitespaces( var.getDefaultValue())) {
 					sb.append( " = " );
-					sb.append( var.getValue());
+					sb.append( var.getDefaultValue());
 				}
 
-				if( ! Utils.isEmptyOrWhitespaces( var.getPublicAlias())) {
+				if( ! Utils.isEmptyOrWhitespaces( var.getExternalAlias())) {
 					sb.append( "   (alias for external applications: " );
-					sb.append( var.getPublicAlias());
+					sb.append( var.getExternalAlias());
 					sb.append( ")" );
 				}
 

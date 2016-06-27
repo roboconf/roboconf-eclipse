@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" name="graph" version="10.1.3.201511131800">
   <ownedViewpoints name="graph" label="Roboconf Graphs" modelFileExtension="graph-ui" icon="/net.roboconf.eclipse.modeler/icons/16x16/roboconf_16x16.jpg">
-    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Diagram" domainClass="Configuration" enablePopupBars="true">
-      <metamodel href="platform:/plugin/org.occiware.clouddesigner.occi/model/OCCI.ecore#/"/>
-      <metamodel href="../../net.roboconf.eclipse/occi.graph.model/model/roboconf-graph.ecore#/"/>
+    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Diagram" domainClass="roboconf.RoboconfGraphs" enablePopupBars="true">
+      <metamodel href="../../net.roboconf.eclipse.emf.models/model/roboconf.ecore#/"/>
       <defaultLayer name="Default">
-        <nodeMappings name="component" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconfgraph.RoboconfComponent">
-          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-component.svg">
-            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-            <labelFormat>bold</labelFormat>
-            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-          </style>
-        </nodeMappings>
-        <nodeMappings name="facet" preconditionExpression="aql:not self.oclIsKindOf(roboconfgraph::RoboconfComponent)" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconfgraph.RoboconfFacet">
+        <nodeMappings name="roboconf type" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.2/@ownedTools[name='select%20image']" domainClass="roboconf.RoboconfFacet">
           <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-facet.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelFormat>bold</labelFormat>
@@ -20,23 +12,22 @@
           </style>
         </nodeMappings>
         <toolSections name="nodes" label="Roboconf Types">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Facet" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/facet_16x16.png">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Facet" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/facet_16x16.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfFacet" referenceName="resources">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Facet '+container.resources->filter(roboconfgraph::RoboconfFacet)->size()"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="title" valueExpression="aql:instance.id"/>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconf.RoboconfFacet" referenceName="facets">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Facet '+container.facets->size()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Component" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/component_16x16.png">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="New Component" nodeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/component_16x16.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfComponent" referenceName="resources">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Component '+container.resources->filter(roboconfgraph::RoboconfComponent)->size()"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="title" valueExpression="aql:instance.id"/>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconf.RoboconfComponent" referenceName="components">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Component '+container.components->size()"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="installerName" valueExpression="script"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
@@ -51,13 +42,13 @@
         </toolSections>
         <toolSections name="Actions">
           <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Unset Image" id="net.roboconf.eclipse.modeler.unset-image"/>
-          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Set Installer Name" precondition="aql:self.oclIsKindOf(roboconfgraph::RoboconfComponent) or self.members->select( i | i.oclIsKindOf(roboconfgraph::RoboconfComponent))" id="net.roboconf.eclipse.modeler.set-installer-name">
+          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Set Installer Name" precondition="aql:self.oclIsKindOf(roboconf::RoboconfComponent) or self.members->select( i | i.oclIsKindOf(roboconf::RoboconfComponent))" id="net.roboconf.eclipse.modeler.set-installer-name">
             <parameters name="eobject" value="aql:self"/>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Show Variables" precondition="aql:self.oclIsKindOf(roboconfgraph::RoboconfFacet)" id="net.roboconf.eclipse.modeler.showVariables">
+          <ownedTools xsi:type="tool_1:ExternalJavaAction" name="Show Variables" precondition="aql:self.oclIsKindOf(roboconf::RoboconfFacet)" id="net.roboconf.eclipse.modeler.showVariables">
             <parameters name="eobject" value="aql:self"/>
           </ownedTools>
-          <ownedTools xsi:type="tool:DoubleClickDescription" name="select image" forceRefresh="true" elementsToSelect="aql:Sequence{self}" mappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']">
+          <ownedTools xsi:type="tool:DoubleClickDescription" name="select image" forceRefresh="true" elementsToSelect="aql:Sequence{self}" mappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']">
             <element name="element"/>
             <elementView name="elementView"/>
             <initialOperation>
@@ -67,68 +58,65 @@
         </toolSections>
         <customization>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component']/@style //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']/@style" attributeName="workspacePath" value="service:getImage()"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']/@style" attributeName="workspacePath" value="service:getImage()"/>
           </vsmElementCustomizations>
         </customization>
       </defaultLayer>
       <additionalLayers name="Inheritance" activeByDefault="true">
-        <edgeMappings name="inheritance" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" targetFinderExpression="feature:target" sourceFinderExpression="feature:source" domainClass="roboconfgraph.RoboconfInheritanceLink" useDomainElement="true">
+        <edgeMappings name="Inheritance Style" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetFinderExpression="feature:subTypes">
           <style targetArrow="InputClosedArrow" sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
           </style>
         </edgeMappings>
         <toolSections name="inheritance palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="inheritance" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Inheritance']/@edgeMappings[name='inheritance']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/inheritance_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="inheritance" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Inheritance']/@edgeMappings[name='Inheritance%20Style']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/inheritance_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfInheritanceLink" referenceName="links">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="target" valueExpression="var:target"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="source" valueExpression="var:source"/>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="subTypes" valueExpression="var:target"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
         </toolSections>
       </additionalLayers>
       <additionalLayers name="Children" activeByDefault="true">
-        <edgeMappings name="children" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" targetFinderExpression="feature:target" sourceFinderExpression="feature:source" domainClass="roboconfgraph.RoboconfChildrenLink" useDomainElement="true">
+        <edgeMappings name="Children Style" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetFinderExpression="feature:children">
           <style sourceArrow="Diamond" sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </edgeMappings>
         <toolSections name="children palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="children" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Children']/@edgeMappings[name='children']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/children_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="children" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Children']/@edgeMappings[name='Children%20Style']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/children_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfChildrenLink" referenceName="links">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="source" valueExpression="var:source"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="target" valueExpression="var:target"/>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="children" valueExpression="var:target"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
         </toolSections>
       </additionalLayers>
       <additionalLayers name="Runtime" activeByDefault="true">
-        <edgeMappings name="runtime" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component'] //@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='facet']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='component']" targetFinderExpression="feature:target" sourceFinderExpression="feature:source" domainClass="roboconfgraph.RoboconfRuntimeLink" useDomainElement="true">
+        <edgeMappings name="Runtime Style" sourceMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetMapping="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@nodeMappings[name='roboconf%20type']" targetFinderExpression="feature:dependencies">
           <style lineStyle="dash" targetArrow="InputFillClosedArrow" sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_red']"/>
           </style>
         </edgeMappings>
         <toolSections name="runtime palette" label="Relations">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="runtime" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Runtime']/@edgeMappings[name='runtime']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/runtime_16x16.png">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="runtime" edgeMappings="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@additionalLayers[name='Runtime']/@edgeMappings[name='Runtime%20Style']" iconPath="/net.roboconf.eclipse.modeler/icons/16x16/runtime_16x16.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="roboconfgraph.RoboconfRuntimeLink" referenceName="links">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="target" valueExpression="var:target"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="source" valueExpression="var:source"/>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="dependencies" valueExpression="var:target"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>

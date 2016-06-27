@@ -35,9 +35,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PlatformUI;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
 import net.roboconf.eclipse.modeler.dialogs.ExportedVariableDialog;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
+import net.roboconf.eclipse.modeler.views.VariablesView;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -67,12 +68,13 @@ public class EditExportedVariableCommand extends AbstractHandler {
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
-		ExportedVariableDialog dlg = new ExportedVariableDialog( this.var.getName(), this.var.getValue(), this.var.getPublicAlias());
+		ExportedVariableDialog dlg = new ExportedVariableDialog( this.var.getName(), this.var.getDefaultValue(), this.var.getExternalAlias());
 		if( dlg.open() == Window.OK ) {
 
 			// Perform the modifications within a transactional command
 			Command cmd = new UpdateExportedVariabledCommand( this.var, dlg.getName(), dlg.getValue(), dlg.getAlias());
 			EclipseUtils.findEditingDomain( this.var ).getCommandStack().execute( cmd );
+			VariablesView.refreshElement( this.var, this.var );
 		}
 
 		return null;
@@ -119,22 +121,22 @@ public class EditExportedVariableCommand extends AbstractHandler {
 			this.value = value;
 
 			this.oldName = var.getName();
-			this.oldValue = var.getValue();
-			this.oldAlias = var.getPublicAlias();
+			this.oldValue = var.getDefaultValue();
+			this.oldAlias = var.getExternalAlias();
 		}
 
 		@Override
 		public void execute() {
 			this.var.setName( this.name );
-			this.var.setPublicAlias( this.alias );
-			this.var.setValue( this.value );
+			this.var.setExternalAlias( this.alias );
+			this.var.setDefaultValue( this.value );
 		}
 
 		@Override
 		public void undo() {
 			this.var.setName( this.oldName );
-			this.var.setPublicAlias( this.oldAlias );
-			this.var.setValue( this.oldValue );
+			this.var.setExternalAlias( this.oldAlias );
+			this.var.setDefaultValue( this.oldValue );
 		}
 
 		@Override

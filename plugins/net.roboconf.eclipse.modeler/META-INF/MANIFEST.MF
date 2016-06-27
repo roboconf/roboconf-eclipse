@@ -8,14 +8,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.sirius,
- org.occiware.clouddesigner.occi.design;bundle-version="0.1.0",
- org.occiware.clouddesigner.occi.emfgen.ui;bundle-version="0.1.0",
  net.roboconf.core,
- net.roboconf.eclipse.occi.graph.model.edit,
- net.roboconf.eclipse.occi.graph.model,
  net.roboconf.eclipse.plugin,
  org.eclipse.sirius.ui,
  org.eclipse.sirius.ext.base,
- org.eclipse.emf.transaction
+ org.eclipse.emf.transaction,
+ net.roboconf.eclipse.emf.models,
+ net.roboconf.eclipse.emf.models.edit,
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

@@ -35,9 +35,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora

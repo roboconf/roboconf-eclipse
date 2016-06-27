@@ -26,8 +26,8 @@
 package net.roboconf.eclipse.modeler.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -38,7 +38,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -49,26 +48,14 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import org.occiware.clouddesigner.occi.Configuration;
-import org.occiware.clouddesigner.occi.Link;
 
 import net.roboconf.core.dsl.ParsingModelIo;
 import net.roboconf.core.dsl.converters.FromGraphs;
 import net.roboconf.core.dsl.parsing.FileDefinition;
-import net.roboconf.core.model.beans.AbstractType;
-import net.roboconf.core.model.beans.Component;
-import net.roboconf.core.model.beans.ExportedVariable;
-import net.roboconf.core.model.beans.Facet;
 import net.roboconf.core.model.beans.Graphs;
-import net.roboconf.core.model.beans.ImportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfGraphs;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfChildrenLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfInheritanceLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
 import net.roboconf.eclipse.plugin.wizards.NewRoboconfProjectWizard;
 
 /**
@@ -210,105 +197,93 @@ public class GenerateRoboconfFilesWizard extends NewRoboconfProjectWizard {
 		// Load the model
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource resource = resSet.getResource( URI.createURI( graphUiFile.getFullPath().toOSString()), true );
-		Configuration config = (Configuration) resource.getContents().get( 0 );
+		RoboconfGraphs config = (RoboconfGraphs) resource.getContents().get( 0 );
+
+		List<RoboconfFacet> allTypes = new ArrayList<> ();
+		allTypes.addAll( config.getFacets());
+		allTypes.addAll( config.getComponents());
 
 		// Convert the model.
 		// Step one: create the Roboconf types.
-		Map<String,AbstractType> typeNameToType = new HashMap<> ();
-		for( EObject eo : config.eContents()) {
-
-			// Filter types
-			if( !( eo instanceof RoboconfFacet )) {
-				continue;
-			}
-
-			// Start the conversion
-			boolean isComp = eo instanceof RoboconfComponent;
-			RoboconfFacet rawType = (RoboconfFacet) eo;
-
-			AbstractType finalType = isComp ? new Component() : new Facet();
-			finalType.setName( rawType.getName());
-			typeNameToType.put( rawType.getName(), finalType );
-
-			// Deal with owner relations
-			for( Link link : rawType.getLinks()) {
-				if( link instanceof RoboconfOwnerLink ) {
-
-					// Exports
-					if( link.getTarget() instanceof RoboconfExportedVariable ) {
-						RoboconfExportedVariable rawVar = (RoboconfExportedVariable) link.getTarget();
-						ExportedVariable finalVar = new ExportedVariable( rawVar.getName(), rawVar.getValue());
-						finalType.exportedVariables.put( finalVar.getName(), finalVar );
-					}
-
-					// Imports => only if we have a component
-					else if( link.getTarget() instanceof RoboconfImportedVariable && isComp ) {
-						RoboconfImportedVariable rawVar = (RoboconfImportedVariable) link.getTarget();
-						ImportedVariable finalVar = new ImportedVariable( rawVar.getName(), rawVar.isOptional(), rawVar.isExternal());
-						((Component) finalType).importedVariables.put( finalVar.getName(), finalVar );
-					}
-				}
-			}
-		}
-
-		// Step two: build the relations between types.
-		for( EObject eo : config.eContents()) {
-
-			// Filter types
-			if( !( eo instanceof RoboconfFacet )) {
-				continue;
-			}
-
-			// Start the conversion
-			boolean isComp = eo instanceof RoboconfComponent;
-			RoboconfFacet rawType = (RoboconfFacet) eo;
-
-			AbstractType sourceType = typeNameToType.get( rawType.getName());
-			if( sourceType == null ) {
-				RoboconfModelerPlugin.log( "Type not found during conversion (source): " + rawType.getName(), IStatus.ERROR );
-				continue;
-			}
-
-			for( Link link : rawType.getLinks()) {
-				if( !( link.getTarget() instanceof RoboconfFacet )) {
-					// Ignore (can be a owner link).
-					continue;
-				}
-
-				RoboconfFacet target = (RoboconfFacet) link.getTarget();
-				AbstractType targetType = typeNameToType.get( target.getName());
-				if( targetType == null ) {
-					RoboconfModelerPlugin.log( "Type not found during conversion (target): " + target.getName(), IStatus.ERROR );
-					continue;
-				}
-
-				// Inheritance
-				if( link instanceof RoboconfInheritanceLink ) {
-					if( isComp && targetType instanceof Facet )
-						((Component) sourceType).associateFacet((Facet) targetType);
-					else if( targetType instanceof Facet )
-						((Facet) sourceType).extendFacet((Facet) targetType);
-					else if( isComp )
-						((Component) sourceType).extendComponent((Component) targetType);
-				}
-
-				// Children
-				else if( link instanceof RoboconfChildrenLink ) {
-					sourceType.addChild( targetType );
-				}
-			}
-		}
-
-		// Step three: find roots components
-		Graphs graphs = new Graphs();
-		for( Map.Entry<String,AbstractType> entry : typeNameToType.entrySet()) {
-			if( entry.getValue() instanceof Facet )
-				graphs.getFacetNameToFacet().put( entry.getKey(), (Facet) entry.getValue());
-			else if( entry.getValue().getChildren().isEmpty())
-				graphs.getRootComponents().add((Component) entry.getValue());
-		}
+//		Map<String,AbstractType> typeNameToType = new HashMap<> ();
+//		for( RoboconfFacet type : allTypes ) {
+//
+//			// Start the conversion
+//			boolean isComp = type instanceof RoboconfComponent;
+//			AbstractType finalType = isComp ? new Component() : new Facet();
+//			finalType.setName( type.getName());
+//			typeNameToType.put( type.getName(), finalType );
+//
+//			// Exports
+//			for( RoboconfExportedVariable var : type.getExports()) {
+//				RoboconfExportedVariable rawVar = (RoboconfExportedVariable) link.getTarget();
+//				ExportedVariable finalVar = new ExportedVariable( rawVar.getName(), rawVar.getDefaultValue());
+//				finalType.exportedVariables.put( finalVar.getName(), finalVar );
+//			}
+//
+//			if( ! isComp )
+//				continue;
+//
+//			// Imports => only if we have a component
+//			for( RoboconfImportedVariable var : ((RoboconfComponent) type).getImports()) {
+//				ImportedVariable finalVar = new ImportedVariable( var.getName(), var.isOptional(), var.isExternal());
+//				((Component) finalType).importedVariables.put( finalVar.getName(), finalVar );
+//			}
+//		}
+//
+//		// Step two: build the relations between types.
+//		for( RoboconfFacet type : allTypes ) {
+//
+//			// Start the conversion
+//			boolean isComp = type instanceof RoboconfComponent;
+//
+//			AbstractType sourceType = typeNameToType.get( rawType.getName());
+//			if( sourceType == null ) {
+//				RoboconfModelerPlugin.log( "Type not found during conversion (source): " + rawType.getName(), IStatus.ERROR );
+//				continue;
+//			}
+//
+//			for( Link link : rawType.getLinks()) {
+//				if( !( link.getTarget() instanceof RoboconfFacet )) {
+//					// Ignore (can be a owner link).
+//					continue;
+//				}
+//
+//				RoboconfFacet target = (RoboconfFacet) link.getTarget();
+//				AbstractType targetType = typeNameToType.get( target.getName());
+//				if( targetType == null ) {
+//					RoboconfModelerPlugin.log( "Type not found during conversion (target): " + target.getName(), IStatus.ERROR );
+//					continue;
+//				}
+//
+//				// Inheritance
+//				if( link instanceof RoboconfInheritanceLink ) {
+//					if( isComp && targetType instanceof Facet )
+//						((Component) sourceType).associateFacet((Facet) targetType);
+//					else if( targetType instanceof Facet )
+//						((Facet) sourceType).extendFacet((Facet) targetType);
+//					else if( isComp )
+//						((Component) sourceType).extendComponent((Component) targetType);
+//				}
+//
+//				// Children
+//				else if( link instanceof RoboconfChildrenLink ) {
+//					sourceType.addChild( targetType );
+//				}
+//			}
+//		}
+//
+//		// Step three: find roots components
+//		Graphs graphs = new Graphs();
+//		for( Map.Entry<String,AbstractType> entry : typeNameToType.entrySet()) {
+//			if( entry.getValue() instanceof Facet )
+//				graphs.getFacetNameToFacet().put( entry.getKey(), (Facet) entry.getValue());
+//			else if( entry.getValue().getChildren().isEmpty())
+//				graphs.getRootComponents().add((Component) entry.getValue());
+//		}
 
 		// Serialize the model
+		Graphs graphs = new Graphs();
 		FileDefinition defToWrite = new FromGraphs().buildFileDefinition( graphs, mainGraphFile.getLocation().toFile(), true );
 		try {
 			ParsingModelIo.saveRelationsFile( defToWrite, true, "\n" );

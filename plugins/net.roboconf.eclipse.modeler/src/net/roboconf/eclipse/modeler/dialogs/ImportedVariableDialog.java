@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IStatus;
@@ -50,18 +51,16 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableColumn;
-import org.occiware.clouddesigner.occi.Link;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfEmfFactory;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable;
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfgraphFactory;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -69,21 +68,23 @@ import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfgraphFactory;
 public class ImportedVariableDialog extends TitleAreaDialog {
 
 	private final Map<RoboconfImportedVariable,Boolean> importedVariablesToTaken = new HashMap<> ();
-	private final Map<String,RoboconfImportedVariable> nameToImportedVariables = new HashMap<> ();
-	private final RoboconfFacet facetOrComponent;
+	private final Map<String,RoboconfImportedVariable> nameToImportedVariables = new TreeMap<> ();
+	private final RoboconfComponent component;
 	private final Image checked, unchecked;
 
 
 	/**
 	 * Constructor.
-	 * @param facetOrComponent
+	 * @param component
 	 */
-	public ImportedVariableDialog( RoboconfFacet facetOrComponent ) {
-		super( Display.getDefault().getActiveShell());
-		this.facetOrComponent = facetOrComponent;
+	public ImportedVariableDialog( RoboconfComponent component ) {
+		super( null );
 
+		this.component = component;
 		this.checked = RoboconfModelerPlugin.findImage( "icons/16x16/checked.gif" );
 		this.unchecked = RoboconfModelerPlugin.findImage( "icons/16x16/unchecked.gif" );
+
+		setShellStyle( SWT.TITLE | SWT.RESIZE );
 	}
 
 
@@ -116,12 +117,13 @@ public class ImportedVariableDialog extends TitleAreaDialog {
 		for( RoboconfFacet type : findAllFacetsAndComponents()) {
 
 			Collection<String> varNames = findAllExportedVariables( type );
-			varNames.add( type.getName() + ".*" );
+			if( ! type.getExports().isEmpty())
+				varNames.add( type.getName() + ".*" );
 
 			for( String varName : varNames ) {
-				RoboconfImportedVariable var = RoboconfgraphFactory.eINSTANCE.createRoboconfImportedVariable();
+				RoboconfImportedVariable var = RoboconfEmfFactory.eINSTANCE.createRoboconfImportedVariable();
 				var.setName( varName );
-				if( var.getName().startsWith( this.facetOrComponent.getName() + "." ))
+				if( var.getName().startsWith( this.component.getName() + "." ))
 					var.setOptional( true );
 
 				this.nameToImportedVariables.put( varName, var );
@@ -190,22 +192,17 @@ public class ImportedVariableDialog extends TitleAreaDialog {
 	 */
 	private void updateImportedVariablesStates() {
 
-		for( Link link : this.facetOrComponent.getLinks()) {
-			if( link instanceof RoboconfOwnerLink
-					&& link.getTarget() instanceof RoboconfImportedVariable ) {
-
-				RoboconfImportedVariable realVar = (RoboconfImportedVariable) link.getTarget();
-				String name = realVar.getName();
-				RoboconfImportedVariable var = this.nameToImportedVariables.get( name );
-				if( var == null ) {
-					RoboconfModelerPlugin.log( "Variable not found: " + name, IStatus.WARNING );
-					continue;
-				}
-
-				this.importedVariablesToTaken.put( var, Boolean.TRUE );
-				var.setOptional( realVar.isOptional());
-				var.setExternal( realVar.isExternal());
+		for( RoboconfImportedVariable realVar : this.component.getImports()) {
+			String name = realVar.getName();
+			RoboconfImportedVariable var = this.nameToImportedVariables.get( name );
+			if( var == null ) {
+				RoboconfModelerPlugin.log( "Variable not found: " + name, IStatus.WARNING );
+				continue;
 			}
+
+			this.importedVariablesToTaken.put( var, Boolean.TRUE );
+			var.setOptional( realVar.isOptional());
+			var.setExternal( realVar.isExternal());
 		}
 	}
 
@@ -233,11 +230,8 @@ public class ImportedVariableDialog extends TitleAreaDialog {
 	private Collection<String> findAllExportedVariables( RoboconfFacet type ) {
 
 		Set<String> result = new TreeSet<> ();
-		for( Link link : type.getLinks()) {
-			if( link instanceof RoboconfOwnerLink
-					&& link.getTarget() instanceof RoboconfExportedVariable )
-				result.add( type.getName() + "." + ((RoboconfExportedVariable) link.getTarget()).getName());
-		}
+		for( RoboconfExportedVariable var : type.getExports())
+			result.add( type.getName() + "." + var.getName());
 
 		return result;
 	}
@@ -249,7 +243,7 @@ public class ImportedVariableDialog extends TitleAreaDialog {
 	private List<RoboconfFacet> findAllFacetsAndComponents() {
 
 		List<RoboconfFacet> result = new ArrayList<> ();
-		for( EObject eo : this.facetOrComponent.eContainer().eContents()) {
+		for( EObject eo : this.component.eContainer().eContents()) {
 			if( eo instanceof RoboconfFacet )
 				result.add( (RoboconfFacet) eo);
 		}

@@ -25,13 +25,11 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.occiware.clouddesigner.occi.Resource;
-
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfChildrenLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -51,12 +49,29 @@ public class TransitiveParentshipConstraint extends AbstractRoboconfModelConstra
 
 	private String validate( RoboconfFacet facet, String type ) {
 
-		// Follow all the children relations
-		Set<Resource> linkTargets = filterTargetsByLink( facet, RoboconfChildrenLink.class );
+		// Follow all the parent ship relations
+		Set<RoboconfFacet> ancestors = new HashSet<> ();
+		Set<RoboconfFacet> alreadyProcessed = new HashSet<> ();
+		// alreadyProcessed = ancestors + type
 
-		// Now, verify the collected children do not contain the root type
+		Set<RoboconfFacet> toProcess = new HashSet<> ();
+		toProcess.add( facet );
+
+		while( ! toProcess.isEmpty()) {
+			RoboconfFacet f = toProcess.iterator().next();
+			toProcess.remove( f );
+			alreadyProcessed.add( f );
+
+			for( RoboconfFacet ancestor : f.getAncestors()) {
+				ancestors.add( ancestor );
+				if( ! alreadyProcessed.contains( ancestor ))
+					toProcess.add( ancestor );
+			}
+		}
+
+		// Now, verify the collected ancestors do not contain the root type
 		String result = null;
-		if( linkTargets.contains( facet ))
+		if( ancestors.contains( facet ))
 			result = "A " + type + " cannot directly or indirectly deploy on itself.";
 
 		return result;

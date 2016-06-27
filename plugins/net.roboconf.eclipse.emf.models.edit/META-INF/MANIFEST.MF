@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: net.roboconf.eclipse.emf.models.edit;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: net.roboconf.eclipse.emf.models.roboconf.provider.RoboconfEmfModelEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: net.roboconf.eclipse.emf.models.roboconf.provider
+Require-Bundle: org.eclipse.core.runtime,
+ net.roboconf.eclipse.emf.models;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport
+Bundle-ActivationPolicy: lazy

@@ -41,23 +41,19 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.occiware.clouddesigner.occi.Configuration;
-import org.occiware.clouddesigner.occi.Link;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable;
 import net.roboconf.eclipse.modeler.dialogs.ImportedVariableDialog;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 import net.roboconf.eclipse.modeler.views.VariablesView;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfImportedVariable;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfOwnerLink;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfgraphFactory;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class ManageImportedVariableCommand extends AbstractHandler {
 
-	private RoboconfFacet facetOrComponent;
+	private RoboconfComponent component;
 
 
 	/**
@@ -70,22 +66,23 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 
 	/**
 	 * Constructor.
-	 * @param facetOrComponent the "selected" facet or component
+	 * @param component the "selected" facet or component
 	 */
-	public ManageImportedVariableCommand( RoboconfFacet facetOrComponent ) {
-		this.facetOrComponent = facetOrComponent;
+	public ManageImportedVariableCommand( RoboconfComponent component ) {
+		this.component = component;
 	}
 
 
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
-		ImportedVariableDialog dlg = new ImportedVariableDialog( this.facetOrComponent );
+		ImportedVariableDialog dlg = new ImportedVariableDialog( this.component );
 		if( dlg.open() == Window.OK ) {
 
 			// Perform the modifications within a transactional command
-			Command cmd = new NewImportedVariabledCommand( this.facetOrComponent, dlg.getImportedVariablesToTaken());
-			EclipseUtils.findEditingDomain( this.facetOrComponent ).getCommandStack().execute( cmd );
+			Command cmd = new NewImportedVariabledCommand( this.component, dlg.getImportedVariablesToTaken());
+			EclipseUtils.findEditingDomain( this.component ).getCommandStack().execute( cmd );
+			VariablesView.refreshElement( this.component, VariablesView.IMPORTED );
 		}
 
 		return null;
@@ -106,7 +103,7 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 		// The handler is enabled in two cases.
 		// 1. The view with the focus is the variables view, and a facet or a component
 		// was previously selected.
-		if( VariablesView.VIEW_ID.equals( partId ) && this.facetOrComponent != null ) {
+		if( VariablesView.VIEW_ID.equals( partId ) && this.component != null ) {
 			enabled = true;
 		}
 
@@ -115,8 +112,8 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 				&& ! selection.isEmpty()) {
 
 			EObject eo = EclipseUtils.findEObjectFromSelection( selection );
-			enabled = eo instanceof RoboconfFacet;
-			this.facetOrComponent = enabled ? (RoboconfFacet) eo : null;
+			enabled = eo instanceof RoboconfComponent;
+			this.component = enabled ? (RoboconfComponent) eo : null;
 		}
 
 		super.setBaseEnabled( enabled );
@@ -128,17 +125,17 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 	 */
 	private static class NewImportedVariabledCommand extends AbstractCommand implements Command {
 
-		private final RoboconfFacet facetOrComponent;
+		private final RoboconfComponent component;
 		private final Map<RoboconfImportedVariable,Boolean> varToTaken;
 
 
 		/**
 		 * Constructor.
-		 * @param facetOrComponent
+		 * @param component
 		 * @param varToTaken
 		 */
-		public NewImportedVariabledCommand( RoboconfFacet facetOrComponent, Map<RoboconfImportedVariable,Boolean> varToTaken ) {
-			this.facetOrComponent = facetOrComponent;
+		public NewImportedVariabledCommand( RoboconfComponent component, Map<RoboconfImportedVariable,Boolean> varToTaken ) {
+			this.component = component;
 			this.varToTaken = varToTaken;
 		}
 
@@ -151,39 +148,32 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 
 			// Delete what is unnecessary.
 			List<EObject> toDelete = new ArrayList<> ();
-			for( Link link : this.facetOrComponent.getLinks()) {
+			for( RoboconfImportedVariable var : this.component.getImports()) {
 
-				if( link instanceof RoboconfOwnerLink
-						&& link.getTarget() instanceof RoboconfImportedVariable ) {
+				// We reference a variable that is not part of those listed in the dialog.
+				// => Delete it.
+				// FIXME: currently, we do not deal correctly with variables exported by other
+				// applications. We only list variables that are exported within the application.
+				// We should have more flexibility when defining imported variables.
 
-					// We reference a variable that is not part of those listed in the dialog.
-					// => Delete it.
-					// FIXME: currently, we do not deal correctly with variables exported by other
-					// applications. We only list variables that are exported within the application.
-					// We should have more flexibility when defining imported variables.
-					RoboconfImportedVariable targetVar = (RoboconfImportedVariable) link.getTarget();
-
-					// Notice we "get and remove" the verified variables from the cache.
-					RoboconfImportedVariable dlgVar = cache.remove( targetVar.getName());
-					if( dlgVar == null ) {
-						toDelete.add( link );
-						toDelete.add( targetVar );
-						continue;
-					}
-
-					// The variable is not marked as taken.
-					// => Delete it.
-					Boolean taken = this.varToTaken.get( dlgVar );
-					if( taken == null || ! taken ) {
-						toDelete.add( link );
-						toDelete.add( targetVar );
-						continue;
-					}
-
-					// Otherwise, we keep it. We simply update its attributes.
-					targetVar.setOptional( dlgVar.isOptional());
-					targetVar.setExternal( dlgVar.isExternal());
+				// Notice we "get and remove" the verified variables from the cache.
+				RoboconfImportedVariable dlgVar = cache.remove( var.getName());
+				if( dlgVar == null ) {
+					toDelete.add( var );
+					continue;
 				}
+
+				// The variable is not marked as taken.
+				// => Delete it.
+				Boolean taken = this.varToTaken.get( dlgVar );
+				if( taken == null || ! taken ) {
+					toDelete.add( var );
+					continue;
+				}
+
+				// Otherwise, we keep it. We simply update its attributes.
+				var.setOptional( dlgVar.isOptional());
+				var.setExternal( dlgVar.isExternal());
 			}
 
 			// Delete them all
@@ -194,15 +184,8 @@ public class ManageImportedVariableCommand extends AbstractHandler {
 			// "cache" only contains variables that did not already exist first.
 			for( RoboconfImportedVariable var : cache.values()) {
 				Boolean taken = this.varToTaken.get( var );
-				if( taken == null || ! taken )
-					continue;
-
-				RoboconfOwnerLink link = RoboconfgraphFactory.eINSTANCE.createRoboconfOwnerLink();
-				link.setTarget( var );
-				link.setSource( this.facetOrComponent );
-
-				((Configuration) this.facetOrComponent.eContainer()).getResources().add( var );
-				this.facetOrComponent.getLinks().add( link );
+				if( taken != null && taken )
+					this.component.getImports().add( var );
 			}
 		}
 

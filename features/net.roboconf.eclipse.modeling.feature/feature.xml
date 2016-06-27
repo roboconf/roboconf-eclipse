@@ -17,35 +17,37 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.occiware.clouddesigner.occi"/>
-      <import plugin="org.occiware.clouddesigner.occi.edit"/>
-      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.sirius"/>
-      <import plugin="org.occiware.clouddesigner.occi.design" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.occiware.clouddesigner.occi.emfgen.ui" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="net.roboconf.core"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.emf.edit"/>
+      <import plugin="net.roboconf.eclipse.plugin"/>
+      <import plugin="org.eclipse.sirius.ui"/>
+      <import plugin="org.eclipse.sirius.ext.base"/>
+      <import plugin="org.eclipse.emf.transaction"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
    </requires>
 
    <plugin
-         id="net.roboconf.eclipse.occi.graph.model.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.roboconf.eclipse.occi.graph.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.roboconf.eclipse.modeler"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.eclipse.emf.models"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.roboconf.eclipse.emf.models.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -25,13 +25,11 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.occiware.clouddesigner.occi.Resource;
-
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfInheritanceLink;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -51,12 +49,29 @@ public class TransitiveInheritanceConstraint extends AbstractRoboconfModelConstr
 
 	private String validate( RoboconfFacet facet, String type ) {
 
-		// Follow all the children relations
-		Set<Resource> linkTargets = filterTargetsByLink( facet, RoboconfInheritanceLink.class );
+		// Follow all the super types
+		Set<RoboconfFacet> superTypes = new HashSet<> ();
+		Set<RoboconfFacet> alreadyProcessed = new HashSet<> ();
+		// alreadyProcessed = superTypes + type
 
-		// Now, verify the collected children do not contain the root type
+		Set<RoboconfFacet> toProcess = new HashSet<> ();
+		toProcess.add( facet );
+
+		while( ! toProcess.isEmpty()) {
+			RoboconfFacet f = toProcess.iterator().next();
+			toProcess.remove( f );
+			alreadyProcessed.add( f );
+
+			for( RoboconfFacet superType : f.getSuperTypes()) {
+				superTypes.add( superType );
+				if( ! alreadyProcessed.contains( superType ))
+					toProcess.add( superType );
+			}
+		}
+
+		// Now, verify the collected super types do not contain the initial one
 		String result = null;
-		if( linkTargets.contains( facet ))
+		if( superTypes.contains( facet ))
 			result = "A " + type + " cannot directly or indirectly inherit from itself.";
 
 		return result;

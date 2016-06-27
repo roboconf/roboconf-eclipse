@@ -31,16 +31,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.Configuration;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 import org.eclipse.ui.PlatformUI;
-import org.occiware.clouddesigner.occi.Configuration;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
 
 /**
  * @author Vincent Zurczak - Linagora

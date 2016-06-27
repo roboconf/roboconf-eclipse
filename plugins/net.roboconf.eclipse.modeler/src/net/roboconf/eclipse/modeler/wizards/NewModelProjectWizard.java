@@ -25,10 +25,7 @@
 
 package net.roboconf.eclipse.modeler.wizards;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -44,7 +41,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -57,11 +53,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import org.occiware.clouddesigner.occi.Configuration;
-import org.occiware.clouddesigner.occi.Extension;
-import org.occiware.clouddesigner.occi.OCCIFactory;
-import org.occiware.clouddesigner.occi.OCCIRegistry;
-import org.occiware.clouddesigner.occi.design.utils.WizardUtils;
 
 import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 
@@ -231,24 +222,10 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 			final Resource res = resourceSet.createResource( InitExtensionModel.this.semanticModelURI );
 
 			// Populate the model
-			String refExtensionURI = OCCIRegistry.getInstance().getExtensionURI( "http://schemas.ogf.org/occi/core#" );
-			final Resource refExtensionResource = res.getResourceSet().getResource( URI.createURI( refExtensionURI, true ), true);
-			final Extension refExtension = (Extension) refExtensionResource.getContents().get( 0 );
-
-			final Configuration rootObject = OCCIFactory.eINSTANCE.createConfiguration();
-			rootObject.setDescription( "Graph(s) model for " + this.project.getName());
-			rootObject.getUse().add( refExtension );
-			res.getContents().add( rootObject );
+			WizardUtils.createModel( res );
 
 			// Save the model
-			Map<Object,Object> saveOptions = new HashMap<> ();
-			saveOptions.put( XMIResource.OPTION_ENCODING, "UTF-8" );
-			try {
-				res.save( saveOptions );
-
-			} catch( IOException e ) {
-				RoboconfModelerPlugin.log( e, IStatus.ERROR );
-			}
+			WizardUtils.save( res );
 		}
 
 

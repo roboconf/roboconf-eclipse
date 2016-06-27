@@ -25,12 +25,8 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
-import org.occiware.clouddesigner.occi.Link;
-import org.occiware.clouddesigner.occi.Resource;
-
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfInheritanceLink;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * Inheritances constraints.
@@ -47,12 +43,8 @@ public class InheritanceConstraint extends AbstractRoboconfModelConstraint {
 	public String validate( RoboconfComponent component ) {
 
 		int cpt = 0;
-		for( Link link : component.getLinks()) {
-			if( !( link instanceof RoboconfInheritanceLink ))
-				continue;
-
-			Resource res = link.getTarget();
-			if( res instanceof RoboconfComponent )
+		for( RoboconfFacet superType : component.getSuperTypes()) {
+			if( superType instanceof RoboconfComponent )
 				cpt ++;
 		}
 
@@ -65,11 +57,8 @@ public class InheritanceConstraint extends AbstractRoboconfModelConstraint {
 	public String validate( RoboconfFacet facet ) {
 
 		String result = null;
-		for( Link link : facet.getLinks()) {
-			if( !( link instanceof RoboconfInheritanceLink ))
-				continue;
-
-			if( link.getTarget() instanceof RoboconfComponent ) {
+		for( RoboconfFacet superType : facet.getSuperTypes()) {
+			if( superType instanceof RoboconfComponent ) {
 				result = "A facet can only inherit from facets.";
 				break;
 			}

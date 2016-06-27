@@ -25,9 +25,6 @@
 
 package net.roboconf.eclipse.modeler.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -37,12 +34,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.PlatformUI;
-import org.occiware.clouddesigner.occi.Configuration;
-import org.occiware.clouddesigner.occi.Link;
-import org.occiware.clouddesigner.occi.Resource;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfExportedVariable;
+import net.roboconf.eclipse.modeler.views.VariablesView;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -56,8 +51,10 @@ public class DeleteExportedVariableCommand extends AbstractHandler {
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
 		// Perform the modifications within a transactional command
+		EObject container = this.var.eContainer();
 		Command cmd = new DeleteExportedVariabledCommand( this.var );
 		EclipseUtils.findEditingDomain( this.var ).getCommandStack().execute( cmd );
+		VariablesView.refreshElement( container, null );
 
 		return null;
 	}
@@ -97,22 +94,6 @@ public class DeleteExportedVariableCommand extends AbstractHandler {
 
 		@Override
 		public void execute() {
-
-			// Delete all the links that reference this variable
-			Configuration conf = (Configuration) this.var.eContainer();
-			List<Link> toDelete = new ArrayList<> ();
-			for( Resource res : conf.getResources()) {
-				for( Link link : res.getLinks()) {
-					if( this.var.equals( link.getTarget()))
-						toDelete.add( link );
-				}
-			}
-
-			// Delete them all
-			for( Link link : toDelete )
-				EcoreUtil.delete( link );
-
-			// Delete the variable
 			EcoreUtil.delete( this.var );
 		}
 

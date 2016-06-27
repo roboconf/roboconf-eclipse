@@ -25,19 +25,14 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
-import org.occiware.clouddesigner.occi.Link;
-import org.occiware.clouddesigner.occi.Resource;
 
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfComponent;
-import net.roboconf.eclipse.occi.graph.roboconfgraph.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -77,36 +72,4 @@ public abstract class AbstractRoboconfModelConstraint extends AbstractModelConst
 	 * @return an error message, or null if everything is fine
 	 */
 	public abstract String validate( RoboconfFacet facet );
-
-
-	/**
-	 * Start from a given type and follow the relations of a given type.
-	 * @param facet a non-null type (facet or component)
-	 * @return a non-null set of resources
-	 */
-	protected Set<Resource> filterTargetsByLink( RoboconfFacet facet, Class<? extends Link> clazz ) {
-
-		Set<Resource> linkTargets = new HashSet<> ();
-		Set<Resource> alreadyProcessed = new HashSet<> ();
-
-		Set<Resource> toProcess = new HashSet<> ();
-		toProcess.add( facet );
-
-		while( ! toProcess.isEmpty()) {
-			Resource f = toProcess.iterator().next();
-			toProcess.remove( f );
-			alreadyProcessed.add( f );
-
-			for( Link link : f.getLinks()) {
-				if( clazz.isAssignableFrom( link.getClass())) {
-
-					linkTargets.add( link.getTarget());
-					if( ! alreadyProcessed.contains( link.getTarget()))
-						toProcess.add( link.getTarget());
-				}
-			}
-		}
-
-		return linkTargets;
-	}
 }
