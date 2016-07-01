@@ -34,11 +34,14 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 
 import net.roboconf.core.Constants;
 import net.roboconf.core.ErrorCode;
@@ -142,6 +145,7 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 	 */
 	private void mapRoboconfErrors( Collection<RoboconfError> errors, IProgressMonitor monitor ) {
 
+		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		final IFolder mainFolder = findApplicationRootLocation();
 		for( RoboconfError error : errors ) {
 
@@ -162,8 +166,8 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 			IResource res = null;
 			int line = 1;
 			if( error instanceof ParsingError ) {
-				String name = ((ParsingError) error).getFile().getName();
-				res = mainFolder.findMember( Constants.PROJECT_DIR_GRAPH + "/" + name );
+				String filePath = ((ParsingError) error).getFile().getAbsolutePath();
+				res = workspaceRoot.getFileForLocation( new Path( filePath ));
 				line = ((ParsingError) error).getLine();
 			}
 
