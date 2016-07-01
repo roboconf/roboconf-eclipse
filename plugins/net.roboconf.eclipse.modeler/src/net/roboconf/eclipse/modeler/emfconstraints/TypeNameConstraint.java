@@ -23,14 +23,38 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.modeler.wizards;
+package net.roboconf.eclipse.modeler.emfconstraints;
+
+import net.roboconf.core.dsl.ParsingConstants;
+import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public interface WizardConstants {
+public class TypeNameConstraint extends AbstractRoboconfModelConstraint {
 
-	String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
-	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
-	String EXT_MODEL = "graph-ui";
+	@Override
+	public String validate( RoboconfComponent component ) {
+		return validate( component.getName());
+	}
+
+
+	@Override
+	public String validate( RoboconfFacet facet ) {
+		return validate( facet.getName());
+	}
+
+
+	public String validate( String typeName ) {
+
+		String msg = null;
+		if( Utils.isEmptyOrWhitespaces( typeName ))
+			msg = "Empty names are forbidden.";
+		else if( ! typeName.matches( ParsingConstants.PATTERN_ID ))
+			msg = "Component and facet names must respect the following pattern: " + ParsingConstants.PATTERN_ID;
+
+		return msg;
+	}
 }

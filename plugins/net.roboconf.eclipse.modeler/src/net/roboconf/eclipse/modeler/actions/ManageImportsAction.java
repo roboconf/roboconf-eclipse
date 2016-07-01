@@ -23,14 +23,50 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.modeler.wizards;
+package net.roboconf.eclipse.modeler.actions;
+
+import java.util.Collection;
+import java.util.Map;
+
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
+
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
+import net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand;
+import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public interface WizardConstants {
+public class ManageImportsAction implements IExternalJavaAction {
 
-	String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
-	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
-	String EXT_MODEL = "graph-ui";
+	private ManageImportedVariableCommand cmd;
+
+
+	@Override
+	public boolean canExecute( Collection<? extends EObject> selections ) {
+
+		if( selections.size() == 1 ) {
+			EObject eo = EclipseUtils.resolve( selections.iterator().next());
+			if( eo instanceof RoboconfComponent )
+				this.cmd = new ManageImportedVariableCommand((RoboconfComponent) eo);
+		}
+
+		return this.cmd != null;
+	}
+
+
+	@Override
+	public void execute( Collection<? extends EObject> selections, Map<String,Object> parameters ) {
+
+		try {
+			this.cmd.execute( null );
+
+		} catch( ExecutionException e ) {
+			RoboconfModelerPlugin.log( e, IStatus.ERROR );
+		}
+	}
 }

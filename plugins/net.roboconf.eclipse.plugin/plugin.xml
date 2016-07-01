@@ -51,6 +51,9 @@
             id="net.roboconf.eclipse.plugin.wizard"
             name="Roboconf Project"
             project="true">
+         <description>
+            Create a Maven project for Roboconf
+         </description>
       </wizard>
    </extension>
    <extension

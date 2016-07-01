@@ -353,7 +353,7 @@ public interface RoboconfEmfPackage extends EPackage {
 	int ROBOCONF_COMPONENT__INSTALLER_NAME = ROBOCONF_FACET_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Imports</b></em>' reference list.
+	 * The feature id for the '<em><b>Imports</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -587,10 +587,10 @@ public interface RoboconfEmfPackage extends EPackage {
 	EAttribute getRoboconfComponent_InstallerName();
 
 	/**
-	 * Returns the meta object for the reference list '{@link net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent#getImports <em>Imports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent#getImports <em>Imports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Imports</em>'.
+	 * @return the meta object for the containment reference list '<em>Imports</em>'.
 	 * @see net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent#getImports()
 	 * @see #getRoboconfComponent()
 	 * @generated
@@ -872,7 +872,7 @@ public interface RoboconfEmfPackage extends EPackage {
 		EAttribute ROBOCONF_COMPONENT__INSTALLER_NAME = eINSTANCE.getRoboconfComponent_InstallerName();
 
 		/**
-		 * The meta object literal for the '<em><b>Imports</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Imports</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

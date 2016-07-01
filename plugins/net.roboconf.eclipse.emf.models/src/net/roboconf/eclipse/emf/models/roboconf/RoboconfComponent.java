@@ -72,7 +72,7 @@ public interface RoboconfComponent extends RoboconfFacet {
 	void setInstallerName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Imports</b></em>' reference list.
+	 * Returns the value of the '<em><b>Imports</b></em>' containment reference list.
 	 * The list contents are of type {@link net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -80,9 +80,9 @@ public interface RoboconfComponent extends RoboconfFacet {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Imports</em>' reference list.
+	 * @return the value of the '<em>Imports</em>' containment reference list.
 	 * @see net.roboconf.eclipse.emf.models.roboconf.RoboconfEmfPackage#getRoboconfComponent_Imports()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<RoboconfImportedVariable> getImports();

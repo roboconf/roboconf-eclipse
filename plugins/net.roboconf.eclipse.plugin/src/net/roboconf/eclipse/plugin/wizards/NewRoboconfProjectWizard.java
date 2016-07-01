@@ -48,6 +48,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.ide.IDE;
 
+import net.roboconf.core.Constants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.eclipse.plugin.RoboconfEclipseUtils;
 import net.roboconf.tooling.core.ProjectUtils;
@@ -157,13 +158,21 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 			// Run the operation.
 			getContainer().run( true, false, op );
 
-			// Overwrite the graph file?
+			// Overwrite the instances file?
 			String projectName = this.projectPage.getCreationBean().getArtifactId();
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
-			String loc = "graph/main.graph";
+			String loc = Constants.PROJECT_DIR_INSTANCES + "/" + ProjectUtils.INSTANCES_EP;
 			if( this.projectPage.getCreationBean().isMavenProject())
-				loc = "src/main/model/" + loc;
+				loc = Constants.MAVEN_SRC_MAIN_MODEL + loc;
+
+			final IFile instancesFile = project.getFile( loc );
+			overwriteInstancesFileContent( instancesFile );
+
+			// Overwrite the graph file?
+			loc = Constants.PROJECT_DIR_GRAPH + "/" + ProjectUtils.GRAPH_EP;
+			if( this.projectPage.getCreationBean().isMavenProject())
+				loc = Constants.MAVEN_SRC_MAIN_MODEL + loc;
 
 			final IFile graphFile = project.getFile( loc );
 			overwriteGraphFileContent( graphFile );
@@ -203,6 +212,14 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 	 * @param graphFile the main graph file, whose content can be overwritten
 	 */
 	protected void overwriteGraphFileContent( IFile graphFile ) {
+		// nothing
+	}
+
+
+	/**
+	 * @param instancesFile the main instances file, whose content can be overwritten
+	 */
+	protected void overwriteInstancesFileContent( IFile instancesFile ) {
 		// nothing
 	}
 

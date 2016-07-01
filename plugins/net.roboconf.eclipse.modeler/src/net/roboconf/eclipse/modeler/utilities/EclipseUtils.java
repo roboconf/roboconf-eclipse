@@ -68,8 +68,8 @@ public final class EclipseUtils {
 
 	/**
 	 * Resolves an EObject from a Sirius diagram.
-	 * @param eo
-	 * @return
+	 * @param eo the object to resolve
+	 * @return the underlying model object if it is a Sirius element, or the original object
 	 */
 	public static EObject resolve( EObject eo ) {
 
@@ -82,8 +82,8 @@ public final class EclipseUtils {
 
 	/**
 	 * Finds an EObject from the selection.
-	 * @param selection
-	 * @return
+	 * @param selection the selection (can be null)
+	 * @return an EMF object, or null if the selection did not contain one
 	 */
 	public static EObject findEObjectFromSelection( ISelection selection ) {
 
@@ -106,8 +106,8 @@ public final class EclipseUtils {
 
 	/**
 	 * Finds the Eclipse project containing a given EMF resource.
-	 * @param eo
-	 * @return
+	 * @param eo an EMF object
+	 * @return the Eclipse project that contains this resource
 	 */
 	public static IProject findProjectFrom( EObject eo ) {
 
@@ -121,8 +121,8 @@ public final class EclipseUtils {
 
 	/**
 	 * Finds the Eclipse project containing a given EMF resource.
-	 * @param eo
-	 * @return
+	 * @param eo an EMF object
+	 * @return the Eclipse directory that contains this resource
 	 */
 	public static IFolder findImagesDirectoryFrom( EObject eo ) {
 		return findProjectFrom( eo ).getFolder( "images" );
@@ -163,9 +163,10 @@ public final class EclipseUtils {
 
 
 	/**
-	 * @param imgFolder
-	 * @param baseName
-	 * @return
+	 * Finds the image associated with a Robconf type.
+	 * @param imgFolder the folder containing images
+	 * @param baseName the type's name
+	 * @return the associated file, or null of no image was found
 	 */
 	public static IFile findImageOf( IContainer imgFolder, String baseName ) {
 
@@ -191,8 +192,9 @@ public final class EclipseUtils {
 
 
 	/**
-	 * @param eo
-	 * @return
+	 * Finds the editing domain for an EMF object.
+	 * @param eo an EMF object
+	 * @return the editing domain, on null if none was found
 	 */
 	public static EditingDomain findEditingDomain( EObject eo ) {
 
@@ -219,7 +221,8 @@ public final class EclipseUtils {
 
 
 	/**
-	 * @param img
+	 * Disposes a SWT image.
+	 * @param img the image to dispose (can be null or already disposed)
 	 */
 	public static void dispose( Image img ) {
 

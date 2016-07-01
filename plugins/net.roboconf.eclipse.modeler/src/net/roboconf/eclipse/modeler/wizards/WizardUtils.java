@@ -48,6 +48,7 @@ import org.eclipse.sirius.ui.business.api.dialect.DialectUIManager;
 import org.eclipse.sirius.ui.business.api.viewpoint.ViewpointSelectionCallback;
 import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.description.RepresentationDescription;
+import org.eclipse.ui.IEditorPart;
 
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfEmfFactory;
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfGraphs;
@@ -57,9 +58,6 @@ import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
  * @author Vincent Zurczak - Linagora
  */
 public final class WizardUtils {
-
-	public static final String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
-
 
 	/**
 	 * Private empty constructor.
@@ -71,15 +69,15 @@ public final class WizardUtils {
 
 	/**
 	 * Gets a representation description.
-	 * @param eObject
-	 * @param session
+	 * @param eObject the model
+	 * @param sessionthe Sirius session
 	 * @param representationDescriptionId
 	 * @return Representation description
 	 */
 	public static RepresentationDescription getRepresentationDescription(
 			EObject eObject,
 			Session session,
-			String representationDescriptionId) {
+			String representationDescriptionId ) {
 
 		final Collection<RepresentationDescription> representationDescriptions =
 				DialectManager.INSTANCE
@@ -121,7 +119,11 @@ public final class WizardUtils {
 							representationDescription, session, monitor
 					);
 
-					DialectUIManager.INSTANCE.openEditor( session, representation, monitor );
+					// Open the editor.
+					IEditorPart part = DialectUIManager.INSTANCE.openEditor( session, representation, monitor );
+
+					// Sometimes, the editor is marked as dirty.
+					part.doSave( monitor );
 				}
 			};
 			try {
@@ -158,7 +160,13 @@ public final class WizardUtils {
 	}
 
 
-	public static EObject getRoot(Session session, URI resourceURI) {
+	/**
+	 * Gets the root object.
+	 * @param session the Sirius session
+	 * @param resourceURI the resource's URI
+	 * @return the model's root object
+	 */
+	public static EObject getRoot( Session session, URI resourceURI ) {
 
 		EObject result = null;
 		for( Resource resource : session.getSemanticResources()) {

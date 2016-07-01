@@ -27,6 +27,7 @@ package net.roboconf.eclipse.modeler.emfconstraints;
 
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable;
 
 /**
  * A Roboconf type cannot depend on it self unless the dependency is optional.
@@ -36,30 +37,22 @@ public class SelfDependencyConstraint extends AbstractRoboconfModelConstraint {
 
 	@Override
 	public String validate( RoboconfComponent component ) {
-		return validate( component, "component" );
+
+		String result = null;
+		for( RoboconfImportedVariable var : component.getImports()) {
+			if( var.getName().startsWith( component.getName()+ "." )
+					&& ! var.isOptional()) {
+
+				result = "Self dependencies (such as " + var.getName() + ") should be optional.";
+				break;
+			}
+		}
+
+		return result;
 	}
 
 	@Override
 	public String validate( RoboconfFacet facet ) {
-		return validate( facet, "facet" );
-	}
-
-
-	private String validate( RoboconfFacet facet, String type ) {
-
-		String result = null;
-		// TODO:
-//		for( Link link : facet.getLinks()) {
-//			if( !( link instanceof RoboconfRuntimeLink ))
-//				continue;
-//
-////			if( link.getTarget().equals( facet )
-////					&& ! ((RoboconfRuntimeLink) link).) {
-////				result = "A facet can only inherit from facets.";
-////				break;
-////			}
-//		}
-
-		return result;
+		return null;
 	}
 }

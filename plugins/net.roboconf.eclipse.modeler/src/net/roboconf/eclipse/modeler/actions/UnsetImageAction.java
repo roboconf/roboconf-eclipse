@@ -31,6 +31,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
@@ -44,14 +45,18 @@ public class UnsetImageAction implements IExternalJavaAction {
 	@Override
 	public boolean canExecute( Collection<? extends EObject> selections ) {
 
+		// The selection must be a Roboconf type
+		// AND be represented by a node (not edges). Indeed, since edges are based
+		// on relations, they can also be resolved as facets or components.
+		EObject eo;
 		boolean canExecute = false;
-		if( selections.size() == 1 ) {
-			EObject eo = EclipseUtils.resolve( selections.iterator().next());
-			if( eo instanceof RoboconfFacet ) {
-				IContainer imgFolder = EclipseUtils.findImagesDirectoryFrom( eo );
-				IFile imgFile = EclipseUtils.findImageOf( imgFolder, ((RoboconfFacet) eo).getName());
-				canExecute = imgFile != null && imgFile.exists();
-			}
+		if( selections.size() == 1
+				&& (eo = selections.iterator().next()) instanceof DNode
+				&& (eo = EclipseUtils.resolve( eo )) instanceof RoboconfFacet) {
+
+			IContainer imgFolder = EclipseUtils.findImagesDirectoryFrom( eo );
+			IFile imgFile = EclipseUtils.findImageOf( imgFolder, ((RoboconfFacet) eo).getName());
+			canExecute = imgFile != null && imgFile.exists();
 		}
 
 		return canExecute;

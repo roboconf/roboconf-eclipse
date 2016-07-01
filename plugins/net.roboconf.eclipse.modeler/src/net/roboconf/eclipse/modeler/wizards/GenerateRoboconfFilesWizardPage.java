@@ -25,6 +25,9 @@
 
 package net.roboconf.eclipse.modeler.wizards;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -35,29 +38,30 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfGraphs;
+
 /**
  * @author Vincent Zurczak - Linagora
  */
 public class GenerateRoboconfFilesWizardPage extends WizardPage {
 
 	public boolean generateProject = true;
+	private final RoboconfGraphs emfGraphs;
 
 
 	/**
 	 * Constructor.
+	 * @param emfGraphs the model that will be converted
 	 */
-	public GenerateRoboconfFilesWizardPage() {
+	public GenerateRoboconfFilesWizardPage( RoboconfGraphs emfGraphs ) {
 		super( "choice.page" );
+		this.emfGraphs = emfGraphs;
 
 		setTitle( "Generate Roboconf Files" );
 		setDescription( "Select the generation options." );
 	}
 
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.IDialogPage
-	 * #createControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public void createControl( Composite parent ) {
 
@@ -66,6 +70,7 @@ public class GenerateRoboconfFilesWizardPage extends WizardPage {
 		final Composite container = new Composite( parent, SWT.NONE );
 		GridLayoutFactory.swtDefaults().numColumns( 2 ).extendedMargins( 15, 15, 20, 0 ).spacing( 15, 15 ).applyTo( container );
 		container.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ));
+		setControl( container );
 
 		// Project
 		final Button projectButton = new Button( container, SWT.RADIO );
@@ -125,6 +130,20 @@ public class GenerateRoboconfFilesWizardPage extends WizardPage {
 		label1.addListener( SWT.MouseDown, labelListener );
 		label2.addListener( SWT.MouseDown, labelListener );
 
-		setControl( container );
+		// Validate the page
+		if( this.emfGraphs == null ) {
+			setErrorMessage( "The selected file contains errors and could not be loaded." );
+			setPageComplete( false );
+
+		} else {
+			IStatus status = ModelValidationService.getInstance().newValidator( EvaluationMode.BATCH ).validate(this.emfGraphs);
+			if( status.getSeverity() == IStatus.WARNING ) {
+				setErrorMessage( "The selected file contains minor errors (warnings)." );
+
+			} else if( status.getSeverity() == IStatus.ERROR ) {
+				setErrorMessage( "The selected file contains errors." );
+				setPageComplete( false );
+			}
+		}
 	}
 }

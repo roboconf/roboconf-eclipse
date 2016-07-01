@@ -61,6 +61,7 @@ import net.roboconf.eclipse.modeler.commands.ManageImportedVariableCommand;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 
 /**
+ * The Eclipse view to display Roboconf variables.
  * @author Vincent Zurczak - Linagora
  */
 public class VariablesView extends ViewPart implements ISelectionListener {
@@ -121,6 +122,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 	@Override
 	public void selectionChanged( IWorkbenchPart part, ISelection selection ) {
 
+		// Handle editor selection
 		EObject eo = EclipseUtils.findEObjectFromSelection( selection );
 		if( this.viewer != null
 				&& ! this.viewer.getTree().isDisposed()
@@ -131,9 +133,13 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 			this.viewer.expandAll();
 		}
 
-		// Editor closed?
-		else if( !( eo instanceof EObject )) {
-			System.out.println( "ok" );
+		// Filter other selections (ignore exports and imports)
+		else if( eo != null
+				&& !( eo instanceof RoboconfImportedVariable )
+				&& !( eo instanceof RoboconfExportedVariable ))  {
+
+			this.viewer.setInput( eo );
+			this.viewer.refresh();
 		}
 	}
 
@@ -146,7 +152,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 	 * </p>
 	 *
 	 * @param eo an EMF object
-	 * @param selection th object to select (can be null)
+	 * @param selection the object to select (can be null)
 	 */
 	public static void refreshElement( final EObject eo, final Object selection ) {
 
@@ -257,6 +263,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 	 */
 	private static class VariablesLabelProvider extends LabelProvider {
 
+		private static final String SEP = "   ";
 		private final Image listImg, varImg;
 
 
@@ -284,7 +291,7 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 
 			String text = "";
 			if( element instanceof String ) {
-				text = Utils.capitalize((String) element);
+				text = (String) element;
 			}
 
 			// Imported variable
@@ -294,12 +301,14 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				sb.append( var.getName());
 
 				if( var.isExternal()) {
-					sb.append( " (external" );
+					sb.append( this.SEP );
+					sb.append( "(external" );
 					if( var.isOptional())
 						sb.append( ", optional)" );
 
 				} else if( var.isOptional()) {
-					sb.append( "(optional)" );
+					sb.append( this.SEP );
+					sb.append( " (optional)" );
 				}
 
 				text = sb.toString();
@@ -317,7 +326,8 @@ public class VariablesView extends ViewPart implements ISelectionListener {
 				}
 
 				if( ! Utils.isEmptyOrWhitespaces( var.getExternalAlias())) {
-					sb.append( "   (alias for external applications: " );
+					sb.append( this.SEP );
+					sb.append( "(alias for external applications: " );
 					sb.append( var.getExternalAlias());
 					sb.append( ")" );
 				}

@@ -23,14 +23,44 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.modeler.wizards;
+package net.roboconf.eclipse.modeler.actions;
+
+import java.util.Collection;
+import java.util.Map;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+
+import net.roboconf.eclipse.modeler.RoboconfModelerPlugin;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public interface WizardConstants {
+public class ShowPropertiesAction implements IExternalJavaAction {
 
-	String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
-	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
-	String EXT_MODEL = "graph-ui";
+	private static final String VIEW_ID = "org.eclipse.ui.views.PropertySheet";
+
+
+	@Override
+	public boolean canExecute( Collection<? extends EObject> selections ) {
+		return ! selections.isEmpty();
+	}
+
+
+	@Override
+	public void execute( Collection<? extends EObject> selections, Map<String,Object> parameters ) {
+
+		try {
+			IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView( VIEW_ID );
+			editor.setFocus();
+
+		} catch( PartInitException e ) {
+			RoboconfModelerPlugin.log( e, IStatus.ERROR );
+		}
+	}
 }

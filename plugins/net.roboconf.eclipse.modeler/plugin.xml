@@ -10,20 +10,15 @@
   
   
   <extension point="org.eclipse.ui.newWizards">
-  	<!-- FIXME: to replace by the usual Eclipse category -->
-     <wizard
-           category="net.roboconf.eclipse.plugin.wizards"
-           class="net.roboconf.eclipse.modeler.wizards.NewModelFileWizard"
-           icon="icons/16x16/roboconf_16x16.jpg"
-           name="Diagram File for Roboconf Graphs"
-           id="net.roboconf.eclipse.modeler.graphs.file">
-      </wizard>
      <wizard
            category="net.roboconf.eclipse.plugin.wizards"
            class="net.roboconf.eclipse.modeler.wizards.NewModelProjectWizard"
            icon="icons/16x16/roboconf_16x16.jpg"
            id="net.roboconf.eclipse.modeler.graphs.project"
            name="Diagram Project for Roboconf Graphs">
+        <description>
+           Create an Eclipse modelling project for a Roboconf graph
+        </description>
      </wizard>
    </extension>
   <extension
@@ -42,7 +37,19 @@
      </javaActions>
      <javaActions
            actionClass="net.roboconf.eclipse.modeler.actions.ShowVariablesAction"
-           id="net.roboconf.eclipse.modeler.showVariables">
+           id="net.roboconf.eclipse.modeler.show-variables">
+     </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.ManageImportsAction"
+           id="net.roboconf.eclipse.modeler.manage-imports">
+     </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.ShowPropertiesAction"
+           id="net.roboconf.eclipse.modeler.show-properties">
+     </javaActions>
+     <javaActions
+           actionClass="net.roboconf.eclipse.modeler.actions.RenameTypeAction"
+           id="net.roboconf.eclipse.modeler.rename-type">
      </javaActions>
   </extension>
   <extension
@@ -243,6 +250,70 @@
                  lang="java"
                  mode="Batch"
                  name="Roboconf types must have a unique name within the graph(s)"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfFacet">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.CheckCoherenceOfRuntimeLinkConstraint"
+                 id="net.roboconf.eclipse.modeler.CheckCoherenceOfRuntimeLinkConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="Verify the drawn runtime relations are coherent with imported variables"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfComponent">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.VerifyImportedVariablesContraint"
+                 id="net.roboconf.eclipse.modeler.VerifyImportedVariablesContraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="Verify imported variables refer to existing ones (when they are not external)"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfComponent">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.InstallerNameConstraint"
+                 id="net.roboconf.eclipse.modeler.InstallerNameContraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="Verify components have an installer name"
+                 severity="ERROR"
+                 statusCode="1">
+              <message>
+                 {0}
+              </message>
+              <target
+                    class="RoboconfComponent">
+              </target>
+           </constraint>
+           <constraint
+                 class="net.roboconf.eclipse.modeler.emfconstraints.TypeNameConstraint"
+                 id="net.roboconf.eclipse.modeler.TypeNameConstraint"
+                 isEnabledByDefault="true"
+                 lang="java"
+                 mode="Batch"
+                 name="Type names cannot be empty and must respect a given pattern"
                  severity="ERROR"
                  statusCode="1">
               <message>

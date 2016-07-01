@@ -60,8 +60,8 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 
 
 	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
+	public void start( BundleContext context ) throws Exception {
+		super.start( context );
 		plugin = this;
 
 		this.viewpoints = new HashSet<> ();
@@ -71,19 +71,18 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop( BundleContext context ) throws Exception {
 
 		plugin = null;
-		if (this.viewpoints != null) {
-			for (final Viewpoint viewpoint: this.viewpoints) {
-				ViewpointRegistry.getInstance().disposeFromPlugin(viewpoint);
-			}
+		if( this.viewpoints != null ) {
+			for( final Viewpoint viewpoint: this.viewpoints )
+				ViewpointRegistry.getInstance().disposeFromPlugin( viewpoint );
 
 			this.viewpoints.clear();
 			this.viewpoints = null;
 		}
 
-		super.stop(context);
+		super.stop( context );
 	}
 
 
@@ -122,6 +121,11 @@ public class RoboconfModelerPlugin extends AbstractUIPlugin {
 	}
 
 
+	/**
+	 * Finds an image from a relative path.
+	 * @param filePath the relative file path
+	 * @return an image, or null if none was found
+	 */
 	public static Image findImage( String filePath ) {
 
 		ImageDescriptor desc = imageDescriptorFromPlugin( PLUGIN_ID, filePath );

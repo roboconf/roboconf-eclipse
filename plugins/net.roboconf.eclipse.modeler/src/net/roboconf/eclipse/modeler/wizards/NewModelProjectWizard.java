@@ -91,7 +91,7 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 
 				// Switch to the modeling perspective
 				PlatformUI.getWorkbench().showPerspective(
-						WizardUtils.MODELING_PERSPECTIVE_ID,
+						WizardConstants.MODELING_PERSPECTIVE_ID,
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 
 				Session session = ModelingProject.asModelingProject( NewModelProjectWizard.this.project ).get().getSession();
@@ -101,6 +101,7 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 						"Diagram",	// A representation kind, as defined in the odesign file.
 						modelFileName,
 						rootObject );
+
 			}
 		};
 

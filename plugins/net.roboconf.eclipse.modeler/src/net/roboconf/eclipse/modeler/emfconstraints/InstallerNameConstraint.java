@@ -23,14 +23,26 @@
  * limitations under the License.
  */
 
-package net.roboconf.eclipse.modeler.wizards;
+package net.roboconf.eclipse.modeler.emfconstraints;
+
+import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public interface WizardConstants {
+public class InstallerNameConstraint extends AbstractRoboconfModelConstraint {
 
-	String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
-	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
-	String EXT_MODEL = "graph-ui";
+	@Override
+	public String validate( RoboconfComponent component ) {
+		String msg = "The installer name cannot be empty.";
+		return Utils.isEmptyOrWhitespaces( component.getInstallerName()) ? msg : null;
+	}
+
+
+	@Override
+	public String validate( RoboconfFacet facet ) {
+		return null;
+	}
 }

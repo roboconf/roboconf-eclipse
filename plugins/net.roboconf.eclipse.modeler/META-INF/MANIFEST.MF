@@ -5,16 +5,12 @@ Bundle-SymbolicName: net.roboconf.eclipse.modeler;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: net.roboconf.eclipse.modeler.RoboconfModelerPlugin
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
- org.eclipse.sirius,
  net.roboconf.core,
  net.roboconf.eclipse.plugin,
- org.eclipse.sirius.ui,
  org.eclipse.sirius.ext.base,
  org.eclipse.emf.transaction,
- net.roboconf.eclipse.emf.models,
  net.roboconf.eclipse.emf.models.edit,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.eclipse.sirius.diagram.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

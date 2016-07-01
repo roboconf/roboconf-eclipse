@@ -54,7 +54,7 @@ public class CreateNewExportedVariableCommand extends AbstractHandler {
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
-		ExportedVariableDialog dlg = new ExportedVariableDialog( null, null, null );
+		ExportedVariableDialog dlg = new ExportedVariableDialog( null, null, null, this.facetOrComponent );
 		if( dlg.open() == Window.OK ) {
 
 			// Perform the modifications within a transactional command

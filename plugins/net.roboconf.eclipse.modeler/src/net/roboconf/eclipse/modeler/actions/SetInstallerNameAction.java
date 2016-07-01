@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
+import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 import org.eclipse.ui.PlatformUI;
 
@@ -57,7 +58,14 @@ public class SetInstallerNameAction implements IExternalJavaAction {
 		// If there is a selection, we only want components...
 		boolean onlyComponents = true;
 		for( Iterator<? extends EObject> it= selections.iterator(); it.hasNext() && onlyComponents; ) {
-			EObject eo = EclipseUtils.resolve( it.next());
+
+			// Ignore edges
+			EObject eo = it.next();
+			if( !(( eo instanceof DNode )))
+				continue;
+
+			// Consider components only
+			eo = EclipseUtils.resolve( eo );
 			onlyComponents = eo instanceof RoboconfComponent;
 		}
 

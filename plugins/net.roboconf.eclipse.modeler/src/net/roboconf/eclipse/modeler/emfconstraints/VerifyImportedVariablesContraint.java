@@ -25,49 +25,48 @@
 
 package net.roboconf.eclipse.modeler.emfconstraints;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
+import net.roboconf.core.model.helpers.VariableHelpers;
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfComponent;
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfGraphs;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfImportedVariable;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
-public class UniqueNameConstraint extends AbstractRoboconfModelConstraint {
+public class VerifyImportedVariablesContraint extends AbstractRoboconfModelConstraint {
 
 	@Override
 	public String validate( RoboconfComponent component ) {
-		return validate((RoboconfFacet) component);
+
+		String result = null;
+		Map<String,RoboconfFacet> nameToType = new HashMap<> ();
+		for( RoboconfFacet type : ((RoboconfGraphs) component.eContainer()).getFacets())
+			nameToType.put( type.getName(), type );
+
+		for( RoboconfFacet type : ((RoboconfGraphs) component.eContainer()).getComponents())
+			nameToType.put( type.getName(), type );
+
+		for( RoboconfImportedVariable var : component.getImports()) {
+			if( var.isExternal())
+				continue;
+
+			String prefix = VariableHelpers.parseVariableName( var.getName()).getKey();
+			if( nameToType.get( prefix ) == null ) {
+				result = var.getName() + " is imported but there is no component or facet called " + prefix + ".";
+				break;
+			}
+		}
+
+		return result;
 	}
 
 
 	@Override
 	public String validate( RoboconfFacet facet ) {
-		return validate( facet, facet.getName());
-	}
-
-
-	public String validate( RoboconfFacet facet, String name ) {
-
-		RoboconfGraphs graphs = (RoboconfGraphs) facet.eContainer();
-		List<RoboconfFacet> allTypes = new ArrayList<> ();
-		allTypes.addAll( graphs.getComponents());
-		allTypes.addAll( graphs.getFacets());
-
-		String msg = null;
-		Set<String> names = new HashSet<> ();
-		for( RoboconfFacet f : allTypes ) {
-			if( ! f.equals( facet ))
-				names.add( f.getName());
-		}
-
-		if( names.contains( name ))
-			msg = "Another facet or component uses the same name. Names must be unique within the graph(s).";
-
-		return msg;
+		return null;
 	}
 }

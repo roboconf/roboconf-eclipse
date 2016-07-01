@@ -36,6 +36,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PlatformUI;
 
 import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 import net.roboconf.eclipse.modeler.dialogs.ExportedVariableDialog;
 import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 import net.roboconf.eclipse.modeler.views.VariablesView;
@@ -68,7 +69,12 @@ public class EditExportedVariableCommand extends AbstractHandler {
 	@Override
 	public Object execute( ExecutionEvent event ) throws ExecutionException {
 
-		ExportedVariableDialog dlg = new ExportedVariableDialog( this.var.getName(), this.var.getDefaultValue(), this.var.getExternalAlias());
+		ExportedVariableDialog dlg = new ExportedVariableDialog(
+				this.var.getName(),
+				this.var.getDefaultValue(),
+				this.var.getExternalAlias(),
+				(RoboconfFacet) this.var.eContainer());
+
 		if( dlg.open() == Window.OK ) {
 
 			// Perform the modifications within a transactional command

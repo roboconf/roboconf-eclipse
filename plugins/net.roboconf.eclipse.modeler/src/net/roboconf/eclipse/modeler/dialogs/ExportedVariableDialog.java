@@ -25,6 +25,9 @@
 
 package net.roboconf.eclipse.modeler.dialogs;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -41,6 +44,8 @@ import org.eclipse.swt.widgets.Text;
 import net.roboconf.core.Constants;
 import net.roboconf.core.dsl.ParsingConstants;
 import net.roboconf.core.utils.Utils;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfExportedVariable;
+import net.roboconf.eclipse.emf.models.roboconf.RoboconfFacet;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -48,19 +53,24 @@ import net.roboconf.core.utils.Utils;
 public class ExportedVariableDialog extends TitleAreaDialog {
 
 	private String name, value, alias;
+	private final Set<String> existingExportedVariables = new HashSet<> ();
 
 
 	/**
 	 * Constructor.
-	 * @param name
-	 * @param value
-	 * @param alias
+	 * @param name the variable's name
+	 * @param value the variable's default value
+	 * @param alias the variable's alias
+	 * @param owner the Roboconf type that holds this variable
 	 */
-	public ExportedVariableDialog( String name, String value, String alias ) {
+	public ExportedVariableDialog( String name, String value, String alias, RoboconfFacet owner ) {
 		super( Display.getDefault().getActiveShell());
 		this.name = name;
 		this.value = value;
 		this.alias = alias;
+
+		for( RoboconfExportedVariable var : owner.getExports())
+			this.existingExportedVariables.add( var.getName());
 	}
 
 
@@ -177,6 +187,9 @@ public class ExportedVariableDialog extends TitleAreaDialog {
 
 		else if( ! this.name.matches( ParsingConstants.PATTERN_ID ))
 			msg = "The variable name cannot contain spaces or special characters.";
+
+		else if( this.existingExportedVariables.contains( this.name ))
+			msg = "An exported variable with this name already exists.";
 
 		else if( Utils.isEmptyOrWhitespaces( this.value )
 				&& ! Constants.SPECIFIC_VARIABLE_IP.equalsIgnoreCase( this.name ))

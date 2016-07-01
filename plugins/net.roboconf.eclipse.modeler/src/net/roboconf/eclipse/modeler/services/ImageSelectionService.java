@@ -41,8 +41,11 @@ import net.roboconf.eclipse.modeler.utilities.EclipseUtils;
 public class ImageSelectionService {
 
 	/**
-	 * @param o
-	 * @return
+	 * Gets the image for a Roboconf type.
+	 * @param o the EMF object (to resolve the directory)
+	 * @param name the type's name
+	 * @param suffix "component" or "facet"
+	 * @return the image's location
 	 */
 	private String findImage( EObject o, String name, String suffix ) {
 
@@ -65,8 +68,9 @@ public class ImageSelectionService {
 
 
 	/**
-	 * @param o
-	 * @return
+	 * Gets the image for a component.
+	 * @param comp the component
+	 * @return the image's location
 	 */
 	public String getImage( RoboconfComponent comp ) {
 		return findImage( comp, comp.getName(), "component" );
@@ -74,8 +78,9 @@ public class ImageSelectionService {
 
 
 	/**
-	 * @param o
-	 * @return
+	 * Gets the image for a facet.
+	 * @param facet the facet
+	 * @return the image's location
 	 */
 	public String getImage( RoboconfFacet facet ) {
 

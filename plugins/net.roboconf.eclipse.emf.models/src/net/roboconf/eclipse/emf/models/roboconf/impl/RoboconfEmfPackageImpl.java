@@ -495,7 +495,7 @@ public class RoboconfEmfPackageImpl extends EPackageImpl implements RoboconfEmfP
 
 		initEClass(roboconfComponentEClass, RoboconfComponent.class, "RoboconfComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRoboconfComponent_InstallerName(), theXMLTypePackage.getString(), "installerName", "", 1, 1, RoboconfComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRoboconfComponent_Imports(), this.getRoboconfImportedVariable(), null, "imports", null, 0, -1, RoboconfComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRoboconfComponent_Imports(), this.getRoboconfImportedVariable(), null, "imports", null, 0, -1, RoboconfComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roboconfExportedVariableEClass, RoboconfExportedVariable.class, "RoboconfExportedVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRoboconfExportedVariable_DefaultValue(), theXMLTypePackage.getString(), "defaultValue", null, 0, 1, RoboconfExportedVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
