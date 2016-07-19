@@ -145,6 +145,10 @@
                                  value="net.roboconf.eclipse.project.RoboconfNature">
                            </test>
                         </not>
+                        <test
+                              property="net.roboconf.eclipse.model-dir-exists"
+                              value="true">
+                        </test>
                      </and>
                   </iterate>
                </with>
@@ -198,6 +202,16 @@
             content-type="org.eclipse.core.runtime.xml"
             file-extensions="graph-ui">
       </file-association>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="net.roboconf.eclipse.plugin.propertytesters.ModelDirectoryTester"
+            id="net.roboconf.eclipse.propertytester.modeldir"
+            namespace="net.roboconf.eclipse"
+            properties="model-dir-exists"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
    </extension>
 
 </plugin>
