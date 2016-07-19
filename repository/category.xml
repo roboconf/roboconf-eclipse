@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="net.roboconf.eclipse.main.feature" version="0.7.0.qualifier">
+   <feature id="net.roboconf.eclipse.main.feature" version="0.8.0.qualifier">
       <category name="Roboconf Eclipse Tooling"/>
    </feature>
-   <feature id="net.roboconf.eclipse.modeling.feature" version="0.7.0.qualifier">
+   <feature id="net.roboconf.eclipse.modeling.feature" version="0.8.0.qualifier">
       <category name="Roboconf Modeling Tools"/>
    </feature>
    <category-def name="Roboconf Eclipse Tooling" label="Roboconf Eclipse Tooling"/>
