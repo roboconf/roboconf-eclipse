@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -98,10 +99,11 @@ public final class RoboconfEclipseUtils {
 
 		IProjectDescription description = project.getDescription();
 		String[] natures = description.getNatureIds();
-		List<String> naturesAsList = new ArrayList<String>( Arrays.asList( natures ));
+		List<String> naturesAsList = new ArrayList<>( Arrays.asList( natures ));
 
 		if( naturesAsList.remove( RoboconfEclipseConstants.NATURE_ID )) {
 
+			// Update the natures list
 			String[] newNatures = naturesAsList.toArray( new String[ naturesAsList.size()]);
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IStatus status = workspace.validateNatureSet( newNatures );
@@ -110,6 +112,9 @@ public final class RoboconfEclipseUtils {
 				description.setNatureIds( newNatures );
 				project.setDescription( description, monitor );
 			}
+
+			// Delete Roboconf markers
+			project.deleteMarkers( RoboconfEclipseConstants.MARKER_ID, true, IResource.DEPTH_INFINITE );
 		}
 	}
 }
