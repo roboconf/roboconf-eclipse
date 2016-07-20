@@ -2,7 +2,7 @@
 <feature
       id="net.roboconf.eclipse.modeling.feature"
       label="Roboconf Eclipse Modeling Feature"
-      version="0.7.0.qualifier">
+      version="0.8.0.qualifier">
 
    <description url="http://roboconf.net">
       These plug-ins provide modeling tools for Roboconf.
