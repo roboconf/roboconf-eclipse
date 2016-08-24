@@ -5,3 +5,5 @@
 [![Web site](https://img.shields.io/badge/website-roboconf.net-b23e4b.svg)](http://roboconf.net)
 
 This project includes a set of Eclipse tools for Roboconf.
+
+<img src="http://roboconf.net/resources/img/readme_eclipse.png" alt="Roboconf Eclipse plug-ins" />
