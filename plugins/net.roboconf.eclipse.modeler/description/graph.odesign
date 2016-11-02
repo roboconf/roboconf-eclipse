@@ -5,7 +5,7 @@
       <metamodel href="../../net.roboconf.eclipse.emf.models/model/roboconf.ecore#/"/>
       <defaultLayer name="Default">
         <nodeMappings name="Roboconf Type" labelDirectEdit="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='editName']" doubleClickDescription="//@ownedViewpoints[name='graph']/@ownedRepresentations[name='Diagram']/@defaultLayer/@toolSections.1/@ownedTools[name='select%20image']" domainClass="roboconf.RoboconfFacet">
-          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/16x16/default-facet.svg">
+          <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" tooltipExpression="feature:name" sizeComputationExpression="16" resizeKind="NSEW" roundedCorner="true" workspacePath="/net.roboconf.eclipse.modeler/icons/default-facet.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelFormat>bold</labelFormat>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>

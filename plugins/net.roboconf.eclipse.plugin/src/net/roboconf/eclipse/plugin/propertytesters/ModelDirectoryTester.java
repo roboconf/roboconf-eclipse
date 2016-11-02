@@ -28,8 +28,12 @@ package net.roboconf.eclipse.plugin.propertytesters;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 
 import net.roboconf.core.Constants;
+import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
+import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 
 /**
  * @author Vincent Zurczak - Linagora
@@ -43,13 +47,19 @@ public class ModelDirectoryTester extends PropertyTester {
 		if( receiver instanceof IProject
 					&& expectedValue instanceof Boolean ) {
 
-			IResource res;
-			IProject p = (IProject) receiver;
-			boolean exists = p.isAccessible()
-					&& (res = p.findMember( Constants.MAVEN_SRC_MAIN_MODEL )) != null
-					&& res.exists();
+			try {
+				IResource res;
+				IProject p = (IProject) receiver;
+				boolean exists = p.isAccessible()
+						&& (res = p.findMember( Constants.MAVEN_SRC_MAIN_MODEL )) != null
+						&& res.exists()
+						&& ! p.hasNature( RoboconfEclipseConstants.NATURE_ID );
 
-			result = ((Boolean) expectedValue) == exists;
+				result = ((Boolean) expectedValue) == exists;
+
+			} catch( CoreException e ) {
+				RoboconfEclipsePlugin.log( e, IStatus.ERROR );
+			}
 		}
 
 		return result;

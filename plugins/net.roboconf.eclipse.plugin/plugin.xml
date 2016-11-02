@@ -146,6 +146,7 @@
                            </test>
                         </not>
                         <test
+                              forcePluginActivation="true"
                               property="net.roboconf.eclipse.model-dir-exists"
                               value="true">
                         </test>
