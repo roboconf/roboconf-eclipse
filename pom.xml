@@ -52,7 +52,7 @@
 	<groupId>net.roboconf.eclipse</groupId>
 	<artifactId>parent</artifactId>
 	<name>Roboconf :: Eclipse Parent</name>
-	<version>0.8.0-SNAPSHOT</version>
+	<version>0.9.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<modules>
@@ -80,7 +80,7 @@
 		
 		<tycho-version>0.24.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<roboconf.platform.version>0.8</roboconf.platform.version>
+		<roboconf.platform.version>0.9-SNAPSHOT</roboconf.platform.version>
 		
 		<!-- Customize the set of XML resources to verify with Checkstyle -->
 		<checkstyle.xml.inclusions>**/feature.xml, **/plugin.xml, **/category.xml</checkstyle.xml.inclusions>
