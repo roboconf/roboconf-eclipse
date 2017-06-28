@@ -44,12 +44,12 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 
 import net.roboconf.core.Constants;
-import net.roboconf.core.ErrorCode;
-import net.roboconf.core.ErrorCode.ErrorLevel;
-import net.roboconf.core.RoboconfError;
+import net.roboconf.core.errors.ErrorCode;
+import net.roboconf.core.errors.ErrorCode.ErrorLevel;
+import net.roboconf.core.errors.RoboconfError;
+import net.roboconf.core.errors.RoboconfErrorHelpers;
 import net.roboconf.core.model.ApplicationTemplateDescriptor;
 import net.roboconf.core.model.ParsingError;
-import net.roboconf.core.utils.Utils;
 import net.roboconf.eclipse.plugin.RoboconfEclipseConstants;
 import net.roboconf.eclipse.plugin.RoboconfEclipsePlugin;
 import net.roboconf.tooling.core.validation.ProjectValidator;
@@ -145,22 +145,18 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 	 */
 	private void mapRoboconfErrors( Collection<RoboconfError> errors, IProgressMonitor monitor ) {
 
+		// Get error messages (in English, by default)
+		Map<RoboconfError,String> errorToMsg = RoboconfErrorHelpers.formatErrors( errors, null, false );
+
+		// Create error markers
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		final IFolder mainFolder = findApplicationRootLocation();
-		for( RoboconfError error : errors ) {
+		for( Map.Entry<RoboconfError,String> entry : errorToMsg.entrySet()) {
+			RoboconfError error = entry.getKey();
 
 			// Build canceled?
 			if( checkCancel( monitor ))
 				break;
-
-			// Create the error message
-			StringBuilder sb = new StringBuilder();
-			sb.append( error.getErrorCode().getMsg());
-			if( ! Utils.isEmptyOrWhitespaces( error.getDetails()))
-				sb.append( " " + error.getDetails());
-
-			if( ! sb.toString().endsWith( "." ))
-				sb.append( "." );
 
 			// Resolve the location
 			IResource res = null;
@@ -198,7 +194,7 @@ public class RoboconfIncrementalBuilder extends IncrementalProjectBuilder {
 				marker.setAttribute( IMarker.LINE_NUMBER, line );
 				marker.setAttribute( IMarker.PRIORITY, IMarker.PRIORITY_NORMAL );
 				marker.setAttribute( IMarker.SEVERITY, severity );
-				marker.setAttribute( IMarker.MESSAGE, sb.toString());
+				marker.setAttribute( IMarker.MESSAGE, entry.getValue());
 				marker.setAttribute( RoboconfEclipseConstants.MARKER_ERROR_CODE, error.getErrorCode().toString());
 
 			} catch( CoreException e ) {
