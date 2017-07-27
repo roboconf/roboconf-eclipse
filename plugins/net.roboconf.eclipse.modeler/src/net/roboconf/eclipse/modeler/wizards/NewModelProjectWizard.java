@@ -47,6 +47,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sirius.business.api.modelingproject.ModelingProject;
 import org.eclipse.sirius.business.api.session.Session;
 import org.eclipse.sirius.ext.base.Option;
+import org.eclipse.sirius.ui.tools.api.perspectives.ModelingPerspective;
 import org.eclipse.sirius.ui.tools.api.project.ModelingProjectManager;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -91,7 +92,7 @@ public class NewModelProjectWizard extends BasicNewProjectResourceWizard {
 
 				// Switch to the modeling perspective
 				PlatformUI.getWorkbench().showPerspective(
-						WizardConstants.MODELING_PERSPECTIVE_ID,
+						ModelingPerspective.ID,
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 
 				Session session = ModelingProject.asModelingProject( NewModelProjectWizard.this.project ).get().getSession();

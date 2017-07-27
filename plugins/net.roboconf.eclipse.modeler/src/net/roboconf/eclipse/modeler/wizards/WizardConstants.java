@@ -30,7 +30,6 @@ package net.roboconf.eclipse.modeler.wizards;
  */
 public interface WizardConstants {
 
-	String MODELING_PERSPECTIVE_ID = "org.eclipse.sirius.ui.tools.perspective.modeling";
 	String VIEWPOINT_ID = "viewpoint:/net.roboconf.eclipse.modeler/graph";
 	String EXT_MODEL = "graph-ui";
 }
