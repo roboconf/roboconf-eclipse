@@ -11,6 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.transaction,
  net.roboconf.eclipse.emf.models.edit,
  org.eclipse.ui.ide,
- org.eclipse.sirius.diagram.ui
+ org.eclipse.sirius.diagram.ui,
+ org.eclipse.sirius.common.acceleo.aql,
+ org.eclipse.acceleo.query
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

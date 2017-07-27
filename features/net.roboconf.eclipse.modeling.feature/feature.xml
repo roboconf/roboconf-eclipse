@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
    Copyright 2016-2017 Linagora, Université Joseph Fourier, Floralis
 
@@ -24,7 +23,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
 <feature
       id="net.roboconf.eclipse.modeling.feature"
       label="Roboconf Eclipse Modeling Feature"
@@ -49,11 +47,13 @@
       <import plugin="org.eclipse.sirius.ext.base"/>
       <import plugin="org.eclipse.emf.transaction"/>
       <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.sirius.diagram.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
       <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.eclipse.sirius.diagram.ui"/>
+      <import plugin="org.eclipse.sirius.common.acceleo.aql"/>
+      <import plugin="org.eclipse.acceleo.query"/>
    </requires>
 
    <plugin
