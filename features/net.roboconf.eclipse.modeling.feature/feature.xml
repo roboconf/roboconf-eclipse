@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
    Copyright 2016-2017 Linagora, Université Joseph Fourier, Floralis
 
@@ -23,6 +24,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
+
 <feature
       id="net.roboconf.eclipse.modeling.feature"
       label="Roboconf Eclipse Modeling Feature"
