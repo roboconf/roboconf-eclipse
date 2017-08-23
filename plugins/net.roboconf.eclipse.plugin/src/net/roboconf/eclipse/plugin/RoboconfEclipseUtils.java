@@ -37,11 +37,20 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Vincent Zurczak - Linagora
  */
 public final class RoboconfEclipseUtils {
+
+	private static final String PROJECTS_VIEW = "org.eclipse.ui.navigator.ProjectExplorer";
+	private static final String PACKAGES_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
+
 
 	/**
 	 * Private constructor.
@@ -115,6 +124,34 @@ public final class RoboconfEclipseUtils {
 
 			// Delete Roboconf markers
 			project.deleteMarkers( RoboconfEclipseConstants.MARKER_ID, true, IResource.DEPTH_INFINITE );
+		}
+	}
+
+
+	/**
+	 * Selects the graph file in an explorer.
+	 * @param graphFile
+	 */
+	public static void selectFileInResourceExplorer( IResource... resources ) {
+
+		// Show a view with the workspace as model
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IViewPart viewPart = null;
+		try {
+			viewPart = page.showView( PROJECTS_VIEW );
+
+		} catch( PartInitException e ) {
+			try {
+				viewPart = page.showView( PACKAGES_VIEW );
+
+			} catch( PartInitException e1 ) {
+				RoboconfEclipsePlugin.log( e1, IStatus.ERROR );
+			}
+		}
+
+		// Select and expand
+		if( viewPart != null ) {
+			viewPart.getViewSite().getSelectionProvider().setSelection( new StructuredSelection( resources ));
 		}
 	}
 }

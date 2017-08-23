@@ -141,6 +141,13 @@
                optional="true">
          </commandParameter>
       </command>
+      <command
+            categoryId="net.roboconf.eclipse.commands"
+            defaultHandler="net.roboconf.eclipse.plugin.handlers.CreateRecipesDirectories"
+            description="Creates recipes directories for all the graph components (if they do not already exist)"
+            id="net.roboconf.eclipse.plugin.createRecipesDirectories"
+            name="Create Recipes Directories">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -211,6 +218,41 @@
                   name="net.roboconf.eclipse.plugin.switchRoboconfNature.delete"
                   value="yes">
             </parameter>
+         </command>
+         <command
+               commandId="net.roboconf.eclipse.plugin.createRecipesDirectories"
+               label="Create Recipes Directories"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <or>
+                        <and>
+                           <instanceof
+                                 value="org.eclipse.core.resources.IFile">
+                           </instanceof>
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="graph">
+                           </test>
+                        </and>
+                        <and>
+                           <instanceof
+                                 value="org.eclipse.core.resources.IProject">
+                           </instanceof>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="net.roboconf.eclipse.project.RoboconfNature">
+                           </test>
+                        </and>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution

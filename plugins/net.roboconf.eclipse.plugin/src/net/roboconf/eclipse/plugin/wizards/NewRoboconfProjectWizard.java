@@ -37,10 +37,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -57,9 +55,6 @@ import net.roboconf.tooling.core.ProjectUtils;
  * @author Vincent Zurczak - Linagora
  */
 public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
-
-	private static final String PROJECTS_VIEW = "org.eclipse.ui.navigator.ProjectExplorer";
-	private static final String PACKAGES_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 
 	protected NewRoboconfProjectWizardPage projectPage;
 
@@ -203,7 +198,7 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 			RoboconfEclipsePlugin.log( e, IStatus.ERROR );
 
 		} finally {
-			selectFileInResourceExplorer( graphFile );
+			RoboconfEclipseUtils.selectFileInResourceExplorer( graphFile );
 		}
 	}
 
@@ -221,33 +216,5 @@ public class NewRoboconfProjectWizard extends Wizard implements INewWizard {
 	 */
 	protected void overwriteInstancesFileContent( IFile instancesFile ) {
 		// nothing
-	}
-
-
-	/**
-	 * Selects the graph file in an explorer.
-	 * @param graphFile
-	 */
-	private void selectFileInResourceExplorer( IFile graphFile ) {
-
-		// Show a view with the workspace as model
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IViewPart viewPart = null;
-		try {
-			viewPart = page.showView( PROJECTS_VIEW );
-
-		} catch( PartInitException e ) {
-			try {
-				viewPart = page.showView( PACKAGES_VIEW );
-
-			} catch( PartInitException e1 ) {
-				RoboconfEclipsePlugin.log( e1, IStatus.ERROR );
-			}
-		}
-
-		// Select and expand
-		if( viewPart != null ) {
-			viewPart.getViewSite().getSelectionProvider().setSelection( new StructuredSelection( graphFile ));
-		}
 	}
 }
