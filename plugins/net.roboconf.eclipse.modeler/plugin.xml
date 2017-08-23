@@ -41,7 +41,8 @@
            class="net.roboconf.eclipse.modeler.wizards.NewModelProjectWizard"
            icon="icons/16x16/roboconf_16x16.jpg"
            id="net.roboconf.eclipse.modeler.graphs.project"
-           name="Diagram Project for Roboconf Graphs">
+           name="Diagram Project for Roboconf Graphs"
+           project="true">
         <description>
            Create an Eclipse modelling project for a Roboconf graph
         </description>
