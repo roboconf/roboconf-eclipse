@@ -26,10 +26,10 @@
 -->
 
 <site>
-   <feature id="net.roboconf.eclipse.main.feature" version="0.9.0.qualifier">
+   <feature id="net.roboconf.eclipse.main.feature" version="0.10.0.qualifier">
       <category name="Roboconf Eclipse Tooling"/>
    </feature>
-   <feature id="net.roboconf.eclipse.modeling.feature" version="0.9.0.qualifier">
+   <feature id="net.roboconf.eclipse.modeling.feature" version="0.10.0.qualifier">
       <category name="Roboconf Modeling Tools"/>
    </feature>
    <category-def name="Roboconf Eclipse Tooling" label="Roboconf Eclipse Tooling"/>

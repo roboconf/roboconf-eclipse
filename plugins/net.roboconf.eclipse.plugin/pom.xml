@@ -34,7 +34,7 @@
 	<parent>
 		<groupId>net.roboconf.eclipse</groupId>
 		<artifactId>parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.10.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
